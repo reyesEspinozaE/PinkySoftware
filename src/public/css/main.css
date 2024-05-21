@@ -1,0 +1,42 @@
+body{
+    background: rgb(255, 255, 255);
+    text-align: center;
+    align-items: center;
+}
+
+.navbar{
+    background: black;
+    color: white;
+}
+
+.navbar-brand, .nav-link {
+    color: white;
+}
+
+/* Cambiar color cuando se hace clic o están activos/enfocados */
+.navbar-brand:focus, .navbar-brand:active,
+.nav-link:focus, .nav-link:active {
+    color: #bb7181; 
+}
+
+/* También puedes agregar estilos para el estado "hover" si lo necesitas */
+.navbar-brand:hover, .nav-link:hover {
+    color: #bb7181; 
+}
+
+
+/* Footer */
+
+.ftr {
+    background: black;
+    color: white;
+    text-align: center;
+    padding: 1rem; /* Añadir padding para un poco de espacio alrededor del texto */
+    width: 100%;
+    bottom: 0;
+}
+
+
+/* #contenedorprincipal{
+    min-height: 100vh;
+} */
