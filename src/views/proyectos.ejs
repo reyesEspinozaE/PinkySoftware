@@ -7,13 +7,15 @@
     <title>
         <%= title %>
     </title>
+    <script src="/js/client.js" defer></script>
     <%- include("partials/head") %>
 </head>
 
 <body>
     <%- include('partials/navigation.ejs')%>
-
     <main>
+        <button id="myButton">Click me</button>
+        <button id="test">Test</button>
         <div class="container mt-4">
             <button id="btnAddProyecto" class="btn btn-info">Agregar proyecto</button>
             <!-- Card 1 -->

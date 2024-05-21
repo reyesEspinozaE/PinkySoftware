@@ -25,3 +25,15 @@ npm i express
 Sequelize y tedious
 
 npm install sequelize tedious
+
+// Para subir un repo ya creado xd
+
+-- cd "direccion local del proyecto"
+-- git init
+-- git status "para ver los archivos que se van a subir al repo" (opcional xd)
+-- git add . "para agregarlos"
+-- git commit -m "nombre del commit", "para confirmar"
+-- git status "ya no tiene que aparecer nada" (On branch main), para asegurarse que estan cargados
+-- git branch -m main
+-- git remote add origin "direccion del repo... .git"
+-- git push -u origin main
