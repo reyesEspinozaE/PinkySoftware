@@ -12,80 +12,84 @@
 
 <body>
     <%- include('partials/navigation.ejs')%>
-    <main>
-        <div id="container" class="mt-5">
-            <div class="row">
-                <div class="col-md-6">
-                    <div id="bodyPresupuestos">
-                        <!-- Presupuestos -->
-                        <div class="col">
-                            <h2 class="text-center">Gestión de Presupuestos</h2>
-                            <div class="row">
-                                <div class="col mb-3">
-                                    <button id="btnPresupuesto" class="btn btn-info">+ Asignar presupuesto</button>
+        <main>
+            <div id="container" class="mt-5">
+                <div class="row">
+                    <!-- Presupuestos -->
+                    <div class="col-md-6">
+                        <div id="bodyPresupuestos">
+                            <div class="col">
+                                <h2 class="text-center">Gestión de Presupuestos</h2>
+                                <div class="row">
+                                    <div class="col mb-3">
+                                        <button id="btnPresupuesto" class="btn btn-info">+ Asignar presupuesto</button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <label for="presupuestoTotal">Presupuesto Total:</label>
-                                    <input type="text" style="width:200px" id="presupuestoTotal" class="form-control">
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <label for="presupuestoTotal">Presupuesto Total:</label>
+                                        <input type="text" style="width:200px" id="presupuestoTotal"
+                                            class="form-control">
+                                    </div>
+                                    <div class="col">
+                                        <label for="ahorroMensual">Ahorro Mensual:</label>
+                                        <input type="text" style="width:200px" id="ahorroMensual" class="form-control"
+                                            readonly>
+                                    </div>
                                 </div>
-                                <div class="col">
-                                    <label for="ahorroMensual">Ahorro Mensual:</label>
-                                    <input type="text" style="width:200px" id="ahorroMensual" class="form-control"
-                                        readonly>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <div class="table-responsive">
-                                        <table class="table table-striped
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped
                                     table-hover	
                                     table-borderless
                                     table-secondary
                                     align-middle">
-                                            <thead class="table-light">
-                                                <tr>
-                                                    <th>Acción</th>
-                                                    <th>Id proyecto</th>
-                                                    <th>Nombre proyecto</th>
-                                                    <th>Presupuesto proyecto</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="table-group-divider">
-                                                <tr class="table-secondary">
-                                                    <td>
-                                                        <a name="eliminar" id="eliminar"
-                                                            class="btn btn-danger">Eliminar</a>
-                                                        ||
-                                                        <a name="editar" id="editar" class="btn btn-primary">Editar</a>
-                                                        ||
-                                                        <a name="detalles" id="detalles"
-                                                            class="btn btn-success">Detalles</a>
-                                                    </td>
-                                                    <td>ID</td>
-                                                    <td>Nombre</td>
-                                                    <td>Presupuesto</td>
-                                                </tr>
-                                            </tbody>
-                                            <tfoot>
-                                            </tfoot>
-                                        </table>
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Acción</th>
+                                                        <th>Id proyecto</th>
+                                                        <th>Nombre proyecto</th>
+                                                        <th>Presupuesto proyecto</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="table-group-divider">
+                                                    <tr class="table-secondary">
+                                                        <td>
+                                                            <a name="eliminar" id="eliminar"
+                                                                class="btn btn-danger">Eliminar</a>
+                                                            ||
+                                                            <a name="editar" id="editar"
+                                                                class="btn btn-primary">Editar</a>
+                                                            ||
+                                                            <a name="detalles" id="detalles"
+                                                                class="btn btn-success">Detalles</a>
+                                                        </td>
+                                                        <td>ID</td>
+                                                        <td>Nombre</td>
+                                                        <td>Presupuesto</td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                </tfoot>
+                                            </table>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row mt-3 mb-3">
-                                    <div class="col">
-                                        <label for="totalPresupuesto">Presupuesto Total:</label>
-                                        <input type="text" style="width:200px" id="totalPresupuesto"
-                                            class="form-control" readonly>
+                                    <div class="row mt-3 mb-3">
+                                        <div class="col">
+                                            <label for="totalPresupuesto">Presupuesto Total:</label>
+                                            <input type="text" style="width:200px" id="totalPresupuesto"
+                                                class="form-control" readonly>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Fin de Presupuestos -->
                         </div>
                     </div>
+                    <!-- Fin de presupuestos -->
+
+                    <!-- Gastos -->
                     <div class="col-md-6">
-                        <!-- Gastos -->
                         <div id="bodyGastos">
                             <div class="col">
                                 <h2 class="text-center">Gestión de Gastos</h2>
@@ -105,10 +109,10 @@
                                     <div class="col">
                                         <div class="table-responsive">
                                             <table class="table table-striped
-                                    table-hover	
-                                    table-borderless
-                                    table-secondary
-                                    align-middle">
+                                table-hover	
+                                table-borderless
+                                table-secondary
+                                align-middle">
                                                 <thead class="table-light">
                                                     <tr>
                                                         <th>Acción</th>
@@ -155,8 +159,8 @@
                         </div>
                     </div>
                     <!-- Fin de Gastos -->
-                </div>
-    </main>
+        </main>
 </body>
 <%- include('partials/footer.ejs')%>
+
 </html>

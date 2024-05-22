@@ -1,17 +1,21 @@
+import Proyecto from './models/Proyecto.js';
+
 ////////////////////////////////////////////////////////////////////////////
 ////  Pruebas de interaccion con la DB
 
-// public/js/client.js
+// public/js/proyectos.js
 document.addEventListener('DOMContentLoaded', function () {
-  document.getElementById('myButton').addEventListener('click', function () {
-    alert('Button clicked!');
-    // Llamar a más funciones aquí
-    console.log('conecto bien');
-  });
+  const button = document.getElementById('myButton');
+  if (button) {
+    button.addEventListener('click', function () {
+      alert('Button clicked!');
+      console.log('conecto bien');
+    });
+  } else {
+    console.error('Button not found');
+  }
 });
-
 ////////////////////////////////////////
-import Proyecto from './models/Proyecto.js';
 
 // Seleccionamos el botón por su id
 var test = document.getElementById('test');
@@ -36,7 +40,6 @@ const nuevoProyecto = async () => {
     console.error('Error creando proyecto:', error);
   }
 };
-
 
 ////////////////////////////////////////////////////////////////////////////
 
