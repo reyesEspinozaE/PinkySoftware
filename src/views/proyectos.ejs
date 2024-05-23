@@ -8,51 +8,103 @@
         <%= title %>
     </title>
     <%- include("partials/head") %>
+        <%- include('partials/navigation.ejs')%>
 </head>
 
 <body>
-    <%- include('partials/navigation.ejs')%>
-        <main>
-            <!-- <button id="myButton">Click me</button>
-            <button id="test">Test</button> -->
-            <div class="container mt-4">
-                <button id="btnAddProyecto" class="btn btn-info">Agregar proyecto</button>
-                <!-- Card 1 -->
-                <div class="card mt-4">
-                    <h3>Nombre del Proyecto</h3>
-                    <p><strong>Descripción:</strong> Descripción del proyecto...</p>
-                    <p><strong>Partidas Presupuestarias:</strong> Partida 1, Partida 2, ...</p>
-                    <p><strong>Encargado:</strong> Nombre del encargado</p>
-                    <p><strong>Fecha de Inicio:</strong> DD/MM/AAAA</p>
-                    <p><strong>Fecha de Fin:</strong> DD/MM/AAAA</p>
-                    <div class="table-responsive">
-                        <table class="table table-striped
+    <main>
+        <div class="container mt-4">
+            <button id="btnAddProyecto" class="btnCommon btn btn-info">Agregar proyecto</button>
+            <!-- Card 1 -->
+            <div class="card mt-4">
+                <h3>Nombre del Proyecto</h3>
+                <p><strong>Descripción:</strong> Descripción del proyecto...</p>
+                <p><strong>Partidas Presupuestarias:</strong> Partida 1, Partida 2, ...</p>
+                <p><strong>Encargado:</strong> Nombre del encargado</p>
+                <p><strong>Fecha de Inicio:</strong> DD/MM/AAAA</p>
+                <p><strong>Fecha de Fin:</strong> DD/MM/AAAA</p>
+                <div class="table-responsive">
+                    <table class="table table-striped
                         table-hover	
                         table-borderless
                         table-secondary
                         align-middle">
-                            <thead class="table-light">
-                            </thead>
-                            <tbody class="table-group-divider">
-                                <tr class="table-secondary">
-                                    <td>
-                                        <a name="eliminar" id="btnEliminar" class="btn btn-danger">Eliminar</a>
-                                        ||
-                                        <a name="editar" id="btnEditar" class="btn btn-primary">Editar</a>
-                                        ||
-                                        <a name="detalles" id="btnDetalles" class="btn btn-success">Detalles</a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                            </tfoot>
-                        </table>
-                    </div>
+                        <thead class="table-light">
+                        </thead>
+                        <tbody class="table-group-divider">
+                            <tr class="table-secondary">
+                                <td>
+                                    <a name="eliminar" id="btnEliminar" class="btn btn-danger">Eliminar</a>
+                                    ||
+                                    <a name="editar" id="btnEditar" class="btn btn-primary">Editar</a>
+                                    ||
+                                    <a name="detalles" id="btnDetalles" class="btn btn-success">Detalles</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
-        </main>
+        </div>
+    </main>
 </body>
 <%- include('partials/footer.ejs')%>
 
 </html>
-<script src="/js/proyectos.js"></script>
+
+<script>
+    // Seleccionamos el botón por su id
+    var btnAddProyecto = document.getElementById('btnAddProyecto');
+
+    // Agregamos un evento onclick al botón
+    btnAddProyecto.onclick = function () {
+        // Ventana emergente
+        var popup = window.open('', 'popup', 'width=500,height=400');
+
+        // Contenido del formulario dentro de la ventana emergente
+        var formContent = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Agregar Proyecto</title>
+            <link rel="stylesheet" href="/css/main.css">
+        </head>
+        <body class="bodyPopup">
+            <form class="popup-form">
+                <label for="nombreProyecto">Nombre del Proyecto:</label><br>
+                <input type="text" id="nombreProyecto" name="nombreProyecto"><br>
+
+                <label for="descripcion">Descripción:</label><br>
+                <textarea id="descripcion" name="descripcion" rows="4" cols="50"></textarea><br>
+
+                <label for="partidasPresupuestarias">Partidas Presupuestarias:</label><br>
+                <input type="text" id="partidasPresupuestarias" name="partidasPresupuestarias"><br>
+
+                <label for="encargado">Encargado:</label><br>
+                <input type="text" id="encargado" name="encargado"><br>
+
+                <label for="fechaInicio">Fecha de Inicio:</label><br>
+                <input type="date" id="fechaInicio" name="fechaInicio"><br>
+
+                <label for="fechaFin">Fecha de Fin:</label><br>
+                <input type="date" id="fechaFin" name="fechaFin"><br>
+
+                <button class="btnPopup" type="submit">Guardar</button>
+                <button class="btnPopup" type="button" onclick="window.close()">Cancelar</button>
+            </form>
+        </body>
+        </html>
+        `;
+
+        // Escribimos el contenido del formulario en la ventana emergente
+        popup.document.write(formContent);
+        popup.document.querySelector('form').onsubmit = function (event) {
+            event.preventDefault();
+            // Aquí manejamos las acciones del form con el servidor
+        };
+    };
+</script>

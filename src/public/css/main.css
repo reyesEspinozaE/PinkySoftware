@@ -13,30 +13,139 @@ body{
     color: white;
 }
 
-/* Cambiar color cuando se hace clic o están activos/enfocados */
+
 .navbar-brand:focus, .navbar-brand:active,
 .nav-link:focus, .nav-link:active {
     color: #bb7181; 
 }
 
-/* También puedes agregar estilos para el estado "hover" si lo necesitas */
 .navbar-brand:hover, .nav-link:hover {
     color: #bb7181; 
 }
 
+/* Botones */
+.btnCommon {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    background-color: #1241db;
+    color: white;
+    cursor: pointer;
+}
 
-/* Footer */
+.btnCommon:hover {
+    background-color: #0c1e5a;
+    color: white;
+}
 
 .ftr {
     background: black;
     color: white;
     text-align: center;
-    padding: 1rem; /* Añadir padding para un poco de espacio alrededor del texto */
+    padding: 1rem; 
     width: 100%;
     bottom: 0;
 }
 
+/* Estilos para ventanas emergentes */
 
-/* #contenedorprincipal{
-    min-height: 100vh;
-} */
+.bodyPopup {
+    font-family: Arial, sans-serif;
+    background-color: #f7f9fc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    height: auto;
+    margin: 2;
+    margin-top: 6;
+    margin-bottom: 6;
+}
+
+.popup-form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: auto;
+    height: auto;
+}
+
+.popup-form label {
+    font-weight: bold;
+    color: #333;
+    margin-top: 10px;
+}
+
+.popup-form input[type="text"],
+.popup-form input[type="date"],
+.popup-form input[type="file"],
+.popup-form input[type="number"],
+.popup-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.popup-form button.btnPopup {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.popup-form button.btnPopup:hover {
+    background-color: #0056b3;
+}
+
+.popup-form button[type="button"] {
+    background-color: #dc3545;
+}
+
+.popup-form button[type="button"]:hover {
+    background-color: #66111a;
+}
+
+.popup-window {
+    display: none; 
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: auto; /* Ajusta el ancho de la ventana emergente */
+    max-width: 800px; /* Incrementa el tamaño máximo de la ventana emergente */
+    height: auto; /* Permite que la altura se ajuste automáticamente */
+}
+
+.popup-window.show {
+    display: block;
+}
+
+.popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.popup-overlay.show {
+    display: block;
+}
