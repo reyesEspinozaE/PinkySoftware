@@ -9,7 +9,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url)) // Con esto obtengo la
 
 // Configuración del motor de plantillas y vistas
 app.set('views', join(__dirname, 'views'))
-app.set('view engine', 'ejs') // motor de plantilla, en vez de html
+app.set('view engine', 'ejs') // motor de plantilla ejs, en vez de html
 
 // Uso de las rutas
 app.use(indexRoutes);

@@ -2,130 +2,196 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        <%= title %>
-    </title>
-    <%- include("partials/head") %>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    <%= title %>
+  </title>
+  <%- include("partials/head") %>
 </head>
 
 <body>
-    <%- include('partials/navigation.ejs')%>
-        <main>
-            <button id="btnAddUsuario" class="btnCommon btn btn-primary mt-2">Agregar Usuario</button>
-            <div class="table-responsive mt-2">
-                <table class="table table-striped
-            table-hover	
-            table-borderless
-            table-secondary
-            align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Acciones</th>
-                            <th>Id</th>
-                            <th>Nombre</th>
-                            <th>Email</th>
-                            <th>Passwd</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-group-divider">
-                        <tr class="table-secondary">
-                            <td>
-                                <a name="eliminar" id="btnEliminar" class="btn btn-danger">Eliminar</a>
-                                ||
-                                <a name="editar" id="btnEditar" class="btn btn-primary">Editar</a>
-                                ||
-                                <a name="detalles" id="btnDetelles" class="btn btn-success">Detalles</a>
-                            </td>
-                            <td scope="row">
-                                usuario.idUsuario
-                            </td>
-                            <td>
-                                usuario.nombreUsuario
-                            </td>
-                            <td>
-                                usuario.correo
-                            </td>
-                            <td>
-                                usuario.contrasenia
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                    </tfoot>
-                </table>
-            </div>
-        </main>
-</body>
-<%- include('partials/footer.ejs')%>
+  <%- include('partials/navigation.ejs')%>
+    <main>
+      <button id="btnAddUsuario" class="btnCommon btn btn-primary mt-2">Agregar Usuario</button>
+      <div class="table-responsive mt-2">
+        <table class="table table-striped table-hover table-borderless table-secondary align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Acciones</th>
+              <th>Id</th>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Passwd</th>
+            </tr>
+          </thead>
+          <tbody class="table-group-divider">
+            <% if (usuarios && usuarios.length> 0) { %>
+              <% usuarios.forEach(usuario=> { %>
+                <tr class="table-secondary">
+                  <td>
+                    <a name="detalles" class="btn btn-success" data-user-id="<%= usuario.idUsuario %>">Detalles</a> ||
+                    <a name="editar" class="btn btn-primary" data-user-id="<%= usuario.idUsuario %>">Editar</a> ||
+                    <a name="eliminar" class="btn btn-danger" data-user-id="<%= usuario.idUsuario %>">Eliminar</a>
+                  </td>
+                  <td scope="row">
+                    <%= usuario.idUsuario %>
+                  </td>
+                  <td>
+                    <%= usuario.nombreUsuario %>
+                  </td>
+                  <td>
+                    <%= usuario.correo %>
+                  </td>
+                  <td>
+                    <%= usuario.contrasenia %>
+                  </td>
+                </tr>
+                <% }) %>
+                  <% } else { %>
+                    <tr>
+                      <td colspan="5">No hay usuarios disponibles</td>
+                    </tr>
+                    <% } %>
+          </tbody>
+        </table>
+      </div>
+    </main>
+    <%- include('partials/footer.ejs')%>
 
-    <!-- Bootstrap JavaScript Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      <!-- Bootstrap JavaScript Libraries -->
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQ+zqX6gSbd85u4mG4QzX+"
         crossorigin="anonymous"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
         integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
         crossorigin="anonymous"></script>
 
+      <script>
+        // Manejador de clic para el botón de detalles
+        document.querySelectorAll('[name="detalles"]').forEach(btn => {
+          btn.addEventListener('click', async function () {
+            const userId = this.getAttribute('data-user-id');
+            const response = await fetch(`/usuarios/${userId}`, {
+              method: 'GET',
+              headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await response.json();
+            // Aquí se muestran los detalles del usuario en una ventana emergente
+            console.log(data);
+          });
+        });
 
-    <script>
-        // Seleccionamos el botón por su id
-        var btnAddUsuario = document.getElementById('btnAddUsuario');
+        // Manejador de clic para el botón de editar
+        document.querySelectorAll('[name="editar"]').forEach(btn => {
+          btn.addEventListener('click', function () {
+            const userId = this.getAttribute('data-user-id');
+            window.location.href = `/usuarios/${userId}/editar`;
+          });
+        });
 
-        // Definimos una variable para la ventana emergente
+        // Manejador de clic para el botón de eliminar
+        document.querySelectorAll('[name="eliminar"]').forEach(btn => {
+          btn.addEventListener('click', async function () {
+            const userId = this.getAttribute('data-user-id');
+            const confirmacion = confirm('¿Estás seguro de que quieres eliminar este usuario?');
+            if (confirmacion) {
+              const response = await fetch(`/usuarios/${userId}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' }
+              });
+              const data = await response.json();
+              // Aquí se muestra un mensaje de éxito
+              console.log(data);
+              window.location.reload(); // Recargar la página después de eliminar el usuario
+            }
+          });
+        });
+
+        ////////////////////////////////////////////////////////
+        /////////////////// CREATE /////////////////////////////
+
         var popup;
 
-        // Agregamos un evento onclick al botón
-        btnAddUsuario.onclick = function () {
-            // Abrimos la ventana emergente
-            popup = window.open('', 'popup', 'width=400,height=300');
+        var btnAddUsuario = document.getElementById('btnAddUsuario').addEventListener('click', function () {
+          popup = window.open('', 'popup', 'width=400,height=300');
+          var formContent = `
+              <!DOCTYPE html>
+              <html lang="en">
+              <head>
+                  <meta charset="UTF-8">
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                  <title>Agregar Usuario</title>
+                  <link rel="stylesheet" href="/css/main.css">
+              </head>
+              <body class="bodyPopup">
+                 <form class="popup-form" id="popupForm">
+                      <label for="nombreUsuario">Nombre del usuario:</label><br>
+                      <input type="text" id="nombreUsuario" name="nombreUsuario"><br>
+                      <label for="correo">Correo electrónico:</label><br>
+                      <input type="text" id="correo" name="correo"><br>
+                      <label for="contrasenia">Contraseña:</label><br>
+                      <input type="text" id="contrasenia" name="contrasenia"><br>
+                      <button class="btnPopup" type="submit">Guardar</button>
+                      <button class="btnPopup" type="button" onclick="window.opener.cerrarPopup()">Cancelar</button>
+                  </form>
+              </body>
+              </html>
+            `;
+          popup.document.write(formContent);
 
-            // Contenido del formulario dentro de la ventana emergente
-            var formContent = `
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Agregar Proyecto</title>
-                <link rel="stylesheet" href="/css/main.css">
-            </head>
-            <body class="bodyPopup">
-               <form class="popup-form">
-			        <label for="nombreUsuario">Nombre del usuario:</label><br>
-                    <input type="text" id="nombreUsuario" name="nombreUsuario"><br>
-        
-                    <label for="correo">Correo electrónico:</label><br>
-                    <input type="text" id="correo" name="correo" rows="4" cols="50"></input><br>
-        
-                    <label for="contrasenia">Contraseña:</label><br>
-                    <input type="text" id="contrasenia" name="contrasenia"></input><br>
-        
-                    <button class="btnPopup" type="submit">Guardar</button>
-                    <button class="btnPopup" type="button" onclick="window.opener.cerrarPopup()">Cancelar</button>
-                </form>
-            </body>
-            </html>
-                `;
+          popup.document.querySelector('form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            btnPopupGuardar();
+          });
+        });
 
-            // Escribimos el contenido del formulario en la ventana emergente
-            popup.document.write(formContent);
-
-            // Definimos el comportamiento del formulario al ser enviado
-            popup.document.querySelector('form').onsubmit = function (event) {
-                event.preventDefault();
-                // Aquí manejamos las acciones del form con el servidor
-            };
-        };
-
-        // Definimos la función cerrarPopup para cerrar la ventana emergente
         function cerrarPopup() {
-            if (popup) {
-                popup.close();
-            }
+          if (popup) {
+            popup.close();
+          }
         }
-    </script>
 
+        function btnPopupGuardar() {
+          var nombreUsuario = popup.document.getElementById('nombreUsuario').value;
+          var correo = popup.document.getElementById('correo').value;
+          var contrasenia = popup.document.getElementById('contrasenia').value;
+
+          // Verificar si los valores están capturados correctamente
+          console.log('Datos del formulario:', {
+            nombreUsuario,
+            correo,
+            contrasenia
+          });
+
+          var nuevoUsuario = {
+            nombreUsuario: nombreUsuario,
+            correo: correo,
+            contrasenia: contrasenia
+          };
+
+          console.log('Enviando solicitud para crear usuario:', nuevoUsuario);
+
+          fetch('/usuarios', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(nuevoUsuario)
+          })
+            .then(response => {
+              if (response.ok) {
+                console.log('Usuario creado exitosamente');
+                popup.close();
+                window.location.reload();
+              } else {
+                throw new Error('Error al guardar el nuevo usuario');
+              }
+            })
+            .catch(error => {
+              console.error('Error en la creación del usuario:', error);
+            });
+        }
+      </script>
+</body>
 </html>
