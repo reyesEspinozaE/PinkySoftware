@@ -18,9 +18,8 @@ router.get('/proyectos', (req, res) => res.render('proyectos.ejs', { title: "Pro
 // Llamadas para el controlador de users
 router.get('/users', getUsuarios);
 router.post('/users', crearUsuario);
-router.get('/users', detallesUsuario);
-router.post('/users', actualizarUsuario);
-router.delete('/users', eliminarUsuario);
-
+router.get('/users/:id', detallesUsuario);
+router.put('/users/:id', actualizarUsuario);
+router.delete('/users/:id', eliminarUsuario);
 
 export default router;

@@ -30,9 +30,11 @@
               <% usuarios.forEach(usuario=> { %>
                 <tr class="table-secondary">
                   <td>
-                    <a name="detalles" class="btn btn-success" data-user-id="<%= usuario.idUsuario %>">Detalles</a> ||
-                    <a name="editar" class="btn btn-primary" data-user-id="<%= usuario.idUsuario %>">Editar</a> ||
-                    <a name="eliminar" class="btn btn-danger" data-user-id="<%= usuario.idUsuario %>">Eliminar</a>
+                    <a name="detalles" id="btnDetelles" class="btn btn-success">Detalles</a>
+                    ||
+                    <a name="editar" id="btnEditar" class="btn btn-primary">Editar</a>
+                    ||
+                    <a name="eliminar" id="btnEliminar" class="btn btn-danger">Eliminar</a>
                   </td>
                   <td scope="row">
                     <%= usuario.idUsuario %>
@@ -57,22 +59,120 @@
         </table>
       </div>
     </main>
+
     <%- include('partials/footer.ejs')%>
 
       <!-- Bootstrap JavaScript Libraries -->
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQ+zqX6gSbd85u4mG4QzX+"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
         integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
         crossorigin="anonymous"></script>
 
       <script>
+        ////////////////////////////////////////////////////////
+        /////////////////// CREATE /////////////////////////////
+
+        // Definimos una variable para la ventana emergente
+        var popup;
+
+        // Seleccionamos el botón por su id
+        var btnAddUsuario = document.getElementById('btnAddUsuario').addEventListener('click', function () {
+          // Abre la ventana emergente para agregar un usuario
+          popup = window.open('', 'popup', 'width=400,height=300');
+
+          // Contenido del formulario dentro de la ventana emergente
+          var formContent = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Agregar Usuario</title>
+            <link rel="stylesheet" href="/css/main.css">
+        </head>
+        <body class="bodyPopup">
+           <form class="popup-form">
+                <label for="nombreUsuario">Nombre del usuario:</label><br>
+                <input type="text" id="nombreUsuario" name="nombreUsuario"><br>
+
+                <label for="correo">Correo electrónico:</label><br>
+                <input type="text" id="correo" name="correo"><br>
+
+                <label for="contrasenia">Contraseña:</label><br>
+                <input type="text" id="contrasenia" name="contrasenia"><br>
+
+                <button class="btnPopup" type="submit">Guardar</button>
+                <button class="btnPopup" type="button" onclick="window.opener.cerrarPopup()">Cancelar</button>
+            </form>
+        </body>
+        </html>
+      `;
+
+          // Escribimos el contenido del formulario en la ventana emergente
+          popup.document.write(formContent);
+
+          // Definimos el comportamiento del formulario al ser enviado
+          popup.document.querySelector('form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            // Llamar a la función para guardar el nuevo usuario
+            btnPopupGuardar();
+          });
+        });
+
+        // Definimos la función cerrarPopup para cerrar la ventana emergente
+        function cerrarPopup() {
+          if (popup) {
+            popup.close();
+          }
+        }
+
+        // Definimos la función btnPopupGuardar() para guardar el nuevo usuario
+        function btnPopupGuardar() {
+          // Obtener los valores de los campos del formulario
+          var nombreUsuario = popup.document.getElementById('nombreUsuario').value;
+          var correo = popup.document.getElementById('correo').value;
+          var contrasenia = popup.document.getElementById('contrasenia').value;
+
+          // Objeto con los datos del nuevo usuario
+          var nuevoUsuario = {
+            nombreUsuario: nombreUsuario,
+            correo: correo,
+            contrasenia: contrasenia
+          };
+
+          // Enviar una solicitud POST al servidor para crear el nuevo usuario
+          fetch('/users', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(nuevoUsuario)
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.mensaje === 'Usuario creado exitosamente') {
+                // Si la respuesta es satisfactoria, cerrar la ventana emergente y recargar la página principal
+                popup.close();
+                window.location.reload();
+              } else {
+                // Si hay un error en la respuesta, mostrar un mensaje de error
+                console.error('Error al guardar el nuevo usuario:', data);
+              }
+            })
+            .catch(error => {
+              console.error('Error al realizar la solicitud:', error);
+            });
+        }
+        ////////////////////////////////////////////////////////
+        /////////////////// Read //////////////////////////////
+
         // Manejador de clic para el botón de detalles
         document.querySelectorAll('[name="detalles"]').forEach(btn => {
           btn.addEventListener('click', async function () {
             const userId = this.getAttribute('data-user-id');
-            const response = await fetch(`/usuarios/${userId}`, {
+            const response = await fetch(`/users/${userId}`, {
               method: 'GET',
               headers: { 'Content-Type': 'application/json' }
             });
@@ -82,13 +182,20 @@
           });
         });
 
+
+        ////////////////////////////////////////////////////////
+        /////////////////// Update /////////////////////////////
+
         // Manejador de clic para el botón de editar
         document.querySelectorAll('[name="editar"]').forEach(btn => {
           btn.addEventListener('click', function () {
             const userId = this.getAttribute('data-user-id');
-            window.location.href = `/usuarios/${userId}/editar`;
+            window.location.href = `/users/${userId}/editar`;
           });
         });
+
+        ////////////////////////////////////////////////////////
+        /////////////////// Delete /////////////////////////////
 
         // Manejador de clic para el botón de eliminar
         document.querySelectorAll('[name="eliminar"]').forEach(btn => {
@@ -96,7 +203,7 @@
             const userId = this.getAttribute('data-user-id');
             const confirmacion = confirm('¿Estás seguro de que quieres eliminar este usuario?');
             if (confirmacion) {
-              const response = await fetch(`/usuarios/${userId}`, {
+              const response = await fetch(`/users/${userId}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' }
               });
@@ -108,90 +215,7 @@
           });
         });
 
-        ////////////////////////////////////////////////////////
-        /////////////////// CREATE /////////////////////////////
-
-        var popup;
-
-        var btnAddUsuario = document.getElementById('btnAddUsuario').addEventListener('click', function () {
-          popup = window.open('', 'popup', 'width=400,height=300');
-          var formContent = `
-              <!DOCTYPE html>
-              <html lang="en">
-              <head>
-                  <meta charset="UTF-8">
-                  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                  <title>Agregar Usuario</title>
-                  <link rel="stylesheet" href="/css/main.css">
-              </head>
-              <body class="bodyPopup">
-                 <form class="popup-form" id="popupForm">
-                      <label for="nombreUsuario">Nombre del usuario:</label><br>
-                      <input type="text" id="nombreUsuario" name="nombreUsuario"><br>
-                      <label for="correo">Correo electrónico:</label><br>
-                      <input type="text" id="correo" name="correo"><br>
-                      <label for="contrasenia">Contraseña:</label><br>
-                      <input type="text" id="contrasenia" name="contrasenia"><br>
-                      <button class="btnPopup" type="submit">Guardar</button>
-                      <button class="btnPopup" type="button" onclick="window.opener.cerrarPopup()">Cancelar</button>
-                  </form>
-              </body>
-              </html>
-            `;
-          popup.document.write(formContent);
-
-          popup.document.querySelector('form').addEventListener('submit', function (event) {
-            event.preventDefault();
-            btnPopupGuardar();
-          });
-        });
-
-        function cerrarPopup() {
-          if (popup) {
-            popup.close();
-          }
-        }
-
-        function btnPopupGuardar() {
-          var nombreUsuario = popup.document.getElementById('nombreUsuario').value;
-          var correo = popup.document.getElementById('correo').value;
-          var contrasenia = popup.document.getElementById('contrasenia').value;
-
-          // Verificar si los valores están capturados correctamente
-          console.log('Datos del formulario:', {
-            nombreUsuario,
-            correo,
-            contrasenia
-          });
-
-          var nuevoUsuario = {
-            nombreUsuario: nombreUsuario,
-            correo: correo,
-            contrasenia: contrasenia
-          };
-
-          console.log('Enviando solicitud para crear usuario:', nuevoUsuario);
-
-          fetch('/usuarios', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(nuevoUsuario)
-          })
-            .then(response => {
-              if (response.ok) {
-                console.log('Usuario creado exitosamente');
-                popup.close();
-                window.location.reload();
-              } else {
-                throw new Error('Error al guardar el nuevo usuario');
-              }
-            })
-            .catch(error => {
-              console.error('Error en la creación del usuario:', error);
-            });
-        }
       </script>
 </body>
+
 </html>
