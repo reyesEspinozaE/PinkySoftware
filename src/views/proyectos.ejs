@@ -8,103 +8,141 @@
         <%= title %>
     </title>
     <%- include("partials/head") %>
-        <%- include('partials/navigation.ejs')%>
 </head>
 
 <body>
-    <main>
-        <div class="container mt-4">
-            <button id="btnAddProyecto" class="btnCommon btn btn-info">Agregar proyecto</button>
-            <!-- Card 1 -->
-            <div class="card mt-4">
-                <h3>Nombre del Proyecto</h3>
-                <p><strong>Descripción:</strong> Descripción del proyecto...</p>
-                <p><strong>Partidas Presupuestarias:</strong> Partida 1, Partida 2, ...</p>
-                <p><strong>Encargado:</strong> Nombre del encargado</p>
-                <p><strong>Fecha de Inicio:</strong> DD/MM/AAAA</p>
-                <p><strong>Fecha de Fin:</strong> DD/MM/AAAA</p>
-                <div class="table-responsive">
-                    <table class="table table-striped
+    <%- include("partials/navigation.ejs")%>
+        <div class="content-wrapper">
+            <main>
+                <div class="container mt-4">
+                    <button id="btnAddProyecto" class="btnCommon btn btn-info mt-2">Agregar proyecto</button>
+                    <!-- Card 1 -->
+                    <div class="card mt-4">
+                        <p><strong>Nombre del Proyecto:</strong> Nombre del proyecto</p>
+                        <p><strong>Id proyecto:</strong> Id proyecto</p>
+                        <p><strong>Id partida:</strong> Id partida</p>
+                        <p><strong>Nombre partida:</strong> Nombre partida</p>
+                        <p><strong>Nombre proyecto:</strong> Nombre proyecto</p>
+                        <p><strong>Descripción:</strong> Descripción del proyecto...</p>
+                        <p><strong>Partidas Presupuestarias:</strong> Partida 1, Partida 2, ...</p>
+                        <p><strong>Encargado:</strong> Nombre del encargado</p>
+                        <p><strong>Fecha de Inicio:</strong> DD/MM/AAAA</p>
+                        <p><strong>Fecha de Fin:</strong> DD/MM/AAAA</p>
+                        <div class="table-responsive">
+                            <table class="table table-striped
                         table-hover	
                         table-borderless
                         table-secondary
                         align-middle">
-                        <thead class="table-light">
-                        </thead>
-                        <tbody class="table-group-divider">
-                            <tr class="table-secondary">
-                                <td>
-                                    <a name="eliminar" id="btnEliminar" class="btn btn-danger">Eliminar</a>
-                                    ||
-                                    <a name="editar" id="btnEditar" class="btn btn-primary">Editar</a>
-                                    ||
-                                    <a name="detalles" id="btnDetalles" class="btn btn-success">Detalles</a>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                        </tfoot>
-                    </table>
+                                <thead class="table-light">
+                                </thead>
+                                <tbody class="table-group-divider">
+                                    <% if (proyectos && proyectos.length> 0) { %>
+                                        <% proyectos.forEach(proyecto=> { %>
+                                            <tr class="table-secondary">
+                                                <td>
+                                                    <a name="detalles" class="btn btn-success"
+                                                        data-user-id="<%= proyecto.idProyecto %>">Detalles</a>
+                                                    ||
+                                                    <a name="editar" class="btn btn-primary"
+                                                        data-user-id="<%= proyecto.idProyecto %>">Editar</a>
+                                                    ||
+                                                    <a name="eliminar" class="btn btn-danger"
+                                                        data-user-id="<%= proyecto.idProyecto %>">Eliminar</a>
+                                                </td>
+                                                <td scope="row">
+                                                    <%= proyecto.idProyecto %>
+                                                </td>
+                                                <td>
+                                                    <%= proyecto.nombreProyecto %>
+                                                </td>
+                                                <td>
+                                                    <%= proyecto.descripcionProyecto %>
+                                                </td>
+                                                <td>
+                                                    <%= proyecto.nombreEncargado %>
+                                                </td>
+                                            </tr>
+                                            <% }) %>
+                                                <% } else { %>
+                                                    <tr>
+                                                        <td colspan="5">No hay proyectos disponibles</td>
+                                                    </tr>
+                                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </main>
         </div>
-    </main>
+        <%- include('partials/footer.ejs')%>
+
+            <!-- Bootstrap JavaScript Libraries -->
+
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+                crossorigin="anonymous"></script>
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+                integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+                crossorigin="anonymous"></script>
+
+            <script>
+                ////////////////////////////////////////////////////////
+                /////////////////// CREATE /////////////////////////////
+
+                // Seleccionamos el botón por su id
+                var btnAddProyecto = document.getElementById('btnAddProyecto');
+
+                // Agregamos un evento onclick al botón
+                btnAddProyecto.onclick = function () {
+                    // Ventana emergente
+                    var popup = window.open('', 'popup', 'width=500,height=400');
+
+                    // Contenido del formulario dentro de la ventana emergente
+                    var formContent = `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Agregar Proyecto</title>
+                <link rel="stylesheet" href="/css/main.css">
+            </head>
+            <body class="bodyPopup">
+                <form class="popup-form">
+                    <label for="nombreProyecto">Nombre del Proyecto:</label><br>
+                    <input type="text" id="nombreProyecto" name="nombreProyecto"><br>
+    
+                    <label for="descripcion">Descripción:</label><br>
+                    <textarea id="descripcion" name="descripcion" rows="4" cols="50"></textarea><br>
+    
+                    <label for="partidasPresupuestarias">Partidas Presupuestarias:</label><br>
+                    <input type="text" id="partidasPresupuestarias" name="partidasPresupuestarias"><br>
+    
+                    <label for="encargado">Encargado:</label><br>
+                    <input type="text" id="encargado" name="encargado"><br>
+    
+                    <label for="fechaInicio">Fecha de Inicio:</label><br>
+                    <input type="date" id="fechaInicio" name="fechaInicio"><br>
+    
+                    <label for="fechaFin">Fecha de Fin:</label><br>
+                    <input type="date" id="fechaFin" name="fechaFin"><br>
+    
+                    <button class="btnPopup" type="submit">Guardar</button>
+                    <button class="btnPopup" type="button" onclick="window.close()">Cancelar</button>
+                </form>
+            </body>
+            </html>
+            `;
+
+                    // Escribimos el contenido del formulario en la ventana emergente
+                    popup.document.write(formContent);
+                    popup.document.querySelector('form').onsubmit = function (event) {
+                        event.preventDefault();
+                        // Aquí manejamos las acciones del form con el servidor
+                    };
+                };
+            </script>
 </body>
-<%- include('partials/footer.ejs')%>
-
 </html>
-
-<script>
-    // Seleccionamos el botón por su id
-    var btnAddProyecto = document.getElementById('btnAddProyecto');
-
-    // Agregamos un evento onclick al botón
-    btnAddProyecto.onclick = function () {
-        // Ventana emergente
-        var popup = window.open('', 'popup', 'width=500,height=400');
-
-        // Contenido del formulario dentro de la ventana emergente
-        var formContent = `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Agregar Proyecto</title>
-            <link rel="stylesheet" href="/css/main.css">
-        </head>
-        <body class="bodyPopup">
-            <form class="popup-form">
-                <label for="nombreProyecto">Nombre del Proyecto:</label><br>
-                <input type="text" id="nombreProyecto" name="nombreProyecto"><br>
-
-                <label for="descripcion">Descripción:</label><br>
-                <textarea id="descripcion" name="descripcion" rows="4" cols="50"></textarea><br>
-
-                <label for="partidasPresupuestarias">Partidas Presupuestarias:</label><br>
-                <input type="text" id="partidasPresupuestarias" name="partidasPresupuestarias"><br>
-
-                <label for="encargado">Encargado:</label><br>
-                <input type="text" id="encargado" name="encargado"><br>
-
-                <label for="fechaInicio">Fecha de Inicio:</label><br>
-                <input type="date" id="fechaInicio" name="fechaInicio"><br>
-
-                <label for="fechaFin">Fecha de Fin:</label><br>
-                <input type="date" id="fechaFin" name="fechaFin"><br>
-
-                <button class="btnPopup" type="submit">Guardar</button>
-                <button class="btnPopup" type="button" onclick="window.close()">Cancelar</button>
-            </form>
-        </body>
-        </html>
-        `;
-
-        // Escribimos el contenido del formulario en la ventana emergente
-        popup.document.write(formContent);
-        popup.document.querySelector('form').onsubmit = function (event) {
-            event.preventDefault();
-            // Aquí manejamos las acciones del form con el servidor
-        };
-    };
-</script>

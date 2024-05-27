@@ -1,6 +1,7 @@
 import { Router } from "express";
 // Importando el controlador de users
 import { actualizarUsuario, crearUsuario, detallesUsuario, eliminarUsuario, getUsuarios } from "../controllers/usuariosController.js";
+import { getProyectos } from "../controllers/proyectosController.js";
 import bodyParser from 'body-parser';
 
 const router = Router();
@@ -21,5 +22,8 @@ router.post('/users', crearUsuario);
 router.get('/users/:id', detallesUsuario);
 router.put('/users/:id', actualizarUsuario);
 router.delete('/users/:id', eliminarUsuario);
+
+// Llamadas para el controlador de proyectos
+router.get('/proyectos', getProyectos);
 
 export default router;

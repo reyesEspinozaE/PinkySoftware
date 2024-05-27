@@ -15,12 +15,28 @@ export const getUsuarios = async (req, res) => {
 };
 
 // Detalles de un usuario especifico
+// export const detallesUsuario = async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const usuario = await Usuario.findByPk(id);
+//     console.log(usuario); // Registro para depurar
+
+//     if (usuario) {
+//       res.status(200).json({ usuario });
+//     } else {
+//       res.status(404).json({ mensaje: 'Usuario no encontrado' });
+//     }
+//   } catch (error) {
+//     console.error("Error al obtener los detalles del usuario:", error);
+//     res.status(500).send("Error al obtener los detalles del usuario");
+//   }
+// };
 export const detallesUsuario = async (req, res) => {
   const { id } = req.params;
   try {
     const usuario = await Usuario.findByPk(id);
     if (usuario) {
-      res.status(200).json({ usuario });
+      res.status(200).json(usuario);
     } else {
       res.status(404).json({ mensaje: 'Usuario no encontrado' });
     }
@@ -31,11 +47,12 @@ export const detallesUsuario = async (req, res) => {
 };
 
 // Crear un nuevo usuario
+
 export const crearUsuario = async (req, res) => {
   try {
     const { nombreUsuario, correo, contrasenia } = req.body;
     console.log('Datos recibidos en el servidor:', { nombreUsuario, correo, contrasenia });
-    
+
     const nuevoUsuario = await Usuario.create({
       nombreUsuario,
       correo,
@@ -71,17 +88,21 @@ export const eliminarUsuario = async (req, res) => {
 
 export const actualizarUsuario = async (req, res) => {
   const { id } = req.params;
+  const { nombreUsuario, correo, contrasenia } = req.body;
+
   try {
-    const usuarioActualizado = await Usuario.update(req.body, {
-      where: { idUsuario: id }
-    });
-    if (usuarioActualizado[0]) {
+    const usuario = await Usuario.findByPk(id);
+    if (usuario) {
+      usuario.nombreUsuario = nombreUsuario;
+      usuario.correo = correo;
+      usuario.contrasenia = contrasenia;
+      await usuario.save();
       res.status(200).json({ mensaje: 'Usuario actualizado exitosamente' });
     } else {
       res.status(404).json({ mensaje: 'Usuario no encontrado' });
     }
   } catch (error) {
-    console.error("Error al actualizar el usuario:", error);
-    res.status(500).send("Error al actualizar el usuario");
+    console.error('Error al actualizar el usuario:', error);
+    res.status(500).send('Error al actualizar el usuario');
   }
 };

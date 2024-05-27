@@ -2,6 +2,9 @@ body{
     background: rgb(255, 255, 255);
     text-align: center;
     align-items: center;
+    /* ftr anclado al final de pagina*/
+    height: 100%;
+    margin: 0;
 }
 
 .navbar{
@@ -39,13 +42,22 @@ body{
     color: white;
 }
 
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main {
+    flex: 1;
+}
+
 .ftr {
     background: black;
     color: white;
     text-align: center;
     padding: 1rem; 
     width: 100%;
-    bottom: 0;
 }
 
 /* Estilos para ventanas emergentes */
@@ -78,11 +90,27 @@ body{
     margin-top: 10px;
 }
 
+.popup-form strong{
+    font-weight: bold;
+    color: #333;
+    margin-top: 10px;
+}
+
 .popup-form input[type="text"],
 .popup-form input[type="date"],
 .popup-form input[type="file"],
 .popup-form input[type="number"],
 .popup-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.p{
     width: 100%;
     padding: 8px;
     margin-top: 10px;
