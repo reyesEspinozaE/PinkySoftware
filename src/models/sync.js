@@ -3,13 +3,6 @@ import sequelize from './config/database.js';
 import './models/associations.js'; // Se importan las asociaciones para asegurarse de que se configuren
 
 // Se importan todos los modelos para asegurarse de que estén sincronizados
-// import Proyecto from './models/proyecto.js';
-// import Gasto from './models/gasto.js';
-// import Presupuesto from './models/presupuesto.js';
-// import Usuario from './models/usuario.js';
-// import Partida from './models/partida.js';
-// import ProyectoUsuario from './models/proyectoUsuario.js';
-
 import './models/proyecto.js';
 import './models/gasto.js';
 import './models/presupuesto.js';

@@ -15,22 +15,7 @@ export const getUsuarios = async (req, res) => {
 };
 
 // Detalles de un usuario especifico
-// export const detallesUsuario = async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     const usuario = await Usuario.findByPk(id);
-//     console.log(usuario); // Registro para depurar
 
-//     if (usuario) {
-//       res.status(200).json({ usuario });
-//     } else {
-//       res.status(404).json({ mensaje: 'Usuario no encontrado' });
-//     }
-//   } catch (error) {
-//     console.error("Error al obtener los detalles del usuario:", error);
-//     res.status(500).send("Error al obtener los detalles del usuario");
-//   }
-// };
 export const detallesUsuario = async (req, res) => {
   const { id } = req.params;
   try {
