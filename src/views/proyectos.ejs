@@ -15,168 +15,407 @@
     <div class="content-wrapper">
       <main>
         <button id="btnAddProyecto" class="btnCommon btn btn-primary mt-2">Agregar Proyecto</button>
-        <div class="table-responsive mt-2">
-          <table class="table table-striped table-hover table-borderless table-secondary align-middle">
-            <thead class="table-light">
-              <tr>
-                <th>Acciones</th>
-                <th>Id Proyecto</th>
-                <th>Id Partida</th>
-                <th>Nombre Proyecto</th>
-                <th>Descripción</th>
-                <th>Nombre Encargado</th>
-                <th>Fecha Inicio</th>
-                <th>Fecha Fin</th>
-              </tr>
-            </thead>
-            <tbody class="table-group-divider">
-              <% if (proyectos && proyectos.length > 0) { %>
-                <% proyectos.forEach(proyecto => { %>
-                  <tr class="table-secondary">
-                    <td>
-                      <a name="detalles" class="btn btn-success" data-project-id="<%= proyecto.idProyecto %>">Detalles</a>
-                      ||
-                      <a name="editar" class="btn btn-primary" data-project-id="<%= proyecto.idProyecto %>">Editar</a>
-                      ||
-                      <a name="eliminar" class="btn btn-danger" data-project-id="<%= proyecto.idProyecto %>">Eliminar</a>
-                    </td>
-                    <td scope="row">
-                      <%= proyecto.idProyecto %>
-                    </td>
-                    <td>
-                      <%= proyecto.idPartida %>
-                    </td>
-                    <td>
-                      <%= proyecto.nombreProyecto %>
-                    </td>
-                    <td>
-                      <%= proyecto.descripcionProyecto %>
-                    </td>
-                    <td>
-                      <%= proyecto.nombreEncargado %>
-                    </td>
-                    <td>
-                      <%= new Date(proyecto.fechaInicio).toLocaleDateString() %>
-                    </td>
-                    <td>
-                      <%= new Date(proyecto.fechaFin).toLocaleDateString() %>
-                    </td>
-                  </tr>
-                <% }) %>
-              <% } else { %>
-                <tr>
-                  <td colspan="8">No hay proyectos disponibles</td>
-                </tr>
-              <% } %>
-            </tbody>
-          </table>
+        <div class="projects-container">
+          <% if (proyectos && proyectos.length> 0) { %>
+            <% proyectos.forEach(proyecto=> { %>
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title">Proyecto #<%= proyecto.idProyecto %>
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <p class="card-text"><strong>Nombre:</strong>
+                    <%= proyecto.nombreProyecto %>
+                  </p>
+                  <p class="card-text"><strong>Descripción:</strong>
+                    <%= proyecto.descripcionProyecto %>
+                  </p>
+                  <p class="card-text"><strong>Encargado:</strong>
+                    <%= proyecto.nombreEncargado %>
+                  </p>
+                  <p class="card-text"><strong>Fecha Inicio:</strong>
+                    <%= new Date(proyecto.fechaInicio).toLocaleDateString() %>
+                  </p>
+                  <p class="card-text"><strong>Fecha Fin:</strong>
+                    <%= new Date(proyecto.fechaFin).toLocaleDateString() %>
+                  </p>
+                </div>
+                <div class="card-footer">
+                  <div class="table-responsive mt-2">
+                    <table class="table table-striped table-hover table-borderless table-secondary align-middle">
+                      <thead class="table-light">
+                        <tr>
+                          <th>Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody class="table-group-divider">
+                        <tr class="table-secondary">
+                          <td>
+                            <a name="detalles" class="btn btn-success"
+                              data-project-id="<%= proyecto.idProyecto %>">Detalles</a>
+                            ||
+                            <a name="editar" class="btn btn-primary"
+                              data-project-id="<%= proyecto.idProyecto %>">Editar</a>
+                            ||
+                            <a name="eliminar" class="btn btn-danger"
+                              data-project-id="<%= proyecto.idProyecto %>">Eliminar</a>
+                          </td>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <% }) %>
+                <% } else { %>
+                  <div class="alert alert-info">No hay proyectos disponibles</div>
+                  <% } %>
         </div>
-      </main>  
+      </main>
     </div>
-
-    <%- include('partials/footer.ejs')%>
-    <!-- Bootstrap JavaScript Libraries -->
-
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
-
-    <script>
-      ////////////////////////////////////////////////////////
-      /////////////////// CREATE /////////////////////////////
-
-      var popup;
-
-      var btnAddProyecto = document.getElementById('btnAddProyecto').addEventListener('click', function () {
-        popup = window.open('', 'popup', 'width=400,height=400');
-
-        var formContent = `
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Agregar Proyecto</title>
-              <link rel="stylesheet" href="/css/main.css">
-          </head>
-          <body class="bodyPopup">
-             <form class="popup-form">
-                  <label for="idPartida">ID Partida:</label><br>
-                  <input type="number" id="idPartida" name="idPartida"><br>
-
-                  <label for="nombreProyecto">Nombre del Proyecto:</label><br>
-                  <input type="text" id="nombreProyecto" name="nombreProyecto"><br>
-
-                  <label for="descripcionProyecto">Descripción:</label><br>
-                  <textarea id="descripcionProyecto" name="descripcionProyecto"></textarea><br>
-
-                  <label for="nombreEncargado">Nombre del Encargado:</label><br>
-                  <input type="text" id="nombreEncargado" name="nombreEncargado"><br>
-
-                  <label for="fechaInicio">Fecha de Inicio:</label><br>
-                  <input type="date" id="fechaInicio" name="fechaInicio"><br>
-
-                  <label for="fechaFin">Fecha de Fin:</label><br>
-                  <input type="date" id="fechaFin" name="fechaFin"><br>
-
-                  <button class="btnPopup" type="submit">Guardar</button>
-                  <button class="btnPopup" type="button" onclick="window.opener.cerrarPopup()">Cancelar</button>
-              </form>
-          </body>
-          </html>
-        `;
-
-        popup.document.write(formContent);
-
-        popup.document.querySelector('form').addEventListener('submit', function (event) {
-          event.preventDefault();
-          btnPopupGuardar();
-        });
-      });
-
-      function cerrarPopup() {
-        if (popup) {
-          popup.close();
-        }
-      }
-
-      function btnPopupGuardar() {
-        var idPartida = popup.document.getElementById('idPartida').value;
-        var nombreProyecto = popup.document.getElementById('nombreProyecto').value;
-        var descripcionProyecto = popup.document.getElementById('descripcionProyecto').value;
-        var nombreEncargado = popup.document.getElementById('nombreEncargado').value;
-        var fechaInicio = popup.document.getElementById('fechaInicio').value;
-        var fechaFin = popup.document.getElementById('fechaFin').value;
-
-        var nuevoProyecto = {
-          idPartida: idPartida,
-          nombreProyecto: nombreProyecto,
-          descripcionProyecto: descripcionProyecto,
-          nombreEncargado: nombreEncargado,
-          fechaInicio: fechaInicio,
-          fechaFin: fechaFin
-        };
-
-        fetch('/projects', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(nuevoProyecto)
-        })
-          .then(response => response.json())
-          .then(data => {
-            if (data.mensaje === 'Proyecto creado exitosamente') {
-              popup.close();
-              window.location.reload();
-            } else {
-              console.error('Error al guardar el nuevo proyecto:', data);
-            }
-          })
-          .catch(error => {
-            console.error('Error al realizar la solicitud:', error);
-          });
-      }
-    </script>
 </body>
 
 </html>
+
+<%- include('partials/footer.ejs')%>
+  <!-- Bootstrap JavaScript Libraries -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+    integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+    crossorigin="anonymous"></script>
+
+  <script>
+    ////////////////////////////////////////////////////////
+    /////////////////// CREATE /////////////////////////////
+
+    var popup;
+
+    var btnAddProyecto = document.getElementById('btnAddProyecto').addEventListener('click', function () {
+      popup = window.open('', 'popup', 'width=400,height=600');
+
+      var formContent = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Agregar Proyecto</title>
+          <link rel="stylesheet" href="/css/main.css">
+      </head>
+      <body class="bodyPopup">
+         <form class="popup-form">
+              <label for="idPartida">ID Partida:</label><br>
+              <select id="idPartida" name="idPartida"></select><br>
+
+              <label for="nombreProyecto">Nombre del Proyecto:</label><br>
+              <input type="text" id="nombreProyecto" name="nombreProyecto"><br>
+
+              <label for="descripcionProyecto">Descripción:</label><br>
+              <textarea id="descripcionProyecto" name="descripcionProyecto"></textarea><br>
+
+              <label for="nombreEncargado">Nombre del Encargado:</label><br>
+              <input type="text" id="nombreEncargado" name="nombreEncargado"><br>
+
+              <label for="fechaInicio">Fecha de Inicio:</label><br>
+              <input type="date" id="fechaInicio" name="fechaInicio"><br>
+
+              <label for="fechaFin">Fecha de Fin:</label><br>
+              <input type="date" id="fechaFin" name="fechaFin"><br>
+
+              <button class="btnPopup" type="submit">Guardar</button>
+              <button class="btnPopup" type="button" onclick="window.opener.cerrarPopup()">Cancelar</button>
+          </form>
+      </body>
+      </html>
+    `;
+
+      // Escribimos el contenido del formulario en la ventana emergente
+      popup.document.write(formContent);
+
+      // Esperamos a que la ventana emergente cargue completamente
+      popup.onload = function () {
+        // Obtener las partidas y rellenar la lista desplegable
+        fetch('/partidas') // Ajustar la ruta aquí
+          .then(response => response.json())
+          .then(partidas => {
+            var select = popup.document.getElementById('idPartida');
+            partidas.forEach(partida => {
+              var option = popup.document.createElement('option'); // Correct context for option creation
+              option.value = partida.id;
+              option.textContent = `${partida.id} - ${partida.nombre}`;
+              select.appendChild(option);
+            });
+          })
+          .catch(error => {
+            console.error('Error al obtener las partidas:', error);
+          });
+
+        // Definimos el comportamiento del formulario al ser enviado
+        popup.document.querySelector('form').addEventListener('submit', function (event) {
+          event.preventDefault();
+          // Llamar a la función para guardar el nuevo proyecto
+          btnPopupGuardar();
+        });
+      }
+    });
+
+    function cerrarPopup() {
+      if (popup) {
+        popup.close();
+      }
+    }
+
+    function btnPopupGuardar() {
+      var idPartida = popup.document.getElementById('idPartida').value;
+      var nombreProyecto = popup.document.getElementById('nombreProyecto').value;
+      var descripcionProyecto = popup.document.getElementById('descripcionProyecto').value;
+      var nombreEncargado = popup.document.getElementById('nombreEncargado').value;
+      var fechaInicio = new Date(popup.document.getElementById('fechaInicio').value);
+      var fechaFin = new Date(popup.document.getElementById('fechaFin').value);
+
+      var nuevoProyecto = {
+        idPartida: idPartida,
+        nombreProyecto: nombreProyecto,
+        descripcionProyecto: descripcionProyecto,
+        nombreEncargado: nombreEncargado,
+        fechaInicio: fechaInicio,
+        fechaFin: fechaFin
+      };
+
+      // Enviar una solicitud POST al servidor para crear el nuevo proyecto
+      fetch('/partidas', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(nuevoProyecto)
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.mensaje === 'Proyecto creado exitosamente') {
+            // Si la respuesta es satisfactoria, cerrar la ventana emergente y recargar la página principal
+            popup.close();
+            window.location.reload();
+          } else {
+            // Si hay un error en la respuesta, mostrar un mensaje de error
+            console.error('Error al guardar el nuevo Proyecto:', data);
+          }
+        })
+        .catch(error => {
+          console.error('Error al realizar la solicitud:', error);
+        });
+    }
+
+
+    //////////////////////////////////////////////////////
+    /////////////////// READ /////////////////////////////
+
+    // Ventana emergente para detalles de proyecto
+    document.querySelectorAll('[name="detalles"]').forEach(btn => {
+      btn.addEventListener('click', async function () {
+        const proyectoId = this.getAttribute('data-project-id');
+        const response = await fetch(`/proyectos/${proyectoId}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        if (response.ok) {
+          const proyecto = await response.json();
+          var formContent = `
+              <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                  <meta charset="UTF-8">
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                  <title>Detalles de Proyecto</title>
+                  <link rel="stylesheet" href="/css/main.css">
+                </head>
+                <body>
+                  <div>
+                    <div class="card">
+                      <div class="card-header">
+                        <strong>Detalles del Proyecto</strong>
+                      </div>
+                      <div class="card-body">
+                        <div class="details-container">
+                          <div class="detail-column">
+                            <div class="card-detail">
+                              <strong>ID Proyecto:</strong>
+                            </div>
+                            <div class="card-detail">
+                              ${proyecto.idProyecto}
+                            </div>
+                            <div class="card-detail">
+                              <strong>Nombre del Proyecto:</strong>
+                            </div>
+                            <div class="card-detail">
+                              ${proyecto.nombreProyecto}
+                            </div>
+                            <div class="card-detail">
+                              <strong>Descripción:</strong>
+                            </div>
+                            <div class="card-detail">
+                              ${proyecto.descripcionProyecto}
+                            </div>
+                          </div>
+                          <div class="detail-column">
+                            <div class="card-detail">
+                              <strong>Encargado:</strong>
+                            </div>
+                            <div class="card-detail">
+                              ${proyecto.nombreEncargado}
+                            </div>
+                            <div class="card-detail">
+                              <strong>Fecha de Inicio:</strong>
+                            </div>
+                            <div class="card-detail">
+                              ${new Date(proyecto.fechaInicio).toLocaleDateString()}
+                            </div>
+                            <div class="card-detail">
+                              <strong>Fecha de Fin:</strong>
+                            </div>
+                            <div class="card-detail">
+                              ${new Date(proyecto.fechaFin).toLocaleDateString()}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-footer">
+                        <button class="btnCard btn btn-secondary" onclick="window.close()">Cerrar</button>
+                      </div>
+                    </div>
+                  </div>
+                </body>
+                </html>
+            `;
+          var popup = window.open('', 'popup', 'width=700,height=320');
+          popup.document.write(formContent);
+        } else {
+          console.error('Error al obtener los detalles del proyecto:', await response.text());
+        }
+      });
+    });
+
+
+    ////////////////////////////////////////////////////////
+    /////////////////// Update /////////////////////////////
+
+    // Ventana emergente para editar un proyecto
+
+    document.querySelectorAll('[name="editar"]').forEach(btn => {
+      btn.addEventListener('click', async function () {
+        const idProyecto = this.getAttribute('data-project-id');
+        const response = await fetch(`/proyectos/${idProyecto}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        if (response.ok) {
+          const proyecto = await response.json();
+          var formContent = `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Editar Usuario</title>
+              <link rel="stylesheet" href="/css/main.css">
+            </head>
+            <body class="bodyPopup">
+              <form class="popup-form" id="formProyecto">
+                <label for="idPartida">ID Partida:</label><br>
+                  <input type="number" id="idPartida" name="idPartida"><br>
+
+                  <label for="nombreProyecto">Nombre del Proyecto:</label><br>
+                  <input type="text" id="nombreProyecto" name="nombreProyecto" value="${proyecto.nombreProyecto}"required><br>
+
+                  <label for="descripcionProyecto">Descripción:</label><br>
+                  <textarea id="descripcionProyecto" name="descripcionProyecto" value="${proyecto.descripcionProyecto}"></textarea><br>
+
+                  <label for="nombreEncargado">Nombre del Encargado:</label><br>
+                  <input type="text" id="nombreEncargado" name="nombreEncargado"  value="${proyecto.nombreEncargado}"><br>
+
+                  <label for="fechaInicio">Fecha de Inicio:</label><br>
+                  <input type="date" id="fechaInicio" name="fechaInicio" value="${proyecto.fechaInicio}"><br>
+
+                  <label for="fechaFin">Fecha de Fin:</label><br>
+                  <input type="date" id="fechaFin" name="fechaFin" value="${proyecto.fechaFin}"><br>
+
+                  <button class="btnPopup" type="submit">Guardar</button>
+                  <button class="btnPopup" type="button" onclick="window.close()">Cancelar</button>
+              </form>
+            </body>
+            </html>
+          `;
+          var popup = window.open('', 'popup', 'width=400,height=550');
+          popup.document.write(formContent);
+          popup.document.querySelector('form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            btnPopupActualizar(idProyecto, popup);
+          });
+        } else {
+          console.error('Error al actualizar el proyecto:', await response.text());
+        }
+      });
+    });
+
+    function btnPopupActualizar(idProyecto, popup) {
+      var idPartida = popup.document.getElementById('idPartida').value;
+      var nombreProyecto = popup.document.getElementById('nombreProyecto').value;
+      var descripcionProyecto = popup.document.getElementById('descripcionProyecto').value;
+      var nombreEncargado = popup.document.getElementById('nombreEncargado').value;
+      var fechaInicio = new Date(popup.document.getElementById('fechaInicio').value);
+      var fechaFin = new Date(popup.document.getElementById('fechaFin').value);
+
+      var proyectoActualizado = {
+        idPartida: idPartida,
+        nombreProyecto: nombreProyecto,
+        descripcionProyecto: descripcionProyecto,
+        nombreEncargado: nombreEncargado,
+        fechaInicio: fechaInicio,
+        fechaFin: fechaFin
+      };
+
+      fetch(`/proyectos/${idProyecto}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(proyectoActualizado)
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.mensaje === 'Proyecto actualizado exitosamente') {
+            popup.close();
+            window.location.reload();
+          } else {
+            console.error('Error al actualizar el proyecto:', data);
+          }
+        })
+        .catch(error => {
+          console.error('Error al realizar la solicitud:', error);
+        });
+    }
+
+    // Manejador de clic para el botón de eliminar
+
+    document.querySelectorAll('[name="eliminar"]').forEach(btn => {
+      btn.addEventListener('click', async function () {
+        const idProyecto = this.getAttribute('data-project-id');
+        const confirmacion = confirm('¿Estás seguro de que quieres eliminar este proyecto?');
+        if (confirmacion) {
+          const response = await fetch(`/proyectos/${idProyecto}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+          });
+          const data = await response.json();
+          // Aquí se muestra un mensaje de éxito
+          console.log(data);
+          window.location.reload(); // Recargar la página después de eliminar el usuario
+        }
+      });
+    });
+
+  </script>
+  </body>
+
+  </html>

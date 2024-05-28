@@ -1,4 +1,4 @@
-body{
+body {
     background: rgb(255, 255, 255);
     text-align: center;
     align-items: center;
@@ -7,23 +7,27 @@ body{
     margin: 0;
 }
 
-.navbar{
+.navbar {
     background: black;
     color: white;
 }
 
-.navbar-brand, .nav-link {
+.navbar-brand,
+.nav-link {
     color: white;
 }
 
 
-.navbar-brand:focus, .navbar-brand:active,
-.nav-link:focus, .nav-link:active {
-    color: #bb7181; 
+.navbar-brand:focus,
+.navbar-brand:active,
+.nav-link:focus,
+.nav-link:active {
+    color: #bb7181;
 }
 
-.navbar-brand:hover, .nav-link:hover {
-    color: #bb7181; 
+.navbar-brand:hover,
+.nav-link:hover {
+    color: #bb7181;
 }
 
 /* Botones */
@@ -56,7 +60,7 @@ body{
     background: black;
     color: white;
     text-align: center;
-    padding: 1rem; 
+    padding: 1rem;
     width: 100%;
 }
 
@@ -90,7 +94,7 @@ body{
     margin-top: 10px;
 }
 
-.popup-form strong{
+.popup-form strong {
     font-weight: bold;
     color: #333;
     margin-top: 10px;
@@ -110,7 +114,7 @@ body{
     box-sizing: border-box;
 }
 
-.p{
+.p {
     width: 100%;
     padding: 8px;
     margin-top: 10px;
@@ -144,7 +148,7 @@ body{
 }
 
 .popup-window {
-    display: none; 
+    display: none;
     position: fixed;
     left: 50%;
     top: 50%;
@@ -154,9 +158,12 @@ body{
     padding: 20px;
     z-index: 1000;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: auto; /* Ajusta el ancho de la ventana emergente */
-    max-width: 800px; /* Incrementa el tamaño máximo de la ventana emergente */
-    height: auto; /* Permite que la altura se ajuste automáticamente */
+    width: auto;
+    /* Ajusta el ancho de la ventana emergente */
+    max-width: 800px;
+    /* Incrementa el tamaño máximo de la ventana emergente */
+    height: auto;
+    /* Permite que la altura se ajuste automáticamente */
 }
 
 .popup-window.show {
@@ -177,3 +184,78 @@ body{
 .popup-overlay.show {
     display: block;
 }
+
+/* Estilos para el card de proyectos */
+
+/* Card styles */
+.card {
+    background-color: #fff;
+    /* Shorthand for white */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    /* Set a fixed width for better responsiveness */
+    margin: 0 auto;
+    /* Center the card horizontally */
+}
+
+.card-header {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    /* Increase header font size slightly */
+    margin-bottom: 15px;
+    /* Add more space after the header */
+}
+
+/* Project details */
+.card-detail {
+    margin-bottom: 5px;
+    /* Make labels bold */
+}
+
+.card-detail:not(:first-child) {
+    /* Target all details except the first */
+    margin-left: 10px;
+    /* Add left margin for details except the first */
+}
+
+/* Encargado, Fecha de Inicio, Fecha de Fin styles */
+.detail-column:nth-child(2) .card-detail {
+    /* Target details in the second column */
+    font-weight: normal;
+    /* Remove bold for values */
+}
+
+/* Button styles */
+.btnCard {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btnCard:hover {
+    background-color: #99213b;
+}
+
+/* Details container */
+.details-container {
+    display: flex;
+}
+
+.detail-column {
+    flex: 1;
+    padding: 10px;
+}
+
+.projects-container {
+    display: flex; 
+    flex-wrap: wrap;
+    gap: 20px; 
+    padding: 20px;
+  }

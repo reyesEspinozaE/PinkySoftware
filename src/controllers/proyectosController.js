@@ -1,6 +1,7 @@
 import Proyecto from '../models/proyecto.js';
+import Partida from '../models/partida.js';
 
-// Obtener todos los registros
+// Obtener todos los registros de proyectos
 
 export const getProyectos = async (req, res) => {
   try {
@@ -39,18 +40,13 @@ export const crearProyecto = async (req, res) => {
     const { idPartida, nombreProyecto, descripcionProyecto, nombreEncargado, fechaInicio, fechaFin } = req.body;
     console.log('Datos recibidos en el servidor:', { idPartida, nombreProyecto, descripcionProyecto, nombreEncargado, fechaInicio, fechaFin });
 
-    
-    // Formatea las fechas
-    const formattedFechaInicio = new Date(fechaInicio).toISOString().slice(0, 19).replace('T', ' ');
-    const formattedFechaFin = new Date(fechaFin).toISOString().slice(0, 19).replace('T', ' ');
-
     const nuevoProyecto = await Proyecto.create({
       idPartida,
       nombreProyecto,
       descripcionProyecto,
       nombreEncargado,
-      fechaInicio: formattedFechaInicio,
-      fechaFin: formattedFechaFin
+      fechaInicio,
+      fechaFin
     });
     res.status(201).json({ mensaje: 'Proyecto creado exitosamente', proyecto: nuevoProyecto });
   } catch (error) {
