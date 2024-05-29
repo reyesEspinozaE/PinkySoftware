@@ -1,8 +1,10 @@
 import { Router } from "express";
-// Importando el controlador de users
+
+// Importando los controladores
 import { actualizarUsuario, crearUsuario, detallesUsuario, eliminarUsuario, getUsuarios } from "../controllers/usuariosController.js";
 import { actualizarProyecto, crearProyecto, detallesProyecto, eliminarProyecto, getProyectos } from "../controllers/proyectosController.js";
 import { getPartidas } from "../controllers/partidasController.js";
+import { getPresupuestos } from "../controllers/contaduriaController.js";
 
 import bodyParser from 'body-parser';
 
@@ -18,11 +20,6 @@ router.get('/', (req, res)=> res.render('contaduria.ejs', { title: "Contaduria" 
 
 // Demas vistas para para el navbar
 router.get('/index', (req, res) => res.render('index.ejs', { title: "Pinky Piensa Web" }));
-router.get('/contaduria', (req, res) => res.render('contaduria.ejs', { title: "Contaduria" }));
-//router.get('/proyectos', (req, res) => res.render('proyectos.ejs', { title: "Proyectos" }));
-// Para agregar los metodos crud de los objetos tengo
-// que quitar el uso de estas rutas, porque se genera conflicto
-// al hacer nuevos llamados de las views
 
 // Llamadas para el controlador de users
 router.get('/users', getUsuarios);
@@ -40,5 +37,8 @@ router.delete('/proyectos/:idProyecto', eliminarProyecto);
 
 // Llamadas para el controlador de partidas
 router.get('/partidas', getPartidas);
+
+// Llamadas para el controlador de contaduria
+router.get('/contadurias', getPresupuestos);
 
 export default router;

@@ -30,7 +30,7 @@ const Presupuesto = sequelize.define('Presupuesto', {
         allowNull: false
     },
     fechaMonto: {
-        type: DataTypes.DATEONLY,
+        type: DataTypes.DATE,
         allowNull: false
     },
     descripcion: {

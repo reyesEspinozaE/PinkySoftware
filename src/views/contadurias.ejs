@@ -50,6 +50,7 @@
                                                     <tr>
                                                         <th>Acción</th>
                                                         <th>Id presupuesto</th>
+                                                        <th>ID Proyecto</th>
                                                         <th>Monto total</th>
                                                         <th>Saldo pendiente</th>
                                                         <th>Área</th>
@@ -58,24 +59,33 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody class="table-group-divider">
-                                                    <tr class="table-secondary">
-                                                        <td>
-                                                            <a name="eliminar" id="eliminar"
-                                                                class="btn btn-danger">Eliminar</a>
-                                                            ||
-                                                            <a name="editar" id="editar"
-                                                                class="btn btn-primary">Editar</a>
-                                                            ||
-                                                            <a name="detalles" id="detalles"
-                                                                class="btn btn-success">Detalles</a>
-                                                        </td>
-                                                        <td>Id presupuesto</td>
-                                                        <td>Monto total</td>
-                                                        <td>Saldo pendiente</td>
-                                                        <td>Área</td>
-                                                        <td>Fecha</td>
-                                                        <td>Descripción</td>
-                                                    </tr>
+                                                    <% if (presupuestos && presupuestos.length> 0) { %>
+                                                        <% presupuesto.forEach(presupuesto=> { %>
+                                                            <tr class="table-secondary">
+                                                                <td>
+                                                                    <a name="eliminar" id="eliminar"
+                                                                        class="btn btn-danger">Eliminar</a>
+                                                                    ||
+                                                                    <a name="editar" id="editar"
+                                                                        class="btn btn-primary">Editar</a>
+                                                                    ||
+                                                                    <a name="detalles" id="detalles"
+                                                                        class="btn btn-success">Detalles</a>
+                                                                </td>
+                                                                <td scope="row"> <%= presupuesto.idPresupuesto %> </td>
+                                                                <td>ID Proyecto</td>
+                                                                <td> <%= presupuesto.montoTotal %> </td>
+                                                                <td> <%= presupuesto.saldoPendiente %> </td>
+                                                                <td> <%= presupuesto.area %> </td>
+                                                                <td> <%= presupuesto.fechaMonto %> </td>
+                                                                <td> <%= presupuesto.descripcionPresupuesto %> </td>
+                                                            </tr>
+                                                            <% }) %>
+                                                                <% } else { %>
+                                                                    <tr>
+                                                                        <td colspan="10">No hay presupuestos disponibles</td>
+                                                                    </tr>
+                                                                <% } %>
                                                 </tbody>
                                                 <tfoot>
                                                 </tfoot>
@@ -124,6 +134,7 @@
                                                     <tr>
                                                         <th>Acción</th>
                                                         <th>Id Gasto</th>
+                                                        <th>Id Proyecto</th>
                                                         <th>Descripción</th>
                                                         <th>Lugar</th>
                                                         <th>Monto Gasto</th>
@@ -143,7 +154,8 @@
                                                             <a name="detalles" id="detalles"
                                                                 class="btn btn-success">Detalles</a>
                                                         </td>
-                                                        <td>ID</td>
+                                                        <td>ID Gasto</td>
+                                                        <td>ID Proyecto</td>
                                                         <td>Descripcion</td>
                                                         <td>Lugar</td>
                                                         <td>Monto</td>
