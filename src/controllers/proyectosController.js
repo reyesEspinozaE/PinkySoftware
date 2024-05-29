@@ -2,10 +2,9 @@ import Proyecto from '../models/proyecto.js';
 import Partida from '../models/partida.js';
 
 // Obtener todos los registros de proyectos
-
 export const getProyectos = async (req, res) => {
   try {
-    const proyectos = await Proyecto.findAll();
+    const proyectos = await Proyecto.findAll({ include: Partida }); // Incluir el modelo Partida en la consulta
     res.render('proyectos.ejs', {
       title: 'Proyectos',
       proyectos

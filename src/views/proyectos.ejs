@@ -30,6 +30,9 @@
                   <p class="card-text"><strong>Descripción:</strong>
                     <%= proyecto.descripcionProyecto %>
                   </p>
+                  <p class="card-text"><strong>Partida presupuestaria:</strong>
+                    <%= proyecto.Partida.nombrePartida %>
+                  </p>
                   <p class="card-text"><strong>Encargado:</strong>
                     <%= proyecto.nombreEncargado %>
                   </p>
@@ -91,6 +94,26 @@
 
     var popup;
 
+    async function cargarPartidas() {
+      try {
+        const response = await fetch('/partidas');
+        if (response.ok) {
+          const partidas = await response.json();
+          const selectPartida = popup.document.getElementById('idPartida');
+          partidas.forEach(partida => {
+            const option = document.createElement('option');
+            option.value = partida.idPartida;
+            option.textContent = partida.nombrePartida;
+            selectPartida.appendChild(option);
+          });
+        } else {
+          console.error('Error al obtener las partidas:', await response.text());
+        }
+      } catch (error) {
+        console.error('Error al realizar la solicitud:', error);
+      }
+    }
+
     var btnAddProyecto = document.getElementById('btnAddProyecto').addEventListener('click', function () {
       popup = window.open('', 'popup', 'width=400,height=600');
 
@@ -102,62 +125,50 @@
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <title>Agregar Proyecto</title>
           <link rel="stylesheet" href="/css/main.css">
-      </head>
-      <body class="bodyPopup">
-         <form class="popup-form">
-              <label for="idPartida">ID Partida:</label><br>
-              <select id="idPartida" name="idPartida"></select><br>
+  </head>
 
-              <label for="nombreProyecto">Nombre del Proyecto:</label><br>
-              <input type="text" id="nombreProyecto" name="nombreProyecto"><br>
+  <body class="bodyPopup">
+    <form class="popup-form">
+      <label for="idPartida">ID Partida:</label><br>
+      <select id="idPartida" name="idPartida" style="width: 200px; height: 30px;">
+          <option value="">Seleccione una partida...</option>
+      </select><br>
 
-              <label for="descripcionProyecto">Descripción:</label><br>
-              <textarea id="descripcionProyecto" name="descripcionProyecto"></textarea><br>
+      <label for="nombreProyecto">Nombre del Proyecto:</label><br>
+      <input type="text" id="nombreProyecto" name="nombreProyecto"><br>
 
-              <label for="nombreEncargado">Nombre del Encargado:</label><br>
-              <input type="text" id="nombreEncargado" name="nombreEncargado"><br>
+      <label for="descripcionProyecto">Descripción:</label><br>
+      <textarea id="descripcionProyecto" name="descripcionProyecto"></textarea><br>
 
-              <label for="fechaInicio">Fecha de Inicio:</label><br>
-              <input type="date" id="fechaInicio" name="fechaInicio"><br>
+      <label for="nombreEncargado">Nombre del Encargado:</label><br>
+      <input type="text" id="nombreEncargado" name="nombreEncargado"><br>
 
-              <label for="fechaFin">Fecha de Fin:</label><br>
-              <input type="date" id="fechaFin" name="fechaFin"><br>
+      <label for="fechaInicio">Fecha de Inicio:</label><br>
+      <input type="date" id="fechaInicio" name="fechaInicio"><br>
 
-              <button class="btnPopup" type="submit">Guardar</button>
-              <button class="btnPopup" type="button" onclick="window.opener.cerrarPopup()">Cancelar</button>
-          </form>
-      </body>
-      </html>
-    `;
+      <label for="fechaFin">Fecha de Fin:</label><br>
+      <input type="date" id="fechaFin" name="fechaFin"><br>
+
+      <button class="btnPopup" type="submit">Guardar</button>
+      <button class="btnPopup" type="button" onclick="window.opener.cerrarPopup()">Cancelar</button>
+    </form>
+  </body>
+  </html>
+  `;
 
       // Escribimos el contenido del formulario en la ventana emergente
       popup.document.write(formContent);
 
-      // Esperamos a que la ventana emergente cargue completamente
-      popup.onload = function () {
-        // Obtener las partidas y rellenar la lista desplegable
-        fetch('/partidas') // Ajustar la ruta aquí
-          .then(response => response.json())
-          .then(partidas => {
-            var select = popup.document.getElementById('idPartida');
-            partidas.forEach(partida => {
-              var option = popup.document.createElement('option'); // Correct context for option creation
-              option.value = partida.id;
-              option.textContent = `${partida.id} - ${partida.nombre}`;
-              select.appendChild(option);
-            });
-          })
-          .catch(error => {
-            console.error('Error al obtener las partidas:', error);
-          });
+      // Cargar las partidas en el select
+      cargarPartidas();
 
-        // Definimos el comportamiento del formulario al ser enviado
-        popup.document.querySelector('form').addEventListener('submit', function (event) {
-          event.preventDefault();
-          // Llamar a la función para guardar el nuevo proyecto
-          btnPopupGuardar();
-        });
-      }
+
+      // Definimos el comportamiento del formulario al ser enviado
+      popup.document.querySelector('form').addEventListener('submit', function (event) {
+        event.preventDefault();
+        // Llamar a la función para guardar el nuevo proyecto
+        btnPopupGuardar();
+      });
     });
 
     function cerrarPopup() {
@@ -184,7 +195,7 @@
       };
 
       // Enviar una solicitud POST al servidor para crear el nuevo proyecto
-      fetch('/partidas', {
+      fetch('/proyectos', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -222,72 +233,75 @@
         if (response.ok) {
           const proyecto = await response.json();
           var formContent = `
-              <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                  <meta charset="UTF-8">
-                  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                  <title>Detalles de Proyecto</title>
-                  <link rel="stylesheet" href="/css/main.css">
-                </head>
-                <body>
-                  <div>
-                    <div class="card">
-                      <div class="card-header">
-                        <strong>Detalles del Proyecto</strong>
-                      </div>
-                      <div class="card-body">
-                        <div class="details-container">
-                          <div class="detail-column">
-                            <div class="card-detail">
-                              <strong>ID Proyecto:</strong>
-                            </div>
-                            <div class="card-detail">
-                              ${proyecto.idProyecto}
-                            </div>
-                            <div class="card-detail">
-                              <strong>Nombre del Proyecto:</strong>
-                            </div>
-                            <div class="card-detail">
-                              ${proyecto.nombreProyecto}
-                            </div>
-                            <div class="card-detail">
-                              <strong>Descripción:</strong>
-                            </div>
-                            <div class="card-detail">
-                              ${proyecto.descripcionProyecto}
-                            </div>
-                          </div>
-                          <div class="detail-column">
-                            <div class="card-detail">
-                              <strong>Encargado:</strong>
-                            </div>
-                            <div class="card-detail">
-                              ${proyecto.nombreEncargado}
-                            </div>
-                            <div class="card-detail">
-                              <strong>Fecha de Inicio:</strong>
-                            </div>
-                            <div class="card-detail">
-                              ${new Date(proyecto.fechaInicio).toLocaleDateString()}
-                            </div>
-                            <div class="card-detail">
-                              <strong>Fecha de Fin:</strong>
-                            </div>
-                            <div class="card-detail">
-                              ${new Date(proyecto.fechaFin).toLocaleDateString()}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card-footer">
-                        <button class="btnCard btn btn-secondary" onclick="window.close()">Cerrar</button>
-                      </div>
-                    </div>
-                  </div>
-                </body>
-                </html>
-            `;
+  <!DOCTYPE html>
+  <html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de Proyecto</title>
+    <link rel="stylesheet" href="/css/main.css">
+  </head>
+
+  <body>
+    <div>
+      <div class="card">
+        <div class="card-header">
+          <strong>Detalles del Proyecto</strong>
+        </div>
+        <div class="card-body">
+          <div class="details-container">
+            <div class="detail-column">
+              <div class="card-detail">
+                <strong>ID Proyecto:</strong>
+              </div>
+              <div class="card-detail">
+                ${proyecto.idProyecto}
+              </div>
+              <div class="card-detail">
+                <strong>Nombre del Proyecto:</strong>
+              </div>
+              <div class="card-detail">
+                ${proyecto.nombreProyecto}
+              </div>
+              <div class="card-detail">
+                <strong>Descripción:</strong>
+              </div>
+              <div class="card-detail">
+                ${proyecto.descripcionProyecto}
+              </div>
+            </div>
+            <div class="detail-column">
+              <div class="card-detail">
+                <strong>Encargado:</strong>
+              </div>
+              <div class="card-detail">
+                ${proyecto.nombreEncargado}
+              </div>
+              <div class="card-detail">
+                <strong>Fecha de Inicio:</strong>
+              </div>
+              <div class="card-detail">
+                ${new Date(proyecto.fechaInicio).toLocaleDateString()}
+              </div>
+              <div class="card-detail">
+                <strong>Fecha de Fin:</strong>
+              </div>
+              <div class="card-detail">
+                ${new Date(proyecto.fechaFin).toLocaleDateString()}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="btnCard btn btn-secondary" onclick="window.close()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  </html>
+  `;
           var popup = window.open('', 'popup', 'width=700,height=320');
           popup.document.write(formContent);
         } else {
@@ -301,7 +315,6 @@
     /////////////////// Update /////////////////////////////
 
     // Ventana emergente para editar un proyecto
-
     document.querySelectorAll('[name="editar"]').forEach(btn => {
       btn.addEventListener('click', async function () {
         const idProyecto = this.getAttribute('data-project-id');
@@ -311,42 +324,63 @@
         });
         if (response.ok) {
           const proyecto = await response.json();
-          var formContent = `
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Editar Usuario</title>
-              <link rel="stylesheet" href="/css/main.css">
-            </head>
-            <body class="bodyPopup">
-              <form class="popup-form" id="formProyecto">
-                <label for="idPartida">ID Partida:</label><br>
-                  <input type="number" id="idPartida" name="idPartida"><br>
 
-                  <label for="nombreProyecto">Nombre del Proyecto:</label><br>
-                  <input type="text" id="nombreProyecto" name="nombreProyecto" value="${proyecto.nombreProyecto}"required><br>
+          // Obtener las partidas disponibles
+          const partidasResponse = await fetch('/partidas');
+          if (!partidasResponse.ok) {
+            console.error('Error al obtener las partidas:', await partidasResponse.text());
+            return;
+          }
+          const partidas = await partidasResponse.json();
 
-                  <label for="descripcionProyecto">Descripción:</label><br>
-                  <textarea id="descripcionProyecto" name="descripcionProyecto" value="${proyecto.descripcionProyecto}"></textarea><br>
+          // Construir las opciones del select de partidas
+          const selectPartida = document.createElement('select');
+          selectPartida.setAttribute('id', 'idPartida');
+          selectPartida.setAttribute('name', 'idPartida');
+          selectPartida.style.width = '200px';
+          selectPartida.style.height = '30px';
+          selectPartida.innerHTML = '<option value="">Seleccione una partida...</option>';
+          partidas.forEach(partida => {
+            const option = document.createElement('option');
+            option.value = partida.idPartida;
+            option.textContent = partida.nombrePartida;
+            if (proyecto.idPartida === partida.idPartida) {
+              option.selected = true; // Seleccionar la partida correspondiente al proyecto
+            }
+            selectPartida.appendChild(option);
+          });
 
-                  <label for="nombreEncargado">Nombre del Encargado:</label><br>
-                  <input type="text" id="nombreEncargado" name="nombreEncargado"  value="${proyecto.nombreEncargado}"><br>
+          const formContent = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Editar Usuario</title>
+          <link rel="stylesheet" href="/css/main.css">
+        </head>
+        <body class="bodyPopup">
+          <form class="popup-form" id="formProyecto">
+            <label for="idPartida">ID Partida:</label><br>
+            ${selectPartida.outerHTML}<br>
+            <label for="nombreProyecto">Nombre del Proyecto:</label><br>
+            <input type="text" id="nombreProyecto" name="nombreProyecto" value="${proyecto.nombreProyecto}" required><br>
+            <label for="descripcionProyecto">Descripción:</label><br>
+            <textarea id="descripcionProyecto" name="descripcionProyecto">${proyecto.descripcionProyecto}</textarea><br>
+            <label for="nombreEncargado">Nombre del Encargado:</label><br>
+            <input type="text" id="nombreEncargado" name="nombreEncargado" value="${proyecto.nombreEncargado}"><br>
+            <label for="fechaInicio">Fecha de Inicio:</label><br>
+            <input type="date" id="fechaInicio" name="fechaInicio" value="${proyecto.fechaInicio}"><br>
+            <label for="fechaFin">Fecha de Fin:</label><br>
+            <input type="date" id="fechaFin" name="fechaFin" value="${proyecto.fechaFin}"><br>
+            <button class="btnPopup" type="submit">Guardar</button>
+            <button class="btnPopup" type="button" onclick="window.close()">Cancelar</button>
+          </form>
+        </body>
+        </html>
+      `;
 
-                  <label for="fechaInicio">Fecha de Inicio:</label><br>
-                  <input type="date" id="fechaInicio" name="fechaInicio" value="${proyecto.fechaInicio}"><br>
-
-                  <label for="fechaFin">Fecha de Fin:</label><br>
-                  <input type="date" id="fechaFin" name="fechaFin" value="${proyecto.fechaFin}"><br>
-
-                  <button class="btnPopup" type="submit">Guardar</button>
-                  <button class="btnPopup" type="button" onclick="window.close()">Cancelar</button>
-              </form>
-            </body>
-            </html>
-          `;
-          var popup = window.open('', 'popup', 'width=400,height=550');
+          const popup = window.open('', 'popup', 'width=400,height=550');
           popup.document.write(formContent);
           popup.document.querySelector('form').addEventListener('submit', function (event) {
             event.preventDefault();
@@ -359,14 +393,14 @@
     });
 
     function btnPopupActualizar(idProyecto, popup) {
-      var idPartida = popup.document.getElementById('idPartida').value;
-      var nombreProyecto = popup.document.getElementById('nombreProyecto').value;
-      var descripcionProyecto = popup.document.getElementById('descripcionProyecto').value;
-      var nombreEncargado = popup.document.getElementById('nombreEncargado').value;
-      var fechaInicio = new Date(popup.document.getElementById('fechaInicio').value);
-      var fechaFin = new Date(popup.document.getElementById('fechaFin').value);
+      const idPartida = popup.document.getElementById('idPartida').value;
+      const nombreProyecto = popup.document.getElementById('nombreProyecto').value;
+      const descripcionProyecto = popup.document.getElementById('descripcionProyecto').value;
+      const nombreEncargado = popup.document.getElementById('nombreEncargado').value;
+      const fechaInicio = new Date(popup.document.getElementById('fechaInicio').value);
+      const fechaFin = new Date(popup.document.getElementById('fechaFin').value);
 
-      var proyectoActualizado = {
+      const proyectoActualizado = {
         idPartida: idPartida,
         nombreProyecto: nombreProyecto,
         descripcionProyecto: descripcionProyecto,
@@ -395,6 +429,7 @@
           console.error('Error al realizar la solicitud:', error);
         });
     }
+
 
     // Manejador de clic para el botón de eliminar
 

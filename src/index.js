@@ -3,6 +3,8 @@ import { dirname, join } from 'path' // Con join podemos concatenar sin importar
 import { fileURLToPath } from 'url'
 // Se importa el enrutador desde /routes/index.js
 import indexRoutes from './routes/index.js'
+// Importa tu archivo de asociaciones
+import './models/associations.js';
 
 const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url)) // Con esto obtengo la ruta del proyecto
