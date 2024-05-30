@@ -4,8 +4,20 @@ import { Router } from "express";
 import { actualizarUsuario, crearUsuario, detallesUsuario, eliminarUsuario, getUsuarios } from "../controllers/usuariosController.js";
 import { actualizarProyecto, crearProyecto, detallesProyecto, eliminarProyecto, getProyectos } from "../controllers/proyectosController.js";
 import { getPartidas } from "../controllers/partidasController.js";
-import { getPresupuestos } from "../controllers/contaduriaController.js";
 import { getProyectoUsuarios } from "../controllers/proyectoUsuarioController.js";
+import {
+    getContaduriaData,
+    crearPresupuesto,
+    crearGasto,
+    eliminarPresupuesto,
+    eliminarGasto,
+    actualizarPresupuesto,
+    actualizarGasto,
+    editarPresupuesto,
+    editarGasto
+} from '../controllers/contaduriaController.js';
+import { getProyectosGastos } from "../controllers/gastosController.js";
+import { getProyectosPresupuesto } from "../controllers/presupuestosController.js";
 
 import bodyParser from 'body-parser';
 
@@ -17,7 +29,7 @@ router.use(bodyParser.urlencoded({ extended: true }));
 // Se enruta a las views
 
 // Esta es la primer view que se va a tener al buscar localhost:3000 en el navegador:
-router.get('/', (req, res)=> res.render('contaduria.ejs', { title: "Contaduria" }));
+router.get('/', (req, res) => res.render('contaduria.ejs', { title: "Contaduria" }));
 
 // Demas vistas para para el navbar
 router.get('/index', (req, res) => res.render('index.ejs', { title: "Pinky Piensa Web" }));
@@ -42,7 +54,26 @@ router.get('/partidas', getPartidas);
 // Llamadas para obtener usuarios para el select en la view de proyectos
 router.get('/proyectoUsuario', getProyectoUsuarios);
 
-// Llamadas para el controlador de contaduria
-router.get('/contadurias', getPresupuestos);
+// Llamadas para el controlador de contaduría
+router.get('/contadurias', getContaduriaData);
+
+// Rutas para presupuestos
+router.post('/presupuestos', crearPresupuesto);
+router.delete('/presupuestos/:id', eliminarPresupuesto);
+router.put('/presupuestos/:id', actualizarPresupuesto);
+router.get('/presupuestos/:id', editarPresupuesto);
+
+// Rutas para gastos
+router.post('/gastos', crearGasto);
+router.delete('/gastos/:id', eliminarGasto);
+router.put('/gastos/:id', actualizarGasto);
+router.get('/gastos/:id', editarGasto);
+
+// Rutas para obtener los proyectos de presupuestos y gastos
+// Presupuestos 
+router.get('/presupuestos', getProyectosPresupuesto);
+
+// Gatos
+router.get('/gastos', getProyectosGastos);
 
 export default router;

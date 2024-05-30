@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <%- include('partials/navigation.ejs')%>
+    <%- include('partials/navigation.ejs') %>
         <main>
             <div id="container" class="mt-5">
                 <div class="row">
@@ -41,15 +41,12 @@
                                 <div class="row mb-3">
                                     <div class="col">
                                         <div class="table-responsive">
-                                            <table class="table table-striped
-                                    table-hover	
-                                    table-borderless
-                                    table-secondary
-                                    align-middle">
+                                            <table
+                                                class="table table-striped table-hover table-borderless table-secondary align-middle">
                                                 <thead class="table-light">
                                                     <tr>
                                                         <th>Acción</th>
-                                                        <th>Id presupuesto</th>
+                                                        <th>ID Presupuesto</th>
                                                         <th>ID Proyecto</th>
                                                         <th>Monto total</th>
                                                         <th>Saldo pendiente</th>
@@ -60,7 +57,7 @@
                                                 </thead>
                                                 <tbody class="table-group-divider">
                                                     <% if (presupuestos && presupuestos.length> 0) { %>
-                                                        <% presupuesto.forEach(presupuesto=> { %>
+                                                        <% presupuestos.forEach(presupuesto=> { %>
                                                             <tr class="table-secondary">
                                                                 <td>
                                                                     <a name="eliminar" id="eliminar"
@@ -72,31 +69,37 @@
                                                                     <a name="detalles" id="detalles"
                                                                         class="btn btn-success">Detalles</a>
                                                                 </td>
-                                                                <td scope="row"> <%= presupuesto.idPresupuesto %> </td>
-                                                                <td>ID Proyecto</td>
-                                                                <td> <%= presupuesto.montoTotal %> </td>
-                                                                <td> <%= presupuesto.saldoPendiente %> </td>
-                                                                <td> <%= presupuesto.area %> </td>
-                                                                <td> <%= presupuesto.fechaMonto %> </td>
-                                                                <td> <%= presupuesto.descripcionPresupuesto %> </td>
+                                                                <td scope="row">
+                                                                    <%= presupuesto.idPresupuesto %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= presupuesto.idProyecto %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= presupuesto.montoTotal %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= presupuesto.saldoPendiente %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= presupuesto.area %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= presupuesto.fechaMonto %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= presupuesto.descripcionPresupuesto %>
+                                                                </td>
                                                             </tr>
                                                             <% }) %>
                                                                 <% } else { %>
                                                                     <tr>
-                                                                        <td colspan="10">No hay presupuestos disponibles</td>
+                                                                        <td colspan="10">No hay presupuestos disponibles
+                                                                        </td>
                                                                     </tr>
-                                                                <% } %>
+                                                                    <% } %>
                                                 </tbody>
-                                                <tfoot>
-                                                </tfoot>
                                             </table>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-3 mb-3">
-                                        <div class="col">
-                                            <label for="totalPresupuesto">Presupuesto Total:</label>
-                                            <input type="text" style="width:200px" id="totalPresupuesto"
-                                                class="form-control" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -125,16 +128,13 @@
                                 <div class="row mb-3">
                                     <div class="col">
                                         <div class="table-responsive">
-                                            <table class="table table-striped
-                                table-hover	
-                                table-borderless
-                                table-secondary
-                                align-middle">
+                                            <table
+                                                class="table table-striped table-hover table-borderless table-secondary align-middle">
                                                 <thead class="table-light">
                                                     <tr>
                                                         <th>Acción</th>
-                                                        <th>Id Gasto</th>
-                                                        <th>Id Proyecto</th>
+                                                        <th>ID Gasto</th>
+                                                        <th>ID Proyecto</th>
                                                         <th>Descripción</th>
                                                         <th>Lugar</th>
                                                         <th>Monto Gasto</th>
@@ -143,36 +143,49 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody class="table-group-divider">
-                                                    <tr class="table-secondary">
-                                                        <td>
-                                                            <a name="eliminar" id="eliminar"
-                                                                class="btn btn-danger">Eliminar</a>
-                                                            ||
-                                                            <a name="editar" id="editar"
-                                                                class="btn btn-primary">Editar</a>
-                                                            ||
-                                                            <a name="detalles" id="detalles"
-                                                                class="btn btn-success">Detalles</a>
-                                                        </td>
-                                                        <td>ID Gasto</td>
-                                                        <td>ID Proyecto</td>
-                                                        <td>Descripcion</td>
-                                                        <td>Lugar</td>
-                                                        <td>Monto</td>
-                                                        <td>Fecha</td>
-                                                        <td>IMG</td>
-                                                    </tr>
+                                                    <% if (gastos && gastos.length> 0) { %>
+                                                        <% gastos.forEach(gasto=> { %>
+                                                            <tr class="table-secondary">
+                                                                <td>
+                                                                    <a name="eliminar" id="eliminar"
+                                                                        class="btn btn-danger">Eliminar</a>
+                                                                    ||
+                                                                    <a name="editar" id="editar"
+                                                                        class="btn btn-primary">Editar</a>
+                                                                    ||
+                                                                    <a name="detalles" id="detalles"
+                                                                        class="btn btn-success">Detalles</a>
+                                                                </td>
+                                                                <td>
+                                                                    <%= gasto.idGasto %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= gasto.idProyecto %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= gasto.descripcion %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= gasto.lugar %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= gasto.montoGasto %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= gasto.fechaGasto %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= gasto.imagen %>
+                                                                </td>
+                                                            </tr>
+                                                            <% }) %>
+                                                                <% } else { %>
+                                                                    <tr>
+                                                                        <td colspan="10">No hay gastos disponibles</td>
+                                                                    </tr>
+                                                                    <% } %>
                                                 </tbody>
-                                                <tfoot>
-                                                </tfoot>
                                             </table>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-3 mb-3">
-                                        <div class="col">
-                                            <label for="gastosTotal">Gastos totales:</label>
-                                            <input type="text" style="width:200px" id="gastosTotal" class="form-control"
-                                                readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -180,20 +193,47 @@
                         </div>
                     </div>
                     <!-- Fin de Gastos -->
+                </div>
+            </div>
         </main>
+        <%- include('partials/footer.ejs') %>
 </body>
-<%- include('partials/footer.ejs')%>
-    <script>
-        // Seleccionamos el botón por su id
-        var btnGasto = document.getElementById('btnGasto');
 
-        // Agregamos un evento onclick al botón
-        btnGasto.onclick = function () {
-            // Ventana emergente
-            var popup = window.open('', 'popup', 'width=400,height=300');
+</html>
 
-            // Contenido del formulario dentro de la ventana emergente
-            var formContent = `
+<script>
+    async function cargarProyectosGatos() {
+        try {
+            const response = await fetch('/gastos');
+            if (response.ok) {
+                const proyectos = await response.json();
+                const selectProyecto = document.getElementById('idProyecto');
+
+                proyectos.forEach(proyecto => {
+                    const option = document.createElement('option');
+                    option.value = proyecto.idProyecto;
+                    option.textContent = proyecto.nombreProyecto;
+                    selectProyecto.appendChild(option);
+                });
+            } else {
+                console.error('Error al obtener los proyectos:', await response.text());
+            }
+        } catch (error) {
+            console.error('Error al realizar la solicitud:', error);
+        }
+    }
+
+    //////////////////////////////////////////////////////////////
+    /////////////////////// GASTOS ///////////////////////////////
+
+    var popup
+
+    // Seleccionamos el botón por su id
+    var btnGasto = document.getElementById('btnGasto').addEventListener('click', function () {
+        // Ventana emergente
+        popup = window.open('', 'popup', 'width=400,height=500');
+
+        var formContent = `
             <!DOCTYPE html>
             <html lang="en">
             <head>
@@ -204,6 +244,11 @@
             </head>
             <body class="bodyPopup">
                <form class="popup-form">
+                    <label for="idProyecto">Nombre del proyecto:</label><br>
+                    <select id="idProyecto" name="idProyecto" style="width: 200px; height: 30px;">
+                        <option value="">Seleccione un proyecto...</option>
+                    </select><br>
+
                     <label for="descripcionGasto">Descripción del gasto:</label><br>
                     <input type="text" id="descripcionGasto" name="descripcionGasto"><br>
                 
@@ -226,25 +271,78 @@
             </html>
     `;
 
-            // Escribimos el contenido del formulario en la ventana emergente
-            popup.document.write(formContent);
+        // Escribimos el contenido del formulario en la ventana emergente
+        popup.document.write(formContent);
 
-            popup.document.querySelector('form').onsubmit = function (event) {
-                event.preventDefault();
-                // Aquí manejamos las acciones del form con el servidor
-            };
+        // Cargar los proyectos en el select
+        cargarProyectosGatos();
+
+        // Definimos el comportamiento del formulario al ser enviado
+        popup.document.querySelector('form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            // Llamar a la función para guardar el nuevo proyecto
+            btnPopupGuardarGasto();
+        });
+    });
+
+    async function btnPopupGuardarGasto() {
+        var idProyecto = popup.document.getElementById('idProyecto').value;
+        var nombreProyecto = popup.document.getElementById('nombreProyecto').value;
+        var descripcionGasto = popup.document.getElementById('descripcionGasto').value;
+        var lugar = popup.document.getElementById('lugar').value;
+        var montoGasto = popup.document.getElementById('montoGasto').value;
+        var fechaGasto = new Date(popup.document.getElementById('fechaGasto').value);
+        var imagen = popup.document.getElementById('imagen').value;
+
+        var nuevoGasto = {
+            idProyecto : idProyecto,
+            nombreProyecto : nombreProyecto,
+            descripcionGasto : descripcionGasto,
+            lugar : lugar,
+            montoGasto : montoGasto,
+            fechaGasto : fechaGasto,
+            imagen : imagen
         };
 
-        // Seleccionamos el botón por su id
-        var btnPresupuesto = document.getElementById('btnPresupuesto');
+        fetch('/gastos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(nuevoGasto)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.mensaje === 'Gasto creado exitosamente') {
+                    // Si la respuesta es satisfactoria, cerrar la ventana emergente y recargar la página principal
+                    popup.close();
+                    window.location.reload();
+                } else {
+                    // Si hay un error en la respuesta, mostrar un mensaje de error
+                    console.error('Error al guardar el nuevo gasto:', data);
+                }
+            })
+            .catch(error => {
+                console.error('Error al realizar la solicitud:', error);
+            });
+    }
 
-        // Agregamos un evento onclick al botón
-        btnPresupuesto.onclick = function () {
-            // Creamos la ventana emergente
-            var popup = window.open('', 'popup', 'width=400,height=300');
+    // Llamada a la función btnPopupGuardar
+    btnPopupGuardarGasto();
 
-            // Creamos el contenido del formulario dentro de la ventana emergente
-            var formContent = `
+    //////////////////////////////////////////////////////////////
+    /////////////////// PRESUPUESTOS /////////////////////////////
+
+    // Seleccionamos el botón por su id
+    var btnPresupuesto = document.getElementById('btnPresupuesto');
+
+    // Agregamos un evento onclick al botón
+    btnPresupuesto.onclick = function () {
+        // Creamos la ventana emergente
+        var popup = window.open('', 'popup', 'width=400,height=500');
+
+        // Creamos el contenido del formulario dentro de la ventana emergente
+        var formContent = `
             <!DOCTYPE html>
             <html lang="en">
             <head>
@@ -255,6 +353,11 @@
             </head>
             <body class="bodyPopup">
                 <form  class="popup-form">
+                    <label for="idProyecto">Nombre del proyecto:</label><br>
+                    <select id="idProyecto" name="idProyecto" style="width: 200px; height: 30px;">
+                        <option value="">Seleccione un proyecto...</option>
+                    </select><br>
+
                     <label for="descripcionPresupuesto">Descripción del presupuesto:</label><br>
                     <input type="text" id="descripcionPresupuesto" name="descripcionPresupuesto"><br>
                 
@@ -277,111 +380,110 @@
             </html>
     `;
 
-            // Escribimos el contenido del formulario en la ventana emergente
-            popup.document.write(formContent);
+        // Escribimos el contenido del formulario en la ventana emergente
+        popup.document.write(formContent);
 
-            // Evitamos que el formulario realice una acción por defecto (como enviar datos)
-            popup.document.querySelector('form').onsubmit = function (event) {
-                event.preventDefault();
-                // Aquí manejamos las acciones del form con el servidor
-            };
+        // Evitamos que el formulario realice una acción por defecto (como enviar datos)
+        popup.document.querySelector('form').onsubmit = function (event) {
+            event.preventDefault();
+            // Aquí manejamos las acciones del form con el servidor
         };
+    };
+
+    //***************** CRUD GASTOS *****************
+
+    // Función de Crear (Create)
+    function crearGasto(gasto) {
+        const query = 'INSERT INTO gastos SET ?';
+        connection.query(query, gasto, (error, results, fields) => {
+            if (error) throw error;
+            console.log('Nuevo gasto creado:', results.insertId);
+        });
+    }
+
+    // Función de Lectura (Read)
+    function obtenerGastos() {
+        const query = 'SELECT * FROM gastos';
+        connection.query(query, (error, results, fields) => {
+            if (error) throw error;
+            console.log('Gastos:', results);
+        });
+    }
+
+    // Función de Actualización (Update)
+    function actualizarGasto(idGasto, idProyecto, nuevosDatos) {
+        const query = 'UPDATE gastos SET ? WHERE idGasto = ? AND idProyecto = ?';
+        connection.query(query, [nuevosDatos, idGasto, idProyecto], (error, results, fields) => {
+            if (error) throw error;
+            console.log('Gasto actualizado:', results.affectedRows);
+        });
+    }
+
+    // Función de Eliminación (Delete)
+    function eliminarGasto(idGasto, idProyecto) {
+        const query = 'DELETE FROM gastos WHERE idGasto = ? AND idProyecto = ?';
+        connection.query(query, [idGasto, idProyecto], (error, results, fields) => {
+            if (error) throw error;
+            console.log('Gasto eliminado:', results.affectedRows);
+        });
+    }
+    //***************** FIN CRUD GASTOS *****************
+    // Función para mostrar todos los gastos
+    function verTodosLosGastos() {
+        const query = 'SELECT * FROM gastos';
+        connection.query(query, (error, results, fields) => {
+            if (error) throw error;
+            console.log('Todos los gastos:', results);
+        });
+    }
 
 
-        //***************** CRUD GASTOS *****************
+    //***************** CRUD PRESUPUESTOS *********************
+    // Función de Crear (Create)
+    function crearPresupuesto(presupuesto) {
+        const query = 'INSERT INTO presupuestos SET ?';
+        connection.query(query, presupuesto, (error, results, fields) => {
+            if (error) throw error;
+            console.log('Nuevo presupuesto creado:', results.insertId);
+        });
+    }
 
-        // Función de Crear (Create)
-        function crearGasto(gasto) {
-            const query = 'INSERT INTO gastos SET ?';
-            connection.query(query, gasto, (error, results, fields) => {
-                if (error) throw error;
-                console.log('Nuevo gasto creado:', results.insertId);
-            });
-        }
+    // Función de Lectura (Read)
+    function obtenerPresupuestos() {
+        const query = 'SELECT * FROM presupuestos';
+        connection.query(query, (error, results, fields) => {
+            if (error) throw error;
+            console.log('Presupuestos:', results);
+        });
+    }
 
-        // Función de Lectura (Read)
-        function obtenerGastos() {
-            const query = 'SELECT * FROM gastos';
-            connection.query(query, (error, results, fields) => {
-                if (error) throw error;
-                console.log('Gastos:', results);
-            });
-        }
+    // Función de Actualización (Update)
+    function actualizarPresupuesto(idPresupuesto, idProyecto, nuevosDatos) {
+        const query = 'UPDATE presupuestos SET ? WHERE idPresupuesto = ? AND idProyecto = ?';
+        connection.query(query, [nuevosDatos, idPresupuesto, idProyecto], (error, results, fields) => {
+            if (error) throw error;
+            console.log('Presupuesto actualizado:', results.affectedRows);
+        });
+    }
 
-        // Función de Actualización (Update)
-        function actualizarGasto(idGasto, idProyecto, nuevosDatos) {
-            const query = 'UPDATE gastos SET ? WHERE idGasto = ? AND idProyecto = ?';
-            connection.query(query, [nuevosDatos, idGasto, idProyecto], (error, results, fields) => {
-                if (error) throw error;
-                console.log('Gasto actualizado:', results.affectedRows);
-            });
-        }
+    // Función de Eliminación (Delete)
+    function eliminarPresupuesto(idPresupuesto, idProyecto) {
+        const query = 'DELETE FROM presupuestos WHERE idPresupuesto = ? AND idProyecto = ?';
+        connection.query(query, [idPresupuesto, idProyecto], (error, results, fields) => {
+            if (error) throw error;
+            console.log('Presupuesto eliminado:', results.affectedRows);
+        });
+    }
+    //***************** FIN CRUD PRESUPUESTOS *****************
 
-        // Función de Eliminación (Delete)
-        function eliminarGasto(idGasto, idProyecto) {
-            const query = 'DELETE FROM gastos WHERE idGasto = ? AND idProyecto = ?';
-            connection.query(query, [idGasto, idProyecto], (error, results, fields) => {
-                if (error) throw error;
-                console.log('Gasto eliminado:', results.affectedRows);
-            });
-        }
-        //***************** FIN CRUD GASTOS *****************
-        // Función para mostrar todos los gastos
-        function verTodosLosGastos() {
-            const query = 'SELECT * FROM gastos';
-            connection.query(query, (error, results, fields) => {
-                if (error) throw error;
-                console.log('Todos los gastos:', results);
-            });
-        }
-
-
-        //***************** CRUD PRESUPUESTOS *********************
-        // Función de Crear (Create)
-        function crearPresupuesto(presupuesto) {
-            const query = 'INSERT INTO presupuestos SET ?';
-            connection.query(query, presupuesto, (error, results, fields) => {
-                if (error) throw error;
-                console.log('Nuevo presupuesto creado:', results.insertId);
-            });
-        }
-
-        // Función de Lectura (Read)
-        function obtenerPresupuestos() {
-            const query = 'SELECT * FROM presupuestos';
-            connection.query(query, (error, results, fields) => {
-                if (error) throw error;
-                console.log('Presupuestos:', results);
-            });
-        }
-
-        // Función de Actualización (Update)
-        function actualizarPresupuesto(idPresupuesto, idProyecto, nuevosDatos) {
-            const query = 'UPDATE presupuestos SET ? WHERE idPresupuesto = ? AND idProyecto = ?';
-            connection.query(query, [nuevosDatos, idPresupuesto, idProyecto], (error, results, fields) => {
-                if (error) throw error;
-                console.log('Presupuesto actualizado:', results.affectedRows);
-            });
-        }
-
-        // Función de Eliminación (Delete)
-        function eliminarPresupuesto(idPresupuesto, idProyecto) {
-            const query = 'DELETE FROM presupuestos WHERE idPresupuesto = ? AND idProyecto = ?';
-            connection.query(query, [idPresupuesto, idProyecto], (error, results, fields) => {
-                if (error) throw error;
-                console.log('Presupuesto eliminado:', results.affectedRows);
-            });
-        }
-        //***************** FIN CRUD PRESUPUESTOS *****************
-
-        // Función para mostrar todos los preuspuestos
-        function verTodosLosPresupuestos() {
-            const query = 'SELECT * FROM presupuestos';
-            connection.query(query, (error, results, fields) => {
-                if (error) throw error;
-                console.log('Todos los presupuestos:', results);
-            });
-        }
-    </script>
+    // Función para mostrar todos los preuspuestos
+    function verTodosLosPresupuestos() {
+        const query = 'SELECT * FROM presupuestos';
+        connection.query(query, (error, results, fields) => {
+            if (error) throw error;
+            console.log('Todos los presupuestos:', results);
+        });
+    }
+</script>
 
 </html>

@@ -3,16 +3,6 @@ import Partida from '../models/partida.js';
 import Usuario from '../models/usuario.js';
 import ProyectoUsuario from '../models/proyectoUsuario.js';
 
-// Obtener los registros de users para mostrarlos en el select
-export const getProyectoUsuarios = async (req, res) => {
-  try {
-    const usuarios = await Usuario.findAll();
-    res.json(usuarios);
-  } catch (error) {
-    res.status(500).json({ message: 'Error al obtener las usuarios', error });
-  }
-};
-
 // Obtener todos los registros de proyectos
 export const getProyectos = async (req, res) => {
   try {
