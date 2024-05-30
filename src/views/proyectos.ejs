@@ -114,54 +114,77 @@
       }
     }
 
+    async function cargarUsuarios() {
+      try {
+        const response = await fetch('/proyectoUsuario');
+        if (response.ok) {
+          const usuarios = await response.json();
+          const selectUsuario = popup.document.getElementById('nombreEncargado');
+          usuarios.forEach(usuario => {
+            const option = document.createElement('option');
+            option.value = usuario.nombreUsuario;
+            option.textContent = usuario.nombreUsuario;
+            selectUsuario.appendChild(option);
+          });
+        } else {
+          console.error('Error al obtener los usuarios:', await response.text());
+        }
+      } catch (error) {
+        console.error('Error al realizar la solicitud:', error);
+      }
+    }
+
     var btnAddProyecto = document.getElementById('btnAddProyecto').addEventListener('click', function () {
       popup = window.open('', 'popup', 'width=400,height=600');
 
       var formContent = `
       <!DOCTYPE html>
       <html lang="en">
-      <head>
+        <head>
           <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Agregar Proyecto</title>
-          <link rel="stylesheet" href="/css/main.css">
-  </head>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Agregar Proyecto</title>
+              <link rel="stylesheet" href="/css/main.css">
+              </head>
 
-  <body class="bodyPopup">
-    <form class="popup-form">
-      <label for="idPartida">ID Partida:</label><br>
-      <select id="idPartida" name="idPartida" style="width: 200px; height: 30px;">
-          <option value="">Seleccione una partida...</option>
-      </select><br>
+              <body class="bodyPopup">
+                <form class="popup-form">
+                  <label for="idPartida">ID Partida:</label><br>
+                    <select id="idPartida" name="idPartida" style="width: 200px; height: 30px;">
+                      <option value="">Seleccione una partida...</option>
+                    </select><br>
 
-      <label for="nombreProyecto">Nombre del Proyecto:</label><br>
-      <input type="text" id="nombreProyecto" name="nombreProyecto"><br>
+                      <label for="nombreProyecto">Nombre del Proyecto:</label><br>
+                        <input type="text" id="nombreProyecto" name="nombreProyecto"><br>
 
-      <label for="descripcionProyecto">Descripción:</label><br>
-      <textarea id="descripcionProyecto" name="descripcionProyecto"></textarea><br>
+                          <label for="descripcionProyecto">Descripción:</label><br>
+                            <textarea id="descripcionProyecto" name="descripcionProyecto"></textarea><br>
 
-      <label for="nombreEncargado">Nombre del Encargado:</label><br>
-      <input type="text" id="nombreEncargado" name="nombreEncargado"><br>
+                              <label for="nombreEncargado">Nombre del Encargado:</label><br>
+                                <select id="nombreEncargado" name="nombreEncargado" style="width: 200px; height: 30px;">
+                                  <option value="">Seleccione un encargado...</option>
+                                </select><br>
 
-      <label for="fechaInicio">Fecha de Inicio:</label><br>
-      <input type="date" id="fechaInicio" name="fechaInicio"><br>
+                                  <label for="fechaInicio">Fecha de Inicio:</label><br>
+                                    <input type="date" id="fechaInicio" name="fechaInicio"><br>
 
-      <label for="fechaFin">Fecha de Fin:</label><br>
-      <input type="date" id="fechaFin" name="fechaFin"><br>
+                                      <label for="fechaFin">Fecha de Fin:</label><br>
+                                        <input type="date" id="fechaFin" name="fechaFin"><br>
 
-      <button class="btnPopup" type="submit">Guardar</button>
-      <button class="btnPopup" type="button" onclick="window.opener.cerrarPopup()">Cancelar</button>
-    </form>
-  </body>
-  </html>
-  `;
+                                          <button class="btnPopup" type="submit">Guardar</button>
+                                          <button class="btnPopup" type="button" onclick="window.opener.cerrarPopup()">Cancelar</button>
+                                        </form>
+                                        </body>
+                                      </html>
+    `;
 
       // Escribimos el contenido del formulario en la ventana emergente
       popup.document.write(formContent);
 
       // Cargar las partidas en el select
       cargarPartidas();
-
+      // Cargar los usuarios en el select
+      cargarUsuarios();
 
       // Definimos el comportamiento del formulario al ser enviado
       popup.document.querySelector('form').addEventListener('submit', function (event) {
@@ -177,11 +200,11 @@
       }
     }
 
-    function btnPopupGuardar() {
+    async function btnPopupGuardar() {
       var idPartida = popup.document.getElementById('idPartida').value;
       var nombreProyecto = popup.document.getElementById('nombreProyecto').value;
       var descripcionProyecto = popup.document.getElementById('descripcionProyecto').value;
-      var nombreEncargado = popup.document.getElementById('nombreEncargado').value;
+      var idEncargado = popup.document.getElementById('nombreEncargado').value;
       var fechaInicio = new Date(popup.document.getElementById('fechaInicio').value);
       var fechaFin = new Date(popup.document.getElementById('fechaFin').value);
 
@@ -189,12 +212,11 @@
         idPartida: idPartida,
         nombreProyecto: nombreProyecto,
         descripcionProyecto: descripcionProyecto,
-        nombreEncargado: nombreEncargado,
+        nombreEncargado: idEncargado,
         fechaInicio: fechaInicio,
         fechaFin: fechaFin
       };
 
-      // Enviar una solicitud POST al servidor para crear el nuevo proyecto
       fetch('/proyectos', {
         method: 'POST',
         headers: {
@@ -217,6 +239,10 @@
           console.error('Error al realizar la solicitud:', error);
         });
     }
+
+    // Llamada a la función btnPopupGuardar
+    btnPopupGuardar();
+
 
 
     //////////////////////////////////////////////////////
@@ -350,37 +376,65 @@
             selectPartida.appendChild(option);
           });
 
-          const formContent = `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Editar Usuario</title>
-          <link rel="stylesheet" href="/css/main.css">
-        </head>
-        <body class="bodyPopup">
-          <form class="popup-form" id="formProyecto">
-            <label for="idPartida">ID Partida:</label><br>
-            ${selectPartida.outerHTML}<br>
-            <label for="nombreProyecto">Nombre del Proyecto:</label><br>
-            <input type="text" id="nombreProyecto" name="nombreProyecto" value="${proyecto.nombreProyecto}" required><br>
-            <label for="descripcionProyecto">Descripción:</label><br>
-            <textarea id="descripcionProyecto" name="descripcionProyecto">${proyecto.descripcionProyecto}</textarea><br>
-            <label for="nombreEncargado">Nombre del Encargado:</label><br>
-            <input type="text" id="nombreEncargado" name="nombreEncargado" value="${proyecto.nombreEncargado}"><br>
-            <label for="fechaInicio">Fecha de Inicio:</label><br>
-            <input type="date" id="fechaInicio" name="fechaInicio" value="${proyecto.fechaInicio}"><br>
-            <label for="fechaFin">Fecha de Fin:</label><br>
-            <input type="date" id="fechaFin" name="fechaFin" value="${proyecto.fechaFin}"><br>
-            <button class="btnPopup" type="submit">Guardar</button>
-            <button class="btnPopup" type="button" onclick="window.close()">Cancelar</button>
-          </form>
-        </body>
-        </html>
-      `;
+          // Obtener los usuarios disponibles
+          const usuariosResponse = await fetch('/proyectoUsuario');
+          if (!usuariosResponse.ok) {
+            console.error('Error al obtener los usuarios:', await usuariosResponse.text());
+            return;
+          }
+          const usuarios = await usuariosResponse.json();
 
-          const popup = window.open('', 'popup', 'width=400,height=550');
+          // Construir las opciones del select de usuarios
+          const selectUsuario = document.createElement('select');
+          selectUsuario.setAttribute('id', 'nombreEncargado');
+          selectUsuario.setAttribute('name', 'nombreEncargado');
+          selectUsuario.style.width = '200px';
+          selectUsuario.style.height = '30px';
+          selectUsuario.innerHTML = '<option value="">Seleccione un encargado...</option>';
+          usuarios.forEach(usuario => {
+            const option = document.createElement('option');
+            option.value = usuario.nombreUsuario;
+            option.textContent = usuario.nombreUsuario;
+            if (proyecto.nombreEncargado === usuario.nombreUsuario) {
+              option.selected = true; // Seleccionar el encargado correspondiente al proyecto
+            }
+            selectUsuario.appendChild(option);
+          });
+
+          const formContent = `
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Usuario</title>
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body class="bodyPopup">
+  <form class="popup-form" id="formProyecto">
+    <label for="idPartida">ID Partida:</label><br>
+    ${selectPartida.outerHTML}<br>
+    <label for="nombreProyecto">Nombre del Proyecto:</label><br>
+    <input type="text" id="nombreProyecto" name="nombreProyecto" value="${proyecto.nombreProyecto}" required><br>
+    <label for="descripcionProyecto">Descripción:</label><br>
+    <textarea id="descripcionProyecto" name="descripcionProyecto">${proyecto.descripcionProyecto}</textarea><br>
+    <label for="nombreEncargado">Nombre del Encargado:</label><br>
+    ${selectUsuario.outerHTML}<br>
+    <label for="fechaInicio">Fecha de Inicio:</label><br>
+    <input type="date" id="fechaInicio" name="fechaInicio" value="${proyecto.fechaInicio}"><br>
+    <label for="fechaFin">Fecha de Fin:</label><br>
+    <input type="date" id="fechaFin" name="fechaFin" value="${proyecto.fechaFin}"><br>
+    <button class="btnPopup" type="submit">Guardar</button>
+    <button class="btnPopup" type="button" onclick="window.close()">Cancelar</button>
+  </form>
+</body>
+
+</html>
+`;
+
+          const popup = window.open('', 'popup', 'width=400,height=600');
           popup.document.write(formContent);
           popup.document.querySelector('form').addEventListener('submit', function (event) {
             event.preventDefault();
@@ -431,7 +485,9 @@
     }
 
 
-    // Manejador de clic para el botón de eliminar
+
+    ////////////////////////////////////////////////////////
+    /////////////////// Delete /////////////////////////////
 
     document.querySelectorAll('[name="eliminar"]').forEach(btn => {
       btn.addEventListener('click', async function () {

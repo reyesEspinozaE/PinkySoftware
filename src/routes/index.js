@@ -5,6 +5,7 @@ import { actualizarUsuario, crearUsuario, detallesUsuario, eliminarUsuario, getU
 import { actualizarProyecto, crearProyecto, detallesProyecto, eliminarProyecto, getProyectos } from "../controllers/proyectosController.js";
 import { getPartidas } from "../controllers/partidasController.js";
 import { getPresupuestos } from "../controllers/contaduriaController.js";
+import { getProyectoUsuarios } from "../controllers/proyectoUsuarioController.js";
 
 import bodyParser from 'body-parser';
 
@@ -37,6 +38,9 @@ router.delete('/proyectos/:idProyecto', eliminarProyecto);
 
 // Llamadas para el controlador de partidas
 router.get('/partidas', getPartidas);
+
+// Llamadas para obtener usuarios para el select en la view de proyectos
+router.get('/proyectoUsuario', getProyectoUsuarios);
 
 // Llamadas para el controlador de contaduria
 router.get('/contadurias', getPresupuestos);

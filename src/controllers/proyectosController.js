@@ -1,5 +1,17 @@
 import Proyecto from '../models/proyecto.js';
 import Partida from '../models/partida.js';
+import Usuario from '../models/usuario.js';
+import ProyectoUsuario from '../models/proyectoUsuario.js';
+
+// Obtener los registros de users para mostrarlos en el select
+export const getProyectoUsuarios = async (req, res) => {
+  try {
+    const usuarios = await Usuario.findAll();
+    res.json(usuarios);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener las usuarios', error });
+  }
+};
 
 // Obtener todos los registros de proyectos
 export const getProyectos = async (req, res) => {
@@ -34,11 +46,33 @@ export const detallesProyecto = async (req, res) => {
 
 // Crear un nuevo proyecto
 
+// export const crearProyecto = async (req, res) => {
+//   try {
+//     const { idPartida, nombreProyecto, descripcionProyecto, nombreEncargado, fechaInicio, fechaFin } = req.body;
+//     console.log('Datos recibidos en el servidor:', { idPartida, nombreProyecto, descripcionProyecto, nombreEncargado, fechaInicio, fechaFin });
+
+//     const nuevoProyecto = await Proyecto.create({
+//       idPartida,
+//       nombreProyecto,
+//       descripcionProyecto,
+//       nombreEncargado,
+//       fechaInicio,
+//       fechaFin
+//     });
+//     res.status(201).json({ mensaje: 'Proyecto creado exitosamente', proyecto: nuevoProyecto });
+//   } catch (error) {
+//     console.error("Error al crear el proyecto:", error);
+//     res.status(500).send("Error al crear el proyecto");
+//   }
+// };
+
+// Crear un nuevo proyecto
 export const crearProyecto = async (req, res) => {
   try {
     const { idPartida, nombreProyecto, descripcionProyecto, nombreEncargado, fechaInicio, fechaFin } = req.body;
     console.log('Datos recibidos en el servidor:', { idPartida, nombreProyecto, descripcionProyecto, nombreEncargado, fechaInicio, fechaFin });
 
+    // Crear el nuevo proyecto
     const nuevoProyecto = await Proyecto.create({
       idPartida,
       nombreProyecto,
@@ -47,6 +81,19 @@ export const crearProyecto = async (req, res) => {
       fechaInicio,
       fechaFin
     });
+
+    // Obtener el ID del usuario encargado
+    const usuario = await Usuario.findOne({ where: { nombreUsuario: nombreEncargado } });
+    if (!usuario) {
+      return res.status(400).json({ mensaje: 'Usuario no encontrado' });
+    }
+
+    // Crear el registro en ProyectoUsuario
+    await ProyectoUsuario.create({
+      idProyecto: nuevoProyecto.idProyecto,
+      idUsuario: usuario.idUsuario,
+    });
+
     res.status(201).json({ mensaje: 'Proyecto creado exitosamente', proyecto: nuevoProyecto });
   } catch (error) {
     console.error("Error al crear el proyecto:", error);
@@ -56,24 +103,68 @@ export const crearProyecto = async (req, res) => {
 
 // Actualizar un proyecto por su ID
 
+// export const actualizarProyecto = async (req, res) => {
+//   const { idProyecto } = req.params;
+//   const { idPartida, nombreProyecto, descripcionProyecto, nombreEncargado, fechaInicio, fechaFin } = req.body;
+
+//   try {
+//     const proyecto = await Proyecto.findByPk(idProyecto);
+//     if (proyecto) {
+//       proyecto.idPartida = idPartida;
+//       proyecto.nombreProyecto = nombreProyecto;
+//       proyecto.descripcionProyecto = descripcionProyecto;
+//       proyecto.nombreEncargado = nombreEncargado;
+//       proyecto.fechaInicio = fechaInicio;
+//       proyecto.fechaFin = fechaFin;
+//       await proyecto.save();
+//       res.status(200).json({ mensaje: 'Proyecto actualizado exitosamente' });
+//     } else {
+//       res.status(404).json({ mensaje: 'Proyecto no encontrado' });
+//     }
+//   } catch (error) {
+//     console.error('Error al actualizar el proyecto:', error);
+//     res.status(500).send('Error al actualizar el proyecto');
+//   }
+// };
+
 export const actualizarProyecto = async (req, res) => {
   const { idProyecto } = req.params;
   const { idPartida, nombreProyecto, descripcionProyecto, nombreEncargado, fechaInicio, fechaFin } = req.body;
 
   try {
     const proyecto = await Proyecto.findByPk(idProyecto);
-    if (proyecto) {
-      proyecto.idPartida = idPartida;
-      proyecto.nombreProyecto = nombreProyecto;
-      proyecto.descripcionProyecto = descripcionProyecto;
-      proyecto.nombreEncargado = nombreEncargado;
-      proyecto.fechaInicio = fechaInicio;
-      proyecto.fechaFin = fechaFin;
-      await proyecto.save();
-      res.status(200).json({ mensaje: 'Proyecto actualizado exitosamente' });
-    } else {
-      res.status(404).json({ mensaje: 'Proyecto no encontrado' });
+    if (!proyecto) {
+      return res.status(404).json({ mensaje: 'Proyecto no encontrado' });
     }
+
+    // Guardar el nombre del encargado actual antes de actualizar
+    const nombreEncargadoAnterior = proyecto.nombreEncargado;
+
+    // Actualizar los datos del proyecto
+    proyecto.idPartida = idPartida;
+    proyecto.nombreProyecto = nombreProyecto;
+    proyecto.descripcionProyecto = descripcionProyecto;
+    proyecto.nombreEncargado = nombreEncargado;
+    proyecto.fechaInicio = fechaInicio;
+    proyecto.fechaFin = fechaFin;
+    await proyecto.save();
+
+    // Verificar si el nombre del encargado ha cambiado
+    if (nombreEncargado !== nombreEncargadoAnterior) {
+      // Obtener el ID del nuevo usuario encargado
+      const nuevoUsuario = await Usuario.findOne({ where: { nombreUsuario: nombreEncargado } });
+      if (!nuevoUsuario) {
+        return res.status(400).json({ mensaje: 'Nuevo usuario encargado no encontrado' });
+      }
+
+      // Actualizar la entrada en ProyectoUsuario con el nuevo idUsuario
+      await ProyectoUsuario.update(
+        { idUsuario: nuevoUsuario.idUsuario },
+        { where: { idProyecto: idProyecto } }
+      );
+    }
+
+    res.status(200).json({ mensaje: 'Proyecto actualizado exitosamente' });
   } catch (error) {
     console.error('Error al actualizar el proyecto:', error);
     res.status(500).send('Error al actualizar el proyecto');
