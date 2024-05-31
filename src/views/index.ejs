@@ -1,18 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
+    <title>
+        <%= title %>
+    </title>
     <%- include("partials/head") %>
-</head>
-<body>
-    <%- include('partials/navigation.ejs')%>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            .background {
+                position: relative;
+                background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('/img/Logo.jpg') no-repeat center center;
+                background-size: cover;
+                min-height: 100vh;
+                padding: 30px 0;
+            }
 
-    
-    <header class="container vh-100 d-flex justify-content-center align-items-center">
-        <img src="/img/Logo.jpg" alt="">
-    </header>
-    <%- include('partials/footer.ejs')%>
+            .profile-card {
+                background-color: #fff;
+                border: 1px solid #e0e0e0;
+                border-radius: 10px;
+                text-align: center;
+                padding: 20px;
+                margin: 15px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .profile-card img {
+                border-radius: 50%;
+                width: 100px;
+                height: 100px;
+                object-fit: cover;
+            }
+
+            .profile-card h4 {
+                margin-top: 15px;
+                margin-bottom: 5px;
+                font-size: 1.2rem;
+            }
+
+            .profile-card p {
+                margin-bottom: 15px;
+                color: #777;
+            }
+
+            .social-icons {
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .social-icons a {
+                color: #000;
+                text-decoration: none;
+                font-size: 1.2rem;
+            }
+        </style>
+        <%- include('partials/navigation.ejs')%>
+</head>
+
+<body>
+    <div class="background">
+        <div class="container mt-4">
+            <div class="row justify-content-center">
+                <div class="col-md-4">
+                    <div class="profile-card">
+                        <img src="https://via.placeholder.com/100" alt="Darren Warner">
+                        <h4>Darren Warner</h4>
+                        <p>UX Senior Designer</p>
+                        <div class="social-icons">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-skype"></i></a>
+                            <a href="#"><i class="fab fa-github"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="profile-card">
+                        <img src="https://via.placeholder.com/100" alt="Kattie Perry">
+                        <h4>Kattie Perry</h4>
+                        <p>Account Manager</p>
+                        <div class="social-icons">
+                            <a href="#"><i class="fab fa-skype"></i></a>
+                            <a href="#"><i class="fab fa-github"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="profile-card">
+                        <img src="https://via.placeholder.com/100" alt="Diana Johnson">
+                        <h4>Diana Johnson</h4>
+                        <p>UX Designer</p>
+                        <div class="social-icons">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-skype"></i></a>
+                            <a href="#"><i class="fab fa-github"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="profile-card">
+                        <img src="https://via.placeholder.com/100" alt="George Vandiver">
+                        <h4>George Vandiver</h4>
+                        <p>Graphics Designer</p>
+                        <div class="social-icons">
+                            <a href="#"><i class="fab fa-skype"></i></a>
+                            <a href="#"><i class="fab fa-github"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="profile-card">
+                        <img src="https://via.placeholder.com/100" alt="Rihanna Jonesy">
+                        <h4>Rihanna Jonesy</h4>
+                        <p>Designer</p>
+                        <div class="social-icons">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-skype"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="profile-card">
+                        <img src="https://via.placeholder.com/100" alt="Rihanna Jonesy">
+                        <h4>Rihanna Jonesy</h4>
+                        <p>Designer</p>
+                        <div class="social-icons">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-skype"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </body>
+<%- include('partials/footer.ejs')%>
+
 </html>
