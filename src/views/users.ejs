@@ -11,11 +11,15 @@
 </head>
 
 <body>
-  <%- include("partials/navigation.ejs")%>
-    <div class="content-wrapper">
+  <%- include("partials/navigation.ejs") %>
+    <div class="content-wrapper container mt-4">
       <main>
-        <button id="btnAddUsuario" class="btnCommon btn btn-primary mt-2">Agregar Usuario</button>
-        <div class="table-responsive mt-2">
+        <div class="row mb-3">
+          <div class="col">
+            <button id="btnAddUsuario" class="btnCommon btn btn-primary w-100">Agregar Usuario</button>
+          </div>
+        </div>
+        <div class="table-responsive">
           <table class="table table-striped table-hover table-borderless table-secondary align-middle">
             <thead class="table-light">
               <tr>
@@ -31,11 +35,13 @@
                 <% usuarios.forEach(usuario=> { %>
                   <tr class="table-secondary">
                     <td>
-                      <a name="detalles" class="btn btn-success" data-user-id="<%= usuario.idUsuario %>">Detalles</a>
+                      <a name="detalles" class="btn btn-success btn-sm"
+                        data-user-id="<%= usuario.idUsuario %>">Detalles</a>
                       ||
-                      <a name="editar" class="btn btn-primary" data-user-id="<%= usuario.idUsuario %>">Editar</a>
+                      <a name="editar" class="btn btn-primary btn-sm" data-user-id="<%= usuario.idUsuario %>">Editar</a>
                       ||
-                      <a name="eliminar" class="btn btn-danger" data-user-id="<%= usuario.idUsuario %>">Eliminar</a>
+                      <a name="eliminar" class="btn btn-danger btn-sm"
+                        data-user-id="<%= usuario.idUsuario %>">Eliminar</a>
                     </td>
                     <td scope="row">
                       <%= usuario.idUsuario %>
@@ -53,40 +59,43 @@
                   <% }) %>
                     <% } else { %>
                       <tr>
-                        <td colspan="5">No hay usuarios disponibles</td>
+                        <td colspan="5" class="text-center">No hay usuarios disponibles</td>
                       </tr>
                       <% } %>
             </tbody>
           </table>
         </div>
-      </main>  
+      </main>
     </div>
+</body>
 
-    <%- include('partials/footer.ejs')%>
+</html>
 
-      <!-- Bootstrap JavaScript Libraries -->
+<%- include('partials/footer.ejs')%>
 
-      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        crossorigin="anonymous"></script>
+  <!-- Bootstrap JavaScript Libraries -->
 
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-        crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    crossorigin="anonymous"></script>
 
-      <script>
-        ////////////////////////////////////////////////////////
-        /////////////////// CREATE /////////////////////////////
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+    integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+    crossorigin="anonymous"></script>
 
-        // Definimos una variable para la ventana emergente
-        var popup;
+  <script>
+    ////////////////////////////////////////////////////////
+    /////////////////// CREATE /////////////////////////////
 
-        // Seleccionamos el botón por su id
-        var btnAddUsuario = document.getElementById('btnAddUsuario').addEventListener('click', function () {
-          // Abre la ventana emergente para agregar un usuario
-          popup = window.open('', 'popup', 'width=400,height=300');
+    // Definimos una variable para la ventana emergente
+    var popup;
 
-          // Contenido del formulario dentro de la ventana emergente
-          var formContent = `
+    // Seleccionamos el botón por su id
+    var btnAddUsuario = document.getElementById('btnAddUsuario').addEventListener('click', function () {
+      // Abre la ventana emergente para agregar un usuario
+      popup = window.open('', 'popup', 'width=400,height=300');
+
+      // Contenido del formulario dentro de la ventana emergente
+      var formContent = `
         <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -113,77 +122,77 @@
         </html>
       `;
 
-          // Escribimos el contenido del formulario en la ventana emergente
-          popup.document.write(formContent);
+      // Escribimos el contenido del formulario en la ventana emergente
+      popup.document.write(formContent);
 
-          // Definimos el comportamiento del formulario al ser enviado
-          popup.document.querySelector('form').addEventListener('submit', function (event) {
-            event.preventDefault();
-            // Llamar a la función para guardar el nuevo usuario
-            btnPopupGuardar();
-          });
-        });
+      // Definimos el comportamiento del formulario al ser enviado
+      popup.document.querySelector('form').addEventListener('submit', function (event) {
+        event.preventDefault();
+        // Llamar a la función para guardar el nuevo usuario
+        btnPopupGuardar();
+      });
+    });
 
-        // Definimos la función cerrarPopup para cerrar la ventana emergente
-        function cerrarPopup() {
-          if (popup) {
+    // Definimos la función cerrarPopup para cerrar la ventana emergente
+    function cerrarPopup() {
+      if (popup) {
+        popup.close();
+      }
+    }
+
+    // Definimos la función btnPopupGuardar() para guardar el nuevo usuario
+
+    function btnPopupGuardar() {
+      // Obtener los valores de los campos del formulario
+      var nombreUsuario = popup.document.getElementById('nombreUsuario').value;
+      var correo = popup.document.getElementById('correo').value;
+      var contrasenia = popup.document.getElementById('contrasenia').value;
+
+      // Objeto con los datos del nuevo usuario
+      var nuevoUsuario = {
+        nombreUsuario: nombreUsuario,
+        correo: correo,
+        contrasenia: contrasenia
+      };
+
+      // Enviar una solicitud POST al servidor para crear el nuevo usuario
+      fetch('/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(nuevoUsuario)
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.mensaje === 'Usuario creado exitosamente') {
+            // Si la respuesta es satisfactoria, cerrar la ventana emergente y recargar la página principal
             popup.close();
+            window.location.reload();
+          } else {
+            // Si hay un error en la respuesta, mostrar un mensaje de error
+            console.error('Error al guardar el nuevo usuario:', data);
           }
-        }
+        })
+        .catch(error => {
+          console.error('Error al realizar la solicitud:', error);
+        });
+    }
 
-        // Definimos la función btnPopupGuardar() para guardar el nuevo usuario
-      
-        function btnPopupGuardar() {
-          // Obtener los valores de los campos del formulario
-          var nombreUsuario = popup.document.getElementById('nombreUsuario').value;
-          var correo = popup.document.getElementById('correo').value;
-          var contrasenia = popup.document.getElementById('contrasenia').value;
+    ////////////////////////////////////////////////////////
+    /////////////////// Read ///////////////////////////////
 
-          // Objeto con los datos del nuevo usuario
-          var nuevoUsuario = {
-            nombreUsuario: nombreUsuario,
-            correo: correo,
-            contrasenia: contrasenia
-          };
-
-          // Enviar una solicitud POST al servidor para crear el nuevo usuario
-          fetch('/users', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(nuevoUsuario)
-          })
-            .then(response => response.json())
-            .then(data => {
-              if (data.mensaje === 'Usuario creado exitosamente') {
-                // Si la respuesta es satisfactoria, cerrar la ventana emergente y recargar la página principal
-                popup.close();
-                window.location.reload();
-              } else {
-                // Si hay un error en la respuesta, mostrar un mensaje de error
-                console.error('Error al guardar el nuevo usuario:', data);
-              }
-            })
-            .catch(error => {
-              console.error('Error al realizar la solicitud:', error);
-            });
-        }
-        
-        ////////////////////////////////////////////////////////
-        /////////////////// Read //////////////////////////////
-
-        // Ventana emergente para detalles de usuario
-        document.querySelectorAll('[name="detalles"]').forEach(btn => {
-          btn.addEventListener('click', async function () {
-            const userId = this.getAttribute('data-user-id');
-            const response = await fetch(`/users/${userId}`, {
-              method: 'GET',
-              headers: { 'Content-Type': 'application/json' }
-            });
-            if (response.ok) {
-              const usuario = await response.json();
-              var formContent = `
+    // Ventana emergente para detalles de usuario
+    document.querySelectorAll('[name="detalles"]').forEach(btn => {
+      btn.addEventListener('click', async function () {
+        const userId = this.getAttribute('data-user-id');
+        const response = await fetch(`/users/${userId}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        if (response.ok) {
+          const usuario = await response.json();
+          var formContent = `
             <!DOCTYPE html>
             <html lang="en">
             <head>
@@ -203,28 +212,28 @@
             </body>
             </html>
           `;
-              var popup = window.open('', 'popup', 'width=300,height=300');
-              popup.document.write(formContent);
-            } else {
-              console.error('Error al obtener los detalles del usuario:', await response.text());
-            }
-          });
+          var popup = window.open('', 'popup', 'width=300,height=300');
+          popup.document.write(formContent);
+        } else {
+          console.error('Error al obtener los detalles del usuario:', await response.text());
+        }
+      });
+    });
+
+    ////////////////////////////////////////////////////////
+    /////////////////// Update /////////////////////////////
+
+    // Ventana emergente para editar un usuario
+    document.querySelectorAll('[name="editar"]').forEach(btn => {
+      btn.addEventListener('click', async function () {
+        const userId = this.getAttribute('data-user-id');
+        const response = await fetch(`/users/${userId}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
         });
-
-        ////////////////////////////////////////////////////////
-        /////////////////// Update /////////////////////////////
-
-        // Ventana emergente para editar un usuario
-        document.querySelectorAll('[name="editar"]').forEach(btn => {
-          btn.addEventListener('click', async function () {
-            const userId = this.getAttribute('data-user-id');
-            const response = await fetch(`/users/${userId}`, {
-              method: 'GET',
-              headers: { 'Content-Type': 'application/json' }
-            });
-            if (response.ok) {
-              const usuario = await response.json();
-              var formContent = `
+        if (response.ok) {
+          const usuario = await response.json();
+          var formContent = `
             <!DOCTYPE html>
             <html lang="en">
             <head>
@@ -247,71 +256,69 @@
             </body>
             </html>
           `;
-              var popup = window.open('', 'popup', 'width=400,height=400');
-              popup.document.write(formContent);
-              popup.document.querySelector('form').addEventListener('submit', function (event) {
-                event.preventDefault();
-                btnPopupActualizar(userId, popup);
-              });
-            } else {
-              console.error('Error al actualizar el usuario:', await response.text());
-            }
+          var popup = window.open('', 'popup', 'width=400,height=400');
+          popup.document.write(formContent);
+          popup.document.querySelector('form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            btnPopupActualizar(userId, popup);
           });
-        });
-
-        function btnPopupActualizar(userId, popup) {
-          var nombreUsuario = popup.document.getElementById('nombreUsuario').value;
-          var correo = popup.document.getElementById('correo').value;
-          var contrasenia = popup.document.getElementById('contrasenia').value;
-
-          var usuarioActualizado = {
-            nombreUsuario: nombreUsuario,
-            correo: correo,
-            contrasenia: contrasenia
-          };
-
-          fetch(`/users/${userId}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(usuarioActualizado)
-          })
-            .then(response => response.json())
-            .then(data => {
-              if (data.mensaje === 'Usuario actualizado exitosamente') {
-                popup.close();
-                window.location.reload();
-              } else {
-                console.error('Error al actualizar el usuario:', data);
-              }
-            })
-            .catch(error => {
-              console.error('Error al realizar la solicitud:', error);
-            });
+        } else {
+          console.error('Error al actualizar el usuario:', await response.text());
         }
+      });
+    });
 
+    function btnPopupActualizar(userId, popup) {
+      var nombreUsuario = popup.document.getElementById('nombreUsuario').value;
+      var correo = popup.document.getElementById('correo').value;
+      var contrasenia = popup.document.getElementById('contrasenia').value;
 
-        ////////////////////////////////////////////////////////
-        /////////////////// Delete /////////////////////////////
+      var usuarioActualizado = {
+        nombreUsuario: nombreUsuario,
+        correo: correo,
+        contrasenia: contrasenia
+      };
 
-        // Manejador de clic para el botón de eliminar
-        document.querySelectorAll('[name="eliminar"]').forEach(btn => {
-          btn.addEventListener('click', async function () {
-            const userId = this.getAttribute('data-user-id');
-            const confirmacion = confirm('¿Estás seguro de que quieres eliminar este usuario?');
-            if (confirmacion) {
-              const response = await fetch(`/users/${userId}`, {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' }
-              });
-              const data = await response.json();
-              // Aquí se muestra un mensaje de éxito
-              console.log(data);
-              window.location.reload(); // Recargar la página después de eliminar el usuario
-            }
-          });
+      fetch(`/users/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(usuarioActualizado)
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.mensaje === 'Usuario actualizado exitosamente') {
+            popup.close();
+            window.location.reload();
+          } else {
+            console.error('Error al actualizar el usuario:', data);
+          }
+        })
+        .catch(error => {
+          console.error('Error al realizar la solicitud:', error);
         });
-      </script>
-</body>
-</html>
+    }
+
+
+    ////////////////////////////////////////////////////////
+    /////////////////// Delete /////////////////////////////
+
+    // Manejador de clic para el botón de eliminar
+    document.querySelectorAll('[name="eliminar"]').forEach(btn => {
+      btn.addEventListener('click', async function () {
+        const userId = this.getAttribute('data-user-id');
+        const confirmacion = confirm('¿Estás seguro de que quieres eliminar este usuario?');
+        if (confirmacion) {
+          const response = await fetch(`/users/${userId}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+          });
+          const data = await response.json();
+          // Aquí se muestra un mensaje de éxito
+          console.log(data);
+          window.location.reload(); // Recargar la página después de eliminar el usuario
+        }
+      });
+    });
+  </script>

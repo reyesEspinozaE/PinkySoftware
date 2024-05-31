@@ -13,8 +13,8 @@ import {
     eliminarGasto,
     actualizarPresupuesto,
     actualizarGasto,
-    editarPresupuesto,
-    editarGasto
+    detallesGasto,
+    detallesPresupuesto
 } from '../controllers/contaduriaController.js';
 import { getProyectosGastos } from "../controllers/gastosController.js";
 import { getProyectosPresupuesto } from "../controllers/presupuestosController.js";
@@ -61,19 +61,19 @@ router.get('/contadurias', getContaduriaData);
 router.post('/presupuestos', crearPresupuesto);
 router.delete('/presupuestos/:id', eliminarPresupuesto);
 router.put('/presupuestos/:id', actualizarPresupuesto);
-router.get('/presupuestos/:id', editarPresupuesto);
+router.get('/presupuestos/:id', detallesPresupuesto);
 
 // Rutas para gastos
 router.post('/gastos', crearGasto);
 router.delete('/gastos/:id', eliminarGasto);
 router.put('/gastos/:id', actualizarGasto);
-router.get('/gastos/:id', editarGasto);
+router.get('/gastos/:id', detallesGasto);
 
 // Rutas para obtener los proyectos de presupuestos y gastos
 // Presupuestos 
-router.get('/presupuestos', getProyectosPresupuesto);
+router.get('/presupuestosProyecto', getProyectosPresupuesto);
 
-// Gatos
-router.get('/gastos', getProyectosGastos);
+// Gastos
+router.get('/gastosProyecto', getProyectosGastos);
 
 export default router;
