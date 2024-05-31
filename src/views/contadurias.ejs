@@ -24,7 +24,7 @@
                                     <div class="col mb-3">
                                         <button id="btnPresupuesto" class="btnCommon btn btn-primary w-100">+ Asignar
                                             presupuesto</button>
-                                    </div> 
+                                    </div>
                                     <!-- Cantidad inicial de presupuesto -->
                                 </div>
                                 <div class="row mb-3">
@@ -60,15 +60,16 @@
                                                         <% presupuestos.forEach(presupuesto=> { %>
                                                             <tr class="table-secondary">
                                                                 <td>
-                                                                    <a name="eliminarPresupuesto"
-                                                                        class="btn btn-danger btn-sm"
-                                                                        data-presupuesto-id="<%= presupuesto.idPresupuesto %>">Eliminar</a>
-                                                                    <a name="editarPresupuesto"
-                                                                        class="btn btn-primary btn-sm"
-                                                                        data-presupuesto-id="<%= presupuesto.idPresupuesto %>">Editar</a>
                                                                     <a name="detallesPresupuesto"
                                                                         class="btn btn-success btn-sm"
                                                                         data-presupuesto-id="<%= presupuesto.idPresupuesto %>">Detalles</a>
+
+                                                                    <a name="editarPresupuesto"
+                                                                        class="btn btn-primary btn-sm"
+                                                                        data-presupuesto-id="<%= presupuesto.idPresupuesto %>">Editar</a>
+                                                                    <a name="eliminarPresupuesto"
+                                                                        class="btn btn-danger btn-sm"
+                                                                        data-presupuesto-id="<%= presupuesto.idPresupuesto %>">Eliminar</a>
                                                                 </td>
                                                                 <!-- <td scope="row">
                                                                     <%= presupuesto.idPresupuesto %>
@@ -105,11 +106,13 @@
                                                                                 <div class="row">
                                                                                     <div class="col">
                                                                                         <label
-                                                                                            for="sumaPresupuesto">Suma presupuestos:
+                                                                                            for="sumaPresupuesto">Suma
+                                                                                            presupuestos:
                                                                                         </label>
                                                                                         <input type="number"
                                                                                             id="sumaPresupuesto"
-                                                                                            class="form-control" readonly>
+                                                                                            class="form-control"
+                                                                                            readonly>
                                                                                     </div>
                                                                                 </div>
                                                                             </td>
@@ -164,14 +167,17 @@
                                                         <% gastos.forEach(gasto=> { %>
                                                             <tr class="table-secondary">
                                                                 <td>
-                                                                    <a name="eliminarGasto"
-                                                                        class="btn btn-danger btn-sm"
-                                                                        data-gasto-id="<%= gasto.idGasto %>">Eliminar</a>
-                                                                    <a name="editarGasto" class="btn btn-primary btn-sm"
-                                                                        data-gasto-id="<%= gasto.idGasto %>">Editar</a>
                                                                     <a name="detallesGasto"
                                                                         class="btn btn-success btn-sm"
                                                                         data-gasto-id="<%= gasto.idGasto %>">Detalles</a>
+
+
+                                                                    <a name="editarGasto" class="btn btn-primary btn-sm"
+                                                                        data-gasto-id="<%= gasto.idGasto %>">Editar</a>
+
+                                                                    <a name="eliminarGasto"
+                                                                        class="btn btn-danger btn-sm"
+                                                                        data-gasto-id="<%= gasto.idGasto %>">Eliminar</a>
                                                                 </td>
                                                                 <!-- <td>
                                                                     <%= gasto.idGasto %>
@@ -202,21 +208,23 @@
                                                                             gastos disponibles</td>
                                                                     </tr>
                                                                     <% } %>
-                                                                    <tr>
-                                                                        <!-- La suma total de los registros de gastos-->
-                                                                        <td>
-                                                                            <div class="row">
-                                                                                <div class="col">
-                                                                                    <label
-                                                                                        for="gastosTotales">Gastos totales:
-                                                                                    </label>
-                                                                                    <input type="number"
-                                                                                        id="gastosTotales"
-                                                                                        class="form-control" readonly>
+                                                                        <tr>
+                                                                            <!-- La suma total de los registros de gastos-->
+                                                                            <td>
+                                                                                <div class="row">
+                                                                                    <div class="col">
+                                                                                        <label
+                                                                                            for="gastosTotales">Gastos
+                                                                                            totales:
+                                                                                        </label>
+                                                                                        <input type="number"
+                                                                                            id="gastosTotales"
+                                                                                            class="form-control"
+                                                                                            readonly>
+                                                                                    </div>
                                                                                 </div>
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>
+                                                                            </td>
+                                                                        </tr>
                                                 </tbody>
                                             </table>
                                         </div>
