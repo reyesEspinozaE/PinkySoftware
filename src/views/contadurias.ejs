@@ -8,242 +8,337 @@
         <%= title %>
     </title>
     <%- include("partials/head") %>
+        <%- include('partials/navigation.ejs') %>
 </head>
 
 <body>
-    <%- include('partials/navigation.ejs') %>
-        <main>
-            <div id="container" class="container mt-5">
-                <div class="row">
-                    <!-- Presupuestos -->
-                    <div class="col-md-6">
-                        <div id="bodyPresupuestos">
-                            <div class="col">
-                                <h2 class="text-center">Gestión de Presupuestos</h2>
-                                <div class="row">
-                                    <div class="col mb-3">
-                                        <button id="btnPresupuesto" class="btnCommon btn btn-primary w-100">+ Asignar
-                                            presupuesto</button>
-                                    </div>
-                                    <!-- Cantidad inicial de presupuesto -->
+    <main>
+        <div id="container" class="container mt-5">
+            <div class="row">
+                <!-- Presupuestos -->
+                <div class="col-md-6">
+                    <div id="bodyPresupuestos">
+                        <div class="col">
+                            <h2 class="text-center">Gestión de Presupuestos</h2>
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <button id="btnPresupuesto" class="btnCommon btn btn-primary w-100">+ Asignar
+                                        presupuesto</button>
                                 </div>
-                                <div class="row mb-3">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="presupuestoTotal">Presupuesto Total:</label>
-                                        <input type="number" id="presupuestoTotal" class="form-control">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="ahorroMensual">Ahorro Mensual:</label>
-                                        <input type="number" id="ahorroMensual" class="form-control" readonly>
-                                    </div>
-                                    <!-- Ahorro mensual es la sumaPresupuestos - PresupuestoTotal -->
+                                <!-- Cantidad inicial de presupuesto -->
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6 mb-3">
+                                    <label for="presupuestoTotal">Presupuesto Total:</label>
+                                    <input type="number" id="presupuestoTotal" class="form-control"
+                                        placeholder="oooo.oo">
                                 </div>
-                                <div class="row mb-3">
-                                    <div class="col">
-                                        <div class="table-responsive">
-                                            <table
-                                                class="table table-striped table-hover table-borderless table-secondary align-middle">
-                                                <thead class="table-light">
-                                                    <tr>
-                                                        <!-- <th>Acción</th>
+                                <div class="col-md-6">
+                                    <label for="ahorroMensualPresupuesto">Ahorro Mensual:</label>
+                                    <input type="number" id="ahorroMensualPresupuesto" class="form-control" readonly>
+                                </div>
+                                <!-- Ahorro mensual es la sumaPresupuestos - PresupuestoTotal -->
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <div class="table-responsive">
+                                        <table
+                                            class="table table-striped table-hover table-borderless table-secondary align-middle">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <!-- <th>Acción</th>
                                                         <th>ID Presupuesto</th> -->
-                                                        <th>ID Proyecto</th>
-                                                        <th>Monto total</th>
-                                                        <th>Saldo pendiente</th>
-                                                        <th>Área</th>
-                                                        <!-- <th>Fecha</th> -->
-                                                        <th>Descripción</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="table-group-divider">
-                                                    <% if (presupuestos && presupuestos.length> 0) { %>
-                                                        <% presupuestos.forEach(presupuesto=> { %>
-                                                            <tr class="table-secondary">
-                                                                <td>
-                                                                    <a name="detallesPresupuesto"
-                                                                        class="btn btn-success btn-sm"
-                                                                        data-presupuesto-id="<%= presupuesto.idPresupuesto %>">Detalles</a>
+                                                    <th>ID Proyecto</th>
+                                                    <th>Monto total</th>
+                                                    <th>Saldo pendiente</th>
+                                                    <th>Área</th>
+                                                    <!-- <th>Fecha</th> -->
+                                                    <th>Descripción</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="table-group-divider">
+                                                <% if (presupuestos && presupuestos.length> 0) { %>
+                                                    <% presupuestos.forEach(presupuesto=> { %>
+                                                        <tr class="table-secondary">
+                                                            <td>
+                                                                <a name="detallesPresupuesto"
+                                                                    class="btn btn-success btn-sm"
+                                                                    data-presupuesto-id="<%= presupuesto.idPresupuesto %>">Detalles</a>
 
-                                                                    <a name="editarPresupuesto"
-                                                                        class="btn btn-primary btn-sm"
-                                                                        data-presupuesto-id="<%= presupuesto.idPresupuesto %>">Editar</a>
-                                                                    <a name="eliminarPresupuesto"
-                                                                        class="btn btn-danger btn-sm"
-                                                                        data-presupuesto-id="<%= presupuesto.idPresupuesto %>">Eliminar</a>
-                                                                </td>
-                                                                <!-- <td scope="row">
+                                                                <a name="editarPresupuesto"
+                                                                    class="btn btn-primary btn-sm"
+                                                                    data-presupuesto-id="<%= presupuesto.idPresupuesto %>">Editar</a>
+                                                                <a name="eliminarPresupuesto"
+                                                                    class="btn btn-danger btn-sm"
+                                                                    data-presupuesto-id="<%= presupuesto.idPresupuesto %>">Eliminar</a>
+                                                            </td>
+                                                            <!-- <td scope="row">
                                                                     <%= presupuesto.idPresupuesto %>
                                                                 </td>
                                                                 <td>
                                                                     <%= presupuesto.idProyecto %>
                                                                 </td> -->
-                                                                <td>
-                                                                    <%= presupuesto.montoTotal %>
-                                                                </td>
-                                                                <td>
-                                                                    <%= presupuesto.saldoPendiente %>
-                                                                </td>
-                                                                <td>
-                                                                    <%= presupuesto.area %>
-                                                                </td>
-                                                                <!-- <td>
+                                                            <td class="montoTotal">
+                                                                <%= presupuesto.montoTotal %>
+                                                            </td>
+                                                            <td>
+                                                                <%= presupuesto.saldoPendiente %>
+                                                            </td>
+                                                            <td>
+                                                                <%= presupuesto.area %>
+                                                            </td>
+                                                            <!-- <td>
                                                                     <%= presupuesto.fechaMonto %>
                                                                 </td> -->
-                                                                <td>
-                                                                    <%= presupuesto.descripcion %>
-                                                                </td>
-                                                            </tr>
-                                                            <% }) %>
-                                                                <% } else { %>
+                                                            <td>
+                                                                <%= presupuesto.descripcion %>
+                                                            </td>
+                                                        </tr>
+                                                        <% }) %>
+                                                            <% } else { %>
+                                                                <tr>
+                                                                    <td colspan="8" class="text-center">No hay
+                                                                        presupuestos disponibles</td>
+                                                                </tr>
+                                                                <% } %>
+                                                                    <!-- La suma total de los registros de presupuestos "MontoTotal"-->
                                                                     <tr>
-                                                                        <td colspan="8" class="text-center">No hay
-                                                                            presupuestos disponibles</td>
-                                                                    </tr>
-                                                                    <% } %>
-                                                                        <tr>
-                                                                            <!-- La suma total de los registros de presupuestos "MontoTotal"-->
-                                                                            <td>
-                                                                                <div class="row">
-                                                                                    <div class="col">
-                                                                                        <label
-                                                                                            for="sumaPresupuesto">Suma
-                                                                                            presupuestos:
-                                                                                        </label>
-                                                                                        <input type="number"
-                                                                                            id="sumaPresupuesto"
-                                                                                            class="form-control"
-                                                                                            readonly>
-                                                                                    </div>
+                                                                        <td colspan="3">
+                                                                            <div class="row">
+                                                                                <div class="col-lg-8 col-xl-6 mx-auto">
+                                                                                    <label for="sumaPresupuesto"
+                                                                                        class="form-label">Suma
+                                                                                        presupuestos:</label>
+                                                                                    <input type="number"
+                                                                                        id="sumaPresupuesto"
+                                                                                        class="form-control form-control-lg"
+                                                                                        readonly>
                                                                                 </div>
-                                                                            </td>
-                                                                        </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Fin de presupuestos -->
+                </div>
+                <!-- Fin de presupuestos -->
 
-                    <!-- Gastos -->
-                    <div class="col-md-6">
-                        <div id="bodyGastos">
-                            <div class="col">
-                                <h2 class="text-center">Gestión de Gastos</h2>
-                                <div class="row">
-                                    <div class="col mb-3">
-                                        <button id="btnGasto" class="btnCommon btn btn-primary w-100">+ Definir
-                                            gasto</button>
-                                    </div>
+                <!-- Gastos -->
+                <div class="col-md-6">
+                    <div id="bodyGastos">
+                        <div class="col">
+                            <h2 class="text-center">Gestión de Gastos</h2>
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <button id="btnGasto" class="btnCommon btn btn-primary w-100">+ Definir
+                                        gasto</button>
                                 </div>
-                                <div class="row mb-3">
-                                    <div class="col-md-12 mb-3">
-                                        <label for="presupuestoTotalMensual">Presupuesto mensual restante:</label>
-                                        <input type="number" id="presupuestoTotalMensual" class="form-control" readonly>
-                                    </div>
-                                    <!-- Es la resta de la suma total de presupuesto - la suma total de los gastos totales -->
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12 mb-3">
+                                    <label for="presupuestoTotalMensualGasto">Presupuesto mensual restante:</label>
+                                    <input type="number" id="presupuestoTotalMensualGasto" class="form-control"
+                                        readonly>
                                 </div>
-                                <div class="row mb-3">
-                                    <div class="col">
-                                        <div class="table-responsive">
-                                            <table
-                                                class="table table-striped table-hover table-borderless table-secondary align-middle">
-                                                <thead class="table-light">
-                                                    <tr>
-                                                        <th>Acción</th>
-                                                        <!-- <th>ID Gasto</th>
+                                <!-- Es la resta de la suma total de presupuesto - la suma total de los gastos totales -->
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <div class="table-responsive">
+                                        <table
+                                            class="table table-striped table-hover table-borderless table-secondary align-middle">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Acción</th>
+                                                    <!-- <th>ID Gasto</th>
                                                         <th>ID Proyecto</th> -->
-                                                        <th>Descripción</th>
-                                                        <th>Lugar</th>
-                                                        <th>Monto Gasto</th>
-                                                        <!-- <th>Fecha de gasto</th>
+                                                    <th>Descripción</th>
+                                                    <th>Lugar</th>
+                                                    <th>Monto Gasto</th>
+                                                    <!-- <th>Fecha de gasto</th>
                                                         <th>Imagen</th> -->
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="table-group-divider">
-                                                    <% if (gastos && gastos.length> 0) { %>
-                                                        <% gastos.forEach(gasto=> { %>
-                                                            <tr class="table-secondary">
-                                                                <td>
-                                                                    <a name="detallesGasto"
-                                                                        class="btn btn-success btn-sm"
-                                                                        data-gasto-id="<%= gasto.idGasto %>">Detalles</a>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="table-group-divider">
+                                                <% if (gastos && gastos.length> 0) { %>
+                                                    <% gastos.forEach(gasto=> { %>
+                                                        <tr class="table-secondary">
+                                                            <td>
+                                                                <a name="detallesGasto" class="btn btn-success btn-sm"
+                                                                    data-gasto-id="<%= gasto.idGasto %>">Detalles</a>
 
 
-                                                                    <a name="editarGasto" class="btn btn-primary btn-sm"
-                                                                        data-gasto-id="<%= gasto.idGasto %>">Editar</a>
+                                                                <a name="editarGasto" class="btn btn-primary btn-sm"
+                                                                    data-gasto-id="<%= gasto.idGasto %>">Editar</a>
 
-                                                                    <a name="eliminarGasto"
-                                                                        class="btn btn-danger btn-sm"
-                                                                        data-gasto-id="<%= gasto.idGasto %>">Eliminar</a>
-                                                                </td>
-                                                                <!-- <td>
+                                                                <a name="eliminarGasto" class="btn btn-danger btn-sm"
+                                                                    data-gasto-id="<%= gasto.idGasto %>">Eliminar</a>
+                                                            </td>
+                                                            <!-- <td>
                                                                     <%= gasto.idGasto %>
                                                                 </td>
                                                                 <td>
                                                                     <%= gasto.idProyecto %>
                                                                 </td> -->
-                                                                <td>
-                                                                    <%= gasto.descripcionGasto %>
-                                                                </td>
-                                                                <td>
-                                                                    <%= gasto.lugar %>
-                                                                </td>
-                                                                <td>
-                                                                    <%= gasto.montoGasto %>
-                                                                </td>
-                                                                <!-- <td>
+                                                            <td>
+                                                                <%= gasto.descripcionGasto %>
+                                                            </td>
+                                                            <td>
+                                                                <%= gasto.lugar %>
+                                                            </td>
+                                                            <td class="montoTotalGasto">
+                                                                <%= gasto.montoGasto %>
+                                                            </td>
+                                                            <!-- <td>
                                                                     <%= gasto.fechaGasto %>
                                                                 </td>
                                                                 <td>
                                                                     <%= gasto.imagen %>
                                                                 </td> -->
-                                                            </tr>
-                                                            <% }) %>
-                                                                <% } else { %>
+                                                        </tr>
+                                                        <% }) %>
+                                                            <% } else { %>
+                                                                <tr>
+                                                                    <td colspan="8" class="text-center">No hay
+                                                                        gastos disponibles</td>
+                                                                </tr>
+                                                                <% } %>
+                                                                    <!-- La suma total de los registros de gastos-->
                                                                     <tr>
-                                                                        <td colspan="8" class="text-center">No hay
-                                                                            gastos disponibles</td>
-                                                                    </tr>
-                                                                    <% } %>
-                                                                        <tr>
-                                                                            <!-- La suma total de los registros de gastos-->
-                                                                            <td>
-                                                                                <div class="row">
-                                                                                    <div class="col">
-                                                                                        <label
-                                                                                            for="gastosTotales">Gastos
-                                                                                            totales:
-                                                                                        </label>
-                                                                                        <input type="number"
-                                                                                            id="gastosTotales"
-                                                                                            class="form-control"
-                                                                                            readonly>
-                                                                                    </div>
+                                                                        <td colspan="3">
+                                                                            <div class="row">
+                                                                                <div class="col-lg-8 col-xl-6 mx-auto">
+                                                                                    <label for="gastosTotales"
+                                                                                        class="form-label">Gastos
+                                                                                        totales:</label>
+                                                                                    <input type="number"
+                                                                                        id="gastosTotales"
+                                                                                        class="form-control form-control-lg"
+                                                                                        readonly>
                                                                                 </div>
-                                                                            </td>
-                                                                        </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Fin de Gastos -->
                 </div>
+                <!-- Fin de Gastos -->
             </div>
-        </main>
-        <%- include('partials/footer.ejs') %>
+        </div>
+    </main>
 </body>
+<footer>
+    <%- include('partials/footer.ejs') %>
+</footer>
 
 </html>
 
 
 <script>
+
+    //////////////////////////////////////// SUMA PRESUPUESTOS ////////////////////////////////////////
+
+    function sumaPresupuestos() {
+        // Selecciona todas las celdas que contienen los montos totales
+        const montosTotales = document.querySelectorAll('.montoTotal');
+
+        // Suma los valores de esas celdas
+        let suma = 0;
+        montosTotales.forEach(celda => {
+            suma += parseFloat(celda.textContent) || 0;
+        });
+
+        // Actualiza el input con el id 'sumaPresupuesto' con el resultado de la suma
+        document.getElementById('sumaPresupuesto').value = suma.toFixed(2);
+    }
+
+    // Llama a la función para que se ejecute al cargar la página
+    document.addEventListener('DOMContentLoaded', sumaPresupuestos);
+
+    //////////////////////////////////////// FIN SUMA PRESUPUESTOS ////////////////////////////////////////
+
+
+    //////////////////////////////////////// AHORRRO MENSUAL PRESUPUESTOS ////////////////////////////////////////
+
+    function ahorroMensualPresupuestos() {
+        // Obtiene los valores de los inputs
+        const presupuestoTotal = parseFloat(document.getElementById('presupuestoTotal').value) || 0;
+        const sumaPresupuesto = parseFloat(document.getElementById('sumaPresupuesto').value) || 0;
+
+        // Calcula el ahorro mensual
+        const ahorroMensual = presupuestoTotal - sumaPresupuesto;
+
+        // Actualiza el input con el id 'ahorroMensualPresupuesto' con el resultado del cálculo
+        document.getElementById('ahorroMensualPresupuesto').value = ahorroMensual.toFixed(2);
+    }
+
+    // Llama a la función para que se ejecute al cargar la página
+    document.addEventListener('DOMContentLoaded', () => {
+        sumaPresupuestos();
+
+        // Agrega un evento para recalcular el ahorro mensual cuando cambia el presupuesto total
+        document.getElementById('presupuestoTotal').addEventListener('input', ahorroMensualPresupuestos);
+    });
+
+    //////////////////////////////////////// FIN AHORRRO MENSUAL PRESUPUESTOS ////////////////////////////////////////
+
+
+    ///////////////////////////////////////// SUMA GASTOS ///////////////////////////////////////////
+
+    function sumaGastos() {
+        // Selecciona todas las celdas que contienen los montos totales
+        const montosTotalesGastos = document.querySelectorAll('.montoTotalGasto');
+
+        // Suma los valores de esas celdas
+        let suma = 0;
+        montosTotalesGastos.forEach(celda => {
+            suma += parseFloat(celda.textContent) || 0;
+        });
+
+        // Actualiza el input con el id 'gastosTotales' con el resultado de la suma
+        document.getElementById('gastosTotales').value = suma.toFixed(2);
+    }
+
+    // Llama a la función para que se ejecute al cargar la página
+    document.addEventListener('DOMContentLoaded', sumaGastos);
+
+    //////////////////////////////////////// FIN SUMA GASTOS ////////////////////////////////////////
+
+
+    //////////////////////////////////////// AHORRRO MENSUAL GASTOS ////////////////////////////////////////
+
+    function presupuestoTotalMensualGasto() {
+        // Obtiene los valores de los inputs
+        const gastosTotales = parseFloat(document.getElementById('gastosTotales').value) || 0;
+        const sumaPresupuesto = parseFloat(document.getElementById('sumaPresupuesto').value) || 0;
+
+        // Calcula el ahorro mensual
+        const ahorroMensual = sumaPresupuesto - gastosTotales;
+
+        // Actualiza el input con el id 'presupuestoTotalMensualGasto' con el resultado del cálculo
+        document.getElementById('presupuestoTotalMensualGasto').value = ahorroMensual.toFixed(2);
+    }
+
+    // Llama a la función para que se ejecute al cargar la página
+    document.addEventListener('DOMContentLoaded', () => {
+        presupuestoTotalMensualGasto();
+
+        // Agrega un evento para recalcular el ahorro mensual cuando cambia el presupuesto total
+        document.getElementById('presupuestoTotalMensualGasto').addEventListener('input', presupuestoTotalMensualGasto);
+    });
+
+    //////////////////////////////////////// FIN AHORRRO MENSUAL GASTOS ////////////////////////////////////////
+
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////// GASTOS //////////////////////////////////////////////////////
 
@@ -554,6 +649,7 @@
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////// PRESUPUESTO ////////////////////////////////////////////////////
 
+
     ////////////////////////////////////////////////////////
     /////////////////// CREATE /////////////////////////////
 
@@ -580,7 +676,7 @@
 
     var popup;
 
-    var btnGasto = document.getElementById('btnPresupuesto').addEventListener('click', function () {
+    var btnPresupuesto = document.getElementById('btnPresupuesto').addEventListener('click', function () {
         popup = window.open('', 'popup', 'width=400,height=500');
 
         var formContent = `

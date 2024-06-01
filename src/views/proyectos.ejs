@@ -8,10 +8,10 @@
     <%= title %>
   </title>
   <%- include("partials/head") %>
+  <%- include("partials/navigation.ejs")%>
 </head>
 
 <body>
-  <%- include("partials/navigation.ejs")%>
     <div class="content-wrapper">
       <main>
         <button id="btnAddProyecto" class="btnCommon btn btn-primary mt-2">Agregar Proyecto</button>
@@ -76,68 +76,69 @@
       </main>
     </div>
 </body>
+<footer>
+  <%- include('partials/footer.ejs')%>
+</footer>
 
 </html>
 
-<%- include('partials/footer.ejs')%>
-  <!-- Bootstrap JavaScript Libraries -->
+<!-- Bootstrap JavaScript Libraries -->
 
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-    integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+  crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+  integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
 
-  <script>
-    ////////////////////////////////////////////////////////
-    /////////////////// CREATE /////////////////////////////
+<script>
+  ////////////////////////////////////////////////////////
+  /////////////////// CREATE /////////////////////////////
 
-    var popup;
+  var popup;
 
-    async function cargarPartidas() {
-      try {
-        const response = await fetch('/partidas');
-        if (response.ok) {
-          const partidas = await response.json();
-          const selectPartida = popup.document.getElementById('idPartida');
-          partidas.forEach(partida => {
-            const option = document.createElement('option');
-            option.value = partida.idPartida;
-            option.textContent = partida.nombrePartida;
-            selectPartida.appendChild(option);
-          });
-        } else {
-          console.error('Error al obtener las partidas:', await response.text());
-        }
-      } catch (error) {
-        console.error('Error al realizar la solicitud:', error);
+  async function cargarPartidas() {
+    try {
+      const response = await fetch('/partidas');
+      if (response.ok) {
+        const partidas = await response.json();
+        const selectPartida = popup.document.getElementById('idPartida');
+        partidas.forEach(partida => {
+          const option = document.createElement('option');
+          option.value = partida.idPartida;
+          option.textContent = partida.nombrePartida;
+          selectPartida.appendChild(option);
+        });
+      } else {
+        console.error('Error al obtener las partidas:', await response.text());
       }
+    } catch (error) {
+      console.error('Error al realizar la solicitud:', error);
     }
+  }
 
-    async function cargarUsuarios() {
-      try {
-        const response = await fetch('/proyectoUsuario');
-        if (response.ok) {
-          const usuarios = await response.json();
-          const selectUsuario = popup.document.getElementById('nombreEncargado');
-          usuarios.forEach(usuario => {
-            const option = document.createElement('option');
-            option.value = usuario.nombreUsuario;
-            option.textContent = usuario.nombreUsuario;
-            selectUsuario.appendChild(option);
-          });
-        } else {
-          console.error('Error al obtener los usuarios:', await response.text());
-        }
-      } catch (error) {
-        console.error('Error al realizar la solicitud:', error);
+  async function cargarUsuarios() {
+    try {
+      const response = await fetch('/proyectoUsuario');
+      if (response.ok) {
+        const usuarios = await response.json();
+        const selectUsuario = popup.document.getElementById('nombreEncargado');
+        usuarios.forEach(usuario => {
+          const option = document.createElement('option');
+          option.value = usuario.nombreUsuario;
+          option.textContent = usuario.nombreUsuario;
+          selectUsuario.appendChild(option);
+        });
+      } else {
+        console.error('Error al obtener los usuarios:', await response.text());
       }
+    } catch (error) {
+      console.error('Error al realizar la solicitud:', error);
     }
+  }
 
-    var btnAddProyecto = document.getElementById('btnAddProyecto').addEventListener('click', function () {
-      popup = window.open('', 'popup', 'width=400,height=600');
+  var btnAddProyecto = document.getElementById('btnAddProyecto').addEventListener('click', function () {
+    popup = window.open('', 'popup', 'width=400,height=600');
 
-      var formContent = `
+    var formContent = `
       <!DOCTYPE html>
       <html lang="en">
         <head>
@@ -178,83 +179,83 @@
                                       </html>
     `;
 
-      // Escribimos el contenido del formulario en la ventana emergente
-      popup.document.write(formContent);
+    // Escribimos el contenido del formulario en la ventana emergente
+    popup.document.write(formContent);
 
-      // Cargar las partidas en el select
-      cargarPartidas();
-      // Cargar los usuarios en el select
-      cargarUsuarios();
+    // Cargar las partidas en el select
+    cargarPartidas();
+    // Cargar los usuarios en el select
+    cargarUsuarios();
 
-      // Definimos el comportamiento del formulario al ser enviado
-      popup.document.querySelector('form').addEventListener('submit', function (event) {
-        event.preventDefault();
-        // Llamar a la función para guardar el nuevo proyecto
-        btnPopupGuardar();
-      });
+    // Definimos el comportamiento del formulario al ser enviado
+    popup.document.querySelector('form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      // Llamar a la función para guardar el nuevo proyecto
+      btnPopupGuardar();
     });
+  });
 
-    function cerrarPopup() {
-      if (popup) {
-        popup.close();
-      }
+  function cerrarPopup() {
+    if (popup) {
+      popup.close();
     }
+  }
 
-    async function btnPopupGuardar() {
-      var idPartida = popup.document.getElementById('idPartida').value;
-      var nombreProyecto = popup.document.getElementById('nombreProyecto').value;
-      var descripcionProyecto = popup.document.getElementById('descripcionProyecto').value;
-      var idEncargado = popup.document.getElementById('nombreEncargado').value;
-      var fechaInicio = new Date(popup.document.getElementById('fechaInicio').value);
-      var fechaFin = new Date(popup.document.getElementById('fechaFin').value);
+  async function btnPopupGuardar() {
+    var idPartida = popup.document.getElementById('idPartida').value;
+    var nombreProyecto = popup.document.getElementById('nombreProyecto').value;
+    var descripcionProyecto = popup.document.getElementById('descripcionProyecto').value;
+    var idEncargado = popup.document.getElementById('nombreEncargado').value;
+    var fechaInicio = new Date(popup.document.getElementById('fechaInicio').value);
+    var fechaFin = new Date(popup.document.getElementById('fechaFin').value);
 
-      var nuevoProyecto = {
-        idPartida: idPartida,
-        nombreProyecto: nombreProyecto,
-        descripcionProyecto: descripcionProyecto,
-        nombreEncargado: idEncargado,
-        fechaInicio: fechaInicio,
-        fechaFin: fechaFin
-      };
+    var nuevoProyecto = {
+      idPartida: idPartida,
+      nombreProyecto: nombreProyecto,
+      descripcionProyecto: descripcionProyecto,
+      nombreEncargado: idEncargado,
+      fechaInicio: fechaInicio,
+      fechaFin: fechaFin
+    };
 
-      fetch('/proyectos', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(nuevoProyecto)
+    fetch('/proyectos', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(nuevoProyecto)
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.mensaje === 'Proyecto creado exitosamente') {
+          // Si la respuesta es satisfactoria, cerrar la ventana emergente y recargar la página principal
+          popup.close();
+          window.location.reload();
+        } else {
+          // Si hay un error en la respuesta, mostrar un mensaje de error
+          console.error('Error al guardar el nuevo Proyecto:', data);
+        }
       })
-        .then(response => response.json())
-        .then(data => {
-          if (data.mensaje === 'Proyecto creado exitosamente') {
-            // Si la respuesta es satisfactoria, cerrar la ventana emergente y recargar la página principal
-            popup.close();
-            window.location.reload();
-          } else {
-            // Si hay un error en la respuesta, mostrar un mensaje de error
-            console.error('Error al guardar el nuevo Proyecto:', data);
-          }
-        })
-        .catch(error => {
-          console.error('Error al realizar la solicitud:', error);
-        });
-    }
+      .catch(error => {
+        console.error('Error al realizar la solicitud:', error);
+      });
+  }
 
 
-    //////////////////////////////////////////////////////
-    /////////////////// READ /////////////////////////////
+  //////////////////////////////////////////////////////
+  /////////////////// READ /////////////////////////////
 
-    // Ventana emergente para detalles de proyecto
-    document.querySelectorAll('[name="detalles"]').forEach(btn => {
-      btn.addEventListener('click', async function () {
-        const proyectoId = this.getAttribute('data-project-id');
-        const response = await fetch(`/proyectos/${proyectoId}`, {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' }
-        });
-        if (response.ok) {
-          const proyecto = await response.json();
-          var formContent = `
+  // Ventana emergente para detalles de proyecto
+  document.querySelectorAll('[name="detalles"]').forEach(btn => {
+    btn.addEventListener('click', async function () {
+      const proyectoId = this.getAttribute('data-project-id');
+      const response = await fetch(`/proyectos/${proyectoId}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (response.ok) {
+        const proyecto = await response.json();
+        var formContent = `
   <!DOCTYPE html>
   <html lang="en">
 
@@ -324,80 +325,80 @@
 
   </html>
   `;
-          var popup = window.open('', 'popup', 'width=700,height=320');
-          popup.document.write(formContent);
-        } else {
-          console.error('Error al obtener los detalles del proyecto:', await response.text());
-        }
-      });
+        var popup = window.open('', 'popup', 'width=700,height=320');
+        popup.document.write(formContent);
+      } else {
+        console.error('Error al obtener los detalles del proyecto:', await response.text());
+      }
     });
+  });
 
 
-    ////////////////////////////////////////////////////////
-    /////////////////// Update /////////////////////////////
+  ////////////////////////////////////////////////////////
+  /////////////////// Update /////////////////////////////
 
-    // Ventana emergente para editar un proyecto
-    document.querySelectorAll('[name="editar"]').forEach(btn => {
-      btn.addEventListener('click', async function () {
-        const idProyecto = this.getAttribute('data-project-id');
-        const response = await fetch(`/proyectos/${idProyecto}`, {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' }
+  // Ventana emergente para editar un proyecto
+  document.querySelectorAll('[name="editar"]').forEach(btn => {
+    btn.addEventListener('click', async function () {
+      const idProyecto = this.getAttribute('data-project-id');
+      const response = await fetch(`/proyectos/${idProyecto}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (response.ok) {
+        const proyecto = await response.json();
+
+        // Obtener las partidas disponibles
+        const partidasResponse = await fetch('/partidas');
+        if (!partidasResponse.ok) {
+          console.error('Error al obtener las partidas:', await partidasResponse.text());
+          return;
+        }
+        const partidas = await partidasResponse.json();
+
+        // Construir las opciones del select de partidas
+        const selectPartida = document.createElement('select');
+        selectPartida.setAttribute('id', 'idPartida');
+        selectPartida.setAttribute('name', 'idPartida');
+        selectPartida.style.width = '200px';
+        selectPartida.style.height = '30px';
+        selectPartida.innerHTML = '<option value="">Seleccione una partida...</option>';
+        partidas.forEach(partida => {
+          const option = document.createElement('option');
+          option.value = partida.idPartida;
+          option.textContent = partida.nombrePartida;
+          if (proyecto.idPartida === partida.idPartida) {
+            option.selected = true; // Seleccionar la partida correspondiente al proyecto
+          }
+          selectPartida.appendChild(option);
         });
-        if (response.ok) {
-          const proyecto = await response.json();
 
-          // Obtener las partidas disponibles
-          const partidasResponse = await fetch('/partidas');
-          if (!partidasResponse.ok) {
-            console.error('Error al obtener las partidas:', await partidasResponse.text());
-            return;
+        // Obtener los usuarios disponibles
+        const usuariosResponse = await fetch('/proyectoUsuario');
+        if (!usuariosResponse.ok) {
+          console.error('Error al obtener los usuarios:', await usuariosResponse.text());
+          return;
+        }
+        const usuarios = await usuariosResponse.json();
+
+        // Construir las opciones del select de usuarios
+        const selectUsuario = document.createElement('select');
+        selectUsuario.setAttribute('id', 'nombreEncargado');
+        selectUsuario.setAttribute('name', 'nombreEncargado');
+        selectUsuario.style.width = '200px';
+        selectUsuario.style.height = '30px';
+        selectUsuario.innerHTML = '<option value="">Seleccione un encargado...</option>';
+        usuarios.forEach(usuario => {
+          const option = document.createElement('option');
+          option.value = usuario.nombreUsuario;
+          option.textContent = usuario.nombreUsuario;
+          if (proyecto.nombreEncargado === usuario.nombreUsuario) {
+            option.selected = true; // Seleccionar el encargado correspondiente al proyecto
           }
-          const partidas = await partidasResponse.json();
+          selectUsuario.appendChild(option);
+        });
 
-          // Construir las opciones del select de partidas
-          const selectPartida = document.createElement('select');
-          selectPartida.setAttribute('id', 'idPartida');
-          selectPartida.setAttribute('name', 'idPartida');
-          selectPartida.style.width = '200px';
-          selectPartida.style.height = '30px';
-          selectPartida.innerHTML = '<option value="">Seleccione una partida...</option>';
-          partidas.forEach(partida => {
-            const option = document.createElement('option');
-            option.value = partida.idPartida;
-            option.textContent = partida.nombrePartida;
-            if (proyecto.idPartida === partida.idPartida) {
-              option.selected = true; // Seleccionar la partida correspondiente al proyecto
-            }
-            selectPartida.appendChild(option);
-          });
-
-          // Obtener los usuarios disponibles
-          const usuariosResponse = await fetch('/proyectoUsuario');
-          if (!usuariosResponse.ok) {
-            console.error('Error al obtener los usuarios:', await usuariosResponse.text());
-            return;
-          }
-          const usuarios = await usuariosResponse.json();
-
-          // Construir las opciones del select de usuarios
-          const selectUsuario = document.createElement('select');
-          selectUsuario.setAttribute('id', 'nombreEncargado');
-          selectUsuario.setAttribute('name', 'nombreEncargado');
-          selectUsuario.style.width = '200px';
-          selectUsuario.style.height = '30px';
-          selectUsuario.innerHTML = '<option value="">Seleccione un encargado...</option>';
-          usuarios.forEach(usuario => {
-            const option = document.createElement('option');
-            option.value = usuario.nombreUsuario;
-            option.textContent = usuario.nombreUsuario;
-            if (proyecto.nombreEncargado === usuario.nombreUsuario) {
-              option.selected = true; // Seleccionar el encargado correspondiente al proyecto
-            }
-            selectUsuario.appendChild(option);
-          });
-
-          const formContent = `
+        const formContent = `
 <!DOCTYPE html>
 <html lang="en">
 
@@ -430,79 +431,79 @@
 </html>
 `;
 
-          const popup = window.open('', 'popup', 'width=400,height=600');
-          popup.document.write(formContent);
-          popup.document.querySelector('form').addEventListener('submit', function (event) {
-            event.preventDefault();
-            btnPopupActualizar(idProyecto, popup);
-          });
-        } else {
-          console.error('Error al actualizar el proyecto:', await response.text());
-        }
-      });
-    });
-
-    function btnPopupActualizar(idProyecto, popup) {
-      const idPartida = popup.document.getElementById('idPartida').value;
-      const nombreProyecto = popup.document.getElementById('nombreProyecto').value;
-      const descripcionProyecto = popup.document.getElementById('descripcionProyecto').value;
-      const nombreEncargado = popup.document.getElementById('nombreEncargado').value;
-      const fechaInicio = new Date(popup.document.getElementById('fechaInicio').value);
-      const fechaFin = new Date(popup.document.getElementById('fechaFin').value);
-
-      const proyectoActualizado = {
-        idPartida: idPartida,
-        nombreProyecto: nombreProyecto,
-        descripcionProyecto: descripcionProyecto,
-        nombreEncargado: nombreEncargado,
-        fechaInicio: fechaInicio,
-        fechaFin: fechaFin
-      };
-
-      fetch(`/proyectos/${idProyecto}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(proyectoActualizado)
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.mensaje === 'Proyecto actualizado exitosamente') {
-            popup.close();
-            window.location.reload();
-          } else {
-            console.error('Error al actualizar el proyecto:', data);
-          }
-        })
-        .catch(error => {
-          console.error('Error al realizar la solicitud:', error);
+        const popup = window.open('', 'popup', 'width=400,height=600');
+        popup.document.write(formContent);
+        popup.document.querySelector('form').addEventListener('submit', function (event) {
+          event.preventDefault();
+          btnPopupActualizar(idProyecto, popup);
         });
-    }
-
-
-
-    ////////////////////////////////////////////////////////
-    /////////////////// Delete /////////////////////////////
-
-    document.querySelectorAll('[name="eliminar"]').forEach(btn => {
-      btn.addEventListener('click', async function () {
-        const idProyecto = this.getAttribute('data-project-id');
-        const confirmacion = confirm('¿Estás seguro de que quieres eliminar este proyecto?');
-        if (confirmacion) {
-          const response = await fetch(`/proyectos/${idProyecto}`, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' }
-          });
-          const data = await response.json();
-          // Aquí se muestra un mensaje de éxito
-          console.log(data);
-          window.location.reload(); // Recargar la página después de eliminar el usuario
-        }
-      });
+      } else {
+        console.error('Error al actualizar el proyecto:', await response.text());
+      }
     });
+  });
 
-  </script>
-  </body>
+  function btnPopupActualizar(idProyecto, popup) {
+    const idPartida = popup.document.getElementById('idPartida').value;
+    const nombreProyecto = popup.document.getElementById('nombreProyecto').value;
+    const descripcionProyecto = popup.document.getElementById('descripcionProyecto').value;
+    const nombreEncargado = popup.document.getElementById('nombreEncargado').value;
+    const fechaInicio = new Date(popup.document.getElementById('fechaInicio').value);
+    const fechaFin = new Date(popup.document.getElementById('fechaFin').value);
 
-  </html>
+    const proyectoActualizado = {
+      idPartida: idPartida,
+      nombreProyecto: nombreProyecto,
+      descripcionProyecto: descripcionProyecto,
+      nombreEncargado: nombreEncargado,
+      fechaInicio: fechaInicio,
+      fechaFin: fechaFin
+    };
+
+    fetch(`/proyectos/${idProyecto}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(proyectoActualizado)
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.mensaje === 'Proyecto actualizado exitosamente') {
+          popup.close();
+          window.location.reload();
+        } else {
+          console.error('Error al actualizar el proyecto:', data);
+        }
+      })
+      .catch(error => {
+        console.error('Error al realizar la solicitud:', error);
+      });
+  }
+
+
+
+  ////////////////////////////////////////////////////////
+  /////////////////// Delete /////////////////////////////
+
+  document.querySelectorAll('[name="eliminar"]').forEach(btn => {
+    btn.addEventListener('click', async function () {
+      const idProyecto = this.getAttribute('data-project-id');
+      const confirmacion = confirm('¿Estás seguro de que quieres eliminar este proyecto?');
+      if (confirmacion) {
+        const response = await fetch(`/proyectos/${idProyecto}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await response.json();
+        // Aquí se muestra un mensaje de éxito
+        console.log(data);
+        window.location.reload(); // Recargar la página después de eliminar el usuario
+      }
+    });
+  });
+
+</script>
+</body>
+
+</html>

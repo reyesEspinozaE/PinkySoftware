@@ -254,8 +254,64 @@ body {
 }
 
 .projects-container {
-    display: flex; 
+    display: flex;
     flex-wrap: wrap;
-    gap: 20px; 
+    gap: 20px;
     padding: 20px;
-  }
+}
+
+/* CSS para el index */
+.bodyIndex {
+    background: rgb(255, 255, 255);
+    text-align: center;
+    align-items: center;
+    height: 100%;
+    margin: 0;
+}
+.backgroundIndex {
+    position: relative;
+    background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('/img/Logo.jpg') no-repeat center center;
+    background-size: cover;
+    min-height: 100vh;
+    padding: 30px 0;
+}
+
+.profile-card {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    text-align: center;
+    padding: 20px;
+    margin: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-card img {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.profile-card h4 {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-size: 1.2rem;
+}
+
+.profile-card p {
+    margin-bottom: 15px;
+    color: #777;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.social-icons a {
+    color: #000;
+    text-decoration: none;
+    font-size: 1.2rem;
+}

@@ -8,68 +8,18 @@
         <%= title %>
     </title>
     <%- include("partials/head") %>
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-        <style>
-            .background {
-                position: relative;
-                background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('/img/Logo.jpg') no-repeat center center;
-                background-size: cover;
-                min-height: 100vh;
-                padding: 30px 0;
-            }
-
-            .profile-card {
-                background-color: #fff;
-                border: 1px solid #e0e0e0;
-                border-radius: 10px;
-                text-align: center;
-                padding: 20px;
-                margin: 15px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            }
-
-            .profile-card img {
-                border-radius: 50%;
-                width: 100px;
-                height: 100px;
-                object-fit: cover;
-            }
-
-            .profile-card h4 {
-                margin-top: 15px;
-                margin-bottom: 5px;
-                font-size: 1.2rem;
-            }
-
-            .profile-card p {
-                margin-bottom: 15px;
-                color: #777;
-            }
-
-            .social-icons {
-                display: flex;
-                justify-content: center;
-                gap: 10px;
-            }
-
-            .social-icons a {
-                color: #000;
-                text-decoration: none;
-                font-size: 1.2rem;
-            }
-        </style>
-        <%- include('partials/navigation.ejs')%>
+    <%- include('partials/navigation.ejs')%>
 </head>
 
-<body>
-    <div class="background">
-        <div class="container mt-4">
+<body class="bodyIndex">
+    <div class="backgroundIndex">
+        <div class="containerIndex mt-4">
             <div class="row justify-content-center">
                 <div class="col-md-4">
                     <div class="profile-card">
-                        <img src="https://via.placeholder.com/100" alt="Darren Warner">
-                        <h4>Darren Warner</h4>
-                        <p>UX Senior Designer</p>
+                        <img src="img/UserImg.png" alt="Darren Warner">
+                        <h4>Richard Chaves</h4>
+                        <p>Coordinador de proyecto</p>
                         <div class="social-icons">
                             <a href="#"><i class="fab fa-linkedin"></i></a>
                             <a href="#"><i class="fab fa-skype"></i></a>
@@ -80,9 +30,9 @@
                 </div>
                 <div class="col-md-4">
                     <div class="profile-card">
-                        <img src="https://via.placeholder.com/100" alt="Kattie Perry">
-                        <h4>Kattie Perry</h4>
-                        <p>Account Manager</p>
+                        <img src="img/UserImg.png" alt="Kattie Perry">
+                        <h4>Fabricio Gallo</h4>
+                        <p>Coordinador de modelado</p>
                         <div class="social-icons">
                             <a href="#"><i class="fab fa-skype"></i></a>
                             <a href="#"><i class="fab fa-github"></i></a>
@@ -92,9 +42,9 @@
                 </div>
                 <div class="col-md-4">
                     <div class="profile-card">
-                        <img src="https://via.placeholder.com/100" alt="Diana Johnson">
-                        <h4>Diana Johnson</h4>
-                        <p>UX Designer</p>
+                        <img src="img/UserImg.png" alt="Diana Johnson">
+                        <h4>Andrey Rodríguez</h4>
+                        <p>Coordinador de análisis</p>
                         <div class="social-icons">
                             <a href="#"><i class="fab fa-linkedin"></i></a>
                             <a href="#"><i class="fab fa-skype"></i></a>
@@ -105,9 +55,9 @@
                 </div>
                 <div class="col-md-4">
                     <div class="profile-card">
-                        <img src="https://via.placeholder.com/100" alt="George Vandiver">
-                        <h4>George Vandiver</h4>
-                        <p>Graphics Designer</p>
+                        <img src="img/UserImg.png" alt="George Vandiver">
+                        <h4>Jairo Marenco</h4>
+                        <p>Coordinador de calidad</p>
                         <div class="social-icons">
                             <a href="#"><i class="fab fa-skype"></i></a>
                             <a href="#"><i class="fab fa-github"></i></a>
@@ -117,9 +67,9 @@
                 </div>
                 <div class="col-md-4">
                     <div class="profile-card">
-                        <img src="https://via.placeholder.com/100" alt="Rihanna Jonesy">
-                        <h4>Rihanna Jonesy</h4>
-                        <p>Designer</p>
+                        <img src="img/UserImg.png" alt="Rihanna Jonesy">
+                        <h4>Yerlin Dávila</h4>
+                        <p>Coordinador de documentación</p>
                         <div class="social-icons">
                             <a href="#"><i class="fab fa-linkedin"></i></a>
                             <a href="#"><i class="fab fa-skype"></i></a>
@@ -128,9 +78,9 @@
                 </div>
                 <div class="col-md-4">
                     <div class="profile-card">
-                        <img src="https://via.placeholder.com/100" alt="Rihanna Jonesy">
-                        <h4>Rihanna Jonesy</h4>
-                        <p>Designer</p>
+                        <img src="img/UserImg.png" alt="Rihanna Jonesy">
+                        <h4>Everth Reyes</h4>
+                        <p>Coordinador de programación</p>
                         <div class="social-icons">
                             <a href="#"><i class="fab fa-linkedin"></i></a>
                             <a href="#"><i class="fab fa-skype"></i></a>
@@ -140,8 +90,11 @@
             </div>
         </div>
     </div>
+
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </body>
-<%- include('partials/footer.ejs')%>
-
+<footer>
+    <%- include('partials/footer.ejs')%>
+</footer>
 </html>
+
