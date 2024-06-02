@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <%- include("partials/head") %>
+        <%- include("partials/navigation.ejs") %>
+</head>
+
+<body>
+    <div class="content-wrapper container mt-4">
+        <main>
+            <div class="row mb-3">
+                <div class="col">
+                    <button id="btnAddPartida" class="btnCommon btn btn-primary w-100">Agregar Partida</button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover table-borderless table-secondary align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Acciones</th>
+                            <th>Id</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        <% if (partidas && partidas.length> 0) { %>
+                            <% partidas.forEach(partida=> { %>
+                                <tr class="table-secondary">
+                                    <td>
+                                        <a name="mostrarDetalles" class="btn btn-success btn-sm"
+                                            data-partida-id="<%= partida.idPartida %>">Detalles</a>
+                                        ||
+                                        <a name="editarPartida" class="btn btn-primary btn-sm"
+                                            data-partida-id="<%= partida.idPartida %>">Editar</a>
+                                        ||
+                                        <a name="eliminarPartida" class="btn btn-danger btn-sm"
+                                            data-partida-id="<%= partida.idPartida %>">Eliminar</a>
+                                    </td>
+                                    <td scope="row">
+                                        <%= partida.idPartida %>
+                                    </td>
+                                    <td>
+                                        <%= partida.nombrePartida %>
+                                    </td>
+                                    <td>
+                                        <%= partida.descripcionPartida %>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="4" class="text-center">No hay partidas disponibles</td>
+                                        </tr>
+                                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</body>
+<footer>
+    <%- include('partials/footer.ejs')%>
+</footer>
+
+</html>
+
+<!-- Bootstrap JavaScript Libraries -->
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+    integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+    crossorigin="anonymous"></script>
+
+<script>
+    ////////////////////////////////////////////////////////
+    /////////////////// CREATE /////////////////////////////
+
+    var popup;
+
+    var btnAddPartida = document.getElementById('btnAddPartida').addEventListener('click', function () {
+        popup = window.open('', 'popup', 'width=400,height=300');
+
+        var formContent = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Agregar Partida</title>
+            <link rel="stylesheet" href="/css/main.css">
+        </head>
+        <body class="bodyPopup">
+           <form class="popup-form">
+                <label for="nombrePartida">Nombre de la partida:</label><br>
+                <input type="text" id="nombrePartida" name="nombrePartida"><br>
+
+                <label for="descripcionPartida">Descripción de la partida:</label><br>
+                <input type="text" id="descripcionPartida" name="descripcionPartida"><br>
+
+                <button class="btnPopup" type="submit">Guardar</button>
+                <button class="btnPopup" type="button" onclick="window.opener.cerrarPopup()">Cancelar</button>
+            </form>
+        </body>
+        </html>
+      `;
+
+        popup.document.write(formContent);
+
+        popup.document.querySelector('form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            btnPopupGuardar();
+        });
+    });
+
+    function cerrarPopup() {
+        if (popup) {
+            popup.close();
+        }
+    }
+
+    function btnPopupGuardar() {
+        var nombrePartida = popup.document.getElementById('nombrePartida').value;
+        var descripcionPartida = popup.document.getElementById('descripcionPartida').value;
+
+        var nuevaPartida = {
+            nombrePartida: nombrePartida,
+            descripcionPartida: descripcionPartida
+        };
+
+        fetch('/partidas', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(nuevaPartida)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.mensaje === 'Partida creada exitosamente') {
+                    popup.close();
+                    window.location.reload();
+                } else {
+                    console.error('Error al guardar la nueva partida:', data);
+                }
+            })
+            .catch(error => {
+                console.error('Error al realizar la solicitud:', error);
+            });
+    }
+
+    ////////////////////////////////////////////////////////
+    /////////////////// Read ///////////////////////////////
+
+    document.querySelectorAll('[name="mostrarDetalles"]').forEach(btn => {
+        btn.addEventListener('click', async function () {
+            const partidaId = this.getAttribute('data-partida-id');
+            const response = await fetch(`/partidas/${partidaId}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            if (response.ok) {
+                const partida = await response.json();
+                var formContent = `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Detalles de Partida</title>
+              <link rel="stylesheet" href="/css/main.css">
+            </head>
+            <body class="bodyPopup">
+              <div class="popup-form">
+                <p><strong>ID:</strong> ${partida.idPartida}</p>
+                <p><strong>Nombre de la partida:</strong> ${partida.nombrePartida}</p>
+                <p><strong>Descripción:</strong> ${partida.descripcionPartida}</p>
+                <button class="btnPopup" type="button" onclick="window.close()">Cerrar</button>
+              </div>
+            </body>
+            </html>
+          `;
+                var popup = window.open('', 'popup', 'width=300,height=300');
+                popup.document.write(formContent);
+            } else {
+                console.error('Error al obtener los detalles de la partida:', await response.text());
+            }
+        });
+    });
+
+    ////////////////////////////////////////////////////////
+    /////////////////// Update /////////////////////////////
+
+    document.querySelectorAll('[name="editarPartida"]').forEach(btn => {
+        btn.addEventListener('click', async function () {
+            const partidaId = this.getAttribute('data-partida-id');
+            const response = await fetch(`/partidas/${partidaId}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            if (response.ok) {
+                const partida = await response.json();
+                var formContent = `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Editar Partida</title>
+              <link rel="stylesheet" href="/css/main.css">
+            </head>
+            <body class="bodyPopup">
+              <form class="popup-form" id="formEditarPartida">
+                <label for="nombrePartida">Nombre de la partida:</label><br>
+                <input type="text" id="nombrePartida" name="nombrePartida" value="${partida.nombrePartida}" required><br>
+                <label for="descripcionPartida">Descripción de la partida:</label><br>
+                <input type="text" id="descripcionPartida" name="descripcionPartida" value="${partida.descripcionPartida}" required><br>
+                <button class="btnPopup" type="submit">Actualizar</button>
+                <button class="btnPopup" type="button" onclick="window.close()">Cerrar</button>
+              </form>
+            </body>
+            </html>
+          `;
+                var popup = window.open('', 'popup', 'width=400,height=400');
+                popup.document.write(formContent);
+                popup.document.querySelector('form').addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    btnPopupActualizar(partidaId, popup);
+                });
+            } else {
+                console.error('Error al obtener la partida:', await response.text());
+            }
+        });
+    });
+
+    function btnPopupActualizar(partidaId, popup) {
+        var nombrePartida = popup.document.getElementById('nombrePartida').value;
+        var descripcionPartida = popup.document.getElementById('descripcionPartida').value;
+
+        var partidaActualizada = {
+            nombrePartida: nombrePartida,
+            descripcionPartida: descripcionPartida
+        };
+
+        fetch(`/partidas/${partidaId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(partidaActualizada)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.mensaje === 'Partida actualizada exitosamente') {
+                    popup.close();
+                    window.location.reload();
+                } else {
+                    console.error('Error al actualizar la partida:', data);
+                }
+            })
+            .catch(error => {
+                console.error('Error al realizar la solicitud:', error);
+            });
+    }
+
+    ////////////////////////////////////////////////////////
+    /////////////////// Delete /////////////////////////////
+
+    document.querySelectorAll('[name="eliminar"]').forEach(btn => {
+        btn.addEventListener('click', async function () {
+            const partidaId = this.getAttribute('data-partida-id');
+            const confirmacion = confirm('¿Estás seguro de que quieres eliminar esta partida?');
+            if (confirmacion) {
+                const response = await fetch(`/partidas/${partidaId}`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await response.json();
+                console.log(data);
+                window.location.reload();
+            }
+        });
+    });
+</script>

@@ -1,5 +1,7 @@
 import Presupuesto from '../models/presupuesto.js';
 import Gasto from '../models/gasto.js';
+import { verificarPresupuestoPorAcabarse } from '../models/procedimientosAlmacenados.js';
+
 
 // Obtener todos los registros de presupuestos y gastos
 export const getContaduriaData = async (req, res) => {
@@ -51,7 +53,14 @@ export const crearGasto = async (req, res) => {
       fechaGasto,
       imagen
     });
-    res.status(201).json({ mensaje: 'Gasto creado exitosamente', gasto: nuevoGasto });
+    // Verificar el presupuesto por acabarse después de crear el gasto
+    const resultados = await verificarPresupuestoPorAcabarse();
+    //res.status(201).json({ mensaje: 'Gasto creado exitosamente', gasto: nuevoGasto });
+    res.status(201).json({
+      mensaje: 'Gasto creado exitosamente',
+      gasto: nuevoGasto,
+      advertencia: resultados.length > 0 ? 'Advertencia: Algunos presupuestos están por acabarse.' : ''
+    });
   } catch (error) {
     console.error("Error al crear gasto:", error);
     res.status(500).send("Error al crear presupuesto");

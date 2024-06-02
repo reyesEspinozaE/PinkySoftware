@@ -97,7 +97,7 @@
 
   async function cargarPartidas() {
     try {
-      const response = await fetch('/partidas');
+      const response = await fetch('/partidasSelect');
       if (response.ok) {
         const partidas = await response.json();
         const selectPartida = popup.document.getElementById('idPartida');
@@ -349,7 +349,7 @@
         const proyecto = await response.json();
 
         // Obtener las partidas disponibles
-        const partidasResponse = await fetch('/partidas');
+        const partidasResponse = await fetch('/partidasSelect');
         if (!partidasResponse.ok) {
           console.error('Error al obtener las partidas:', await partidasResponse.text());
           return;

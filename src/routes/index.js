@@ -3,7 +3,7 @@ import { Router } from "express";
 // Importando los controladores
 import { actualizarUsuario, crearUsuario, detallesUsuario, eliminarUsuario, getUsuarios } from "../controllers/usuariosController.js";
 import { actualizarProyecto, crearProyecto, detallesProyecto, eliminarProyecto, getProyectos } from "../controllers/proyectosController.js";
-import { getPartidas } from "../controllers/partidasController.js";
+import { getPartidas, renderPartidasView, crearPartida, actualizarPartida, eliminarPartida, detallesPartida } from "../controllers/partidasController.js";
 import { getProyectoUsuarios } from "../controllers/proyectoUsuarioController.js";
 import {
     getContaduriaData,
@@ -49,7 +49,12 @@ router.put('/proyectos/:idProyecto', actualizarProyecto);
 router.delete('/proyectos/:idProyecto', eliminarProyecto);
 
 // Llamadas para el controlador de partidas
-router.get('/partidas', getPartidas);
+router.get('/partidasSelect', getPartidas);
+router.get('/partidas', renderPartidasView);
+router.post('/partidas', crearPartida);
+router.put('/partidas/:idPartida', actualizarPartida);
+router.get('/partidas/:idPartida', detallesPartida);
+router.delete('/partidas/:idPartida', eliminarPartida);
 
 // Llamadas para obtener usuarios para el select en la view de proyectos
 router.get('/proyectoUsuario', getProyectoUsuarios);
