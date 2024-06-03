@@ -34,7 +34,7 @@
                             <% partidas.forEach(partida=> { %>
                                 <tr class="table-secondary">
                                     <td>
-                                        <a name="mostrarDetalles" class="btn btn-success btn-sm"
+                                        <a name="detallesPartida" class="btn btn-success btn-sm"
                                             data-partida-id="<%= partida.idPartida %>">Detalles</a>
                                         ||
                                         <a name="editarPartida" class="btn btn-primary btn-sm"
@@ -55,9 +55,7 @@
                                 </tr>
                                 <% }) %>
                                     <% } else { %>
-                                        <tr>
-                                            <td colspan="4" class="text-center">No hay partidas disponibles</td>
-                                        </tr>
+                                            <div class="alert alert-info">No hay partidas disponibles</div>
                                         <% } %>
                     </tbody>
                 </table>
@@ -159,10 +157,10 @@
     ////////////////////////////////////////////////////////
     /////////////////// Read ///////////////////////////////
 
-    document.querySelectorAll('[name="mostrarDetalles"]').forEach(btn => {
+    document.querySelectorAll('[name="detallesPartida"]').forEach(btn => {
         btn.addEventListener('click', async function () {
-            const partidaId = this.getAttribute('data-partida-id');
-            const response = await fetch(`/partidas/${partidaId}`, {
+            const idPartida = this.getAttribute('data-partida-id');
+            const response = await fetch(`/partidas/${idPartida}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -200,14 +198,14 @@
 
     document.querySelectorAll('[name="editarPartida"]').forEach(btn => {
         btn.addEventListener('click', async function () {
-            const partidaId = this.getAttribute('data-partida-id');
-            const response = await fetch(`/partidas/${partidaId}`, {
+            const idPartida = this.getAttribute('data-partida-id');
+            const response = await fetch(`/partidas/${idPartida}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
             });
             if (response.ok) {
                 const partida = await response.json();
-                var formContent = `
+                const formContent = `
             <!DOCTYPE html>
             <html lang="en">
             <head>
@@ -228,28 +226,28 @@
             </body>
             </html>
           `;
-                var popup = window.open('', 'popup', 'width=400,height=400');
+                const popup = window.open('', 'popup', 'width=400,height=400');
                 popup.document.write(formContent);
                 popup.document.querySelector('form').addEventListener('submit', function (event) {
                     event.preventDefault();
-                    btnPopupActualizar(partidaId, popup);
+                    btnPopupActualizar(idPartida, popup);
                 });
             } else {
-                console.error('Error al obtener la partida:', await response.text());
+                console.error('Error al actualizar la partida:', await response.text());
             }
         });
     });
 
-    function btnPopupActualizar(partidaId, popup) {
-        var nombrePartida = popup.document.getElementById('nombrePartida').value;
-        var descripcionPartida = popup.document.getElementById('descripcionPartida').value;
+    function btnPopupActualizar(idPartida, popup) {
+        const nombrePartida = popup.document.getElementById('nombrePartida').value;
+        const descripcionPartida = popup.document.getElementById('descripcionPartida').value;
 
-        var partidaActualizada = {
+        const partidaActualizada = {
             nombrePartida: nombrePartida,
             descripcionPartida: descripcionPartida
         };
 
-        fetch(`/partidas/${partidaId}`, {
+        fetch(`/partidas/${idPartida}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -273,12 +271,12 @@
     ////////////////////////////////////////////////////////
     /////////////////// Delete /////////////////////////////
 
-    document.querySelectorAll('[name="eliminar"]').forEach(btn => {
+    document.querySelectorAll('[name="eliminarPartida"]').forEach(btn => {
         btn.addEventListener('click', async function () {
-            const partidaId = this.getAttribute('data-partida-id');
+            const idPartida = this.getAttribute('data-partida-id');
             const confirmacion = confirm('¿Estás seguro de que quieres eliminar esta partida?');
             if (confirmacion) {
-                const response = await fetch(`/partidas/${partidaId}`, {
+                const response = await fetch(`/partidas/${idPartida}`, {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' }
                 });

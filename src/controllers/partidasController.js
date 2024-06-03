@@ -29,9 +29,9 @@ export const renderPartidasView = async (req, res) => {
 
 // Obtener detalles de una partida específica
 export const detallesPartida = async (req, res) => {
-  const { id } = req.params;
+  const { idPartida } = req.params;
   try {
-    const partida = await Partida.findByPk(id);
+    const partida = await Partida.findByPk(idPartida);
     if (partida) {
       res.status(200).json(partida);
     } else {
@@ -62,11 +62,11 @@ export const crearPartida = async (req, res) => {
 
 // Actualizar una partida por su ID
 export const actualizarPartida = async (req, res) => {
-  const { id } = req.params;
+  const { idPartida } = req.params;
   const { nombrePartida, descripcionPartida } = req.body;
 
   try {
-    const partida = await Partida.findByPk(id);
+    const partida = await Partida.findByPk(idPartida);
     if (partida) {
       partida.nombrePartida = nombrePartida;
       partida.descripcionPartida = descripcionPartida;
@@ -83,10 +83,10 @@ export const actualizarPartida = async (req, res) => {
 
 // Eliminar una partida por su ID
 export const eliminarPartida = async (req, res) => {
-  const { id } = req.params;
+  const { idPartida } = req.params;
   try {
     const partidaEliminada = await Partida.destroy({
-      where: { idPartida: id }
+      where: { idPartida: idPartida }
     });
     if (partidaEliminada) {
       res.status(200).json({ mensaje: 'Partida eliminada exitosamente' });

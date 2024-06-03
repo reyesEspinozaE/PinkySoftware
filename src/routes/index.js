@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router } from 'express';
 
 // Importando los controladores
 import { actualizarUsuario, crearUsuario, detallesUsuario, eliminarUsuario, getUsuarios } from "../controllers/usuariosController.js";
