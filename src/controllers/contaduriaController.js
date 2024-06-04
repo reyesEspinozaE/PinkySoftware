@@ -1,17 +1,16 @@
 import Presupuesto from '../models/presupuesto.js';
 import Gasto from '../models/gasto.js';
-import fs from 'fs';
-import path from 'path';
 import multer from 'multer';
+import path from 'path';
 
-// Configuración de multer para guardar las imágenes
+// Configuración del almacenamiento con Multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/');
+    cb(null, path.join(__dirname, '../../public/uploads'));
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + '-' + file.originalname);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
   }
 });
 
@@ -54,20 +53,50 @@ export const crearPresupuesto = async (req, res) => {
 };
 
 // Crear un nuevo gasto
+// export const crearGasto = async (req, res) => {
+//   try {
+//     upload.single('imagen')(req, res, async (err) => {
+//       if (err instanceof multer.MulterError) {
+//         return res.status(500).json({ error: err.message });
+//       } else if (err) {
+//         return res.status(500).json({ error: err.message });
+//       }
+
+//       const { idProyecto, descripcionGasto, lugar, montoGasto, fechaGasto } = req.body;
+//       const imagen = req.file ? req.file.path : null; // Ruta de la imagen subida
+
+//       console.log('Datos recibidos en el servidor:', { idProyecto, descripcionGasto, lugar, montoGasto, fechaGasto, imagen });
+
+//       const nuevoGasto = await Gasto.create({
+//         idProyecto,
+//         descripcionGasto,
+//         lugar,
+//         montoGasto,
+//         fechaGasto,
+//         imagen
+//       });
+//       res.status(201).json({ mensaje: 'Gasto creado exitosamente', gasto: nuevoGasto });
+//     });
+//   } catch (error) {
+//     console.error("Error al crear gasto:", error);
+//     res.status(500).send("Error al crear gasto");
+//   }
+// };
+
 export const crearGasto = async (req, res) => {
-  try {
-    upload.single('imagen')(req, res, async (err) => {
-      if (err instanceof multer.MulterError) {
-        return res.status(500).json({ error: err.message });
-      } else if (err) {
-        return res.status(500).json({ error: err.message });
-      }
+  upload.single('imagen')(req, res, async (err) => {
+    if (err instanceof multer.MulterError) {
+      return res.status(500).json({ error: err.message });
+    } else if (err) {
+      return res.status(500).json({ error: err.message });
+    }
 
-      const { idProyecto, descripcionGasto, lugar, montoGasto, fechaGasto } = req.body;
-      const imagen = req.file ? req.file.path : null; // Ruta de la imagen subida
+    const { idProyecto, descripcionGasto, lugar, montoGasto, fechaGasto } = req.body;
+    const imagen = req.file ? `/uploads/${req.file.filename}` : null; // Ruta relativa de la imagen subida
 
-      console.log('Datos recibidos en el servidor:', { idProyecto, descripcionGasto, lugar, montoGasto, fechaGasto, imagen });
+    console.log('Datos recibidos en el servidor:', { idProyecto, descripcionGasto, lugar, montoGasto, fechaGasto, imagen });
 
+    try {
       const nuevoGasto = await Gasto.create({
         idProyecto,
         descripcionGasto,
@@ -77,13 +106,12 @@ export const crearGasto = async (req, res) => {
         imagen
       });
       res.status(201).json({ mensaje: 'Gasto creado exitosamente', gasto: nuevoGasto });
-    });
-  } catch (error) {
-    console.error("Error al crear gasto:", error);
-    res.status(500).send("Error al crear gasto");
-  }
+    } catch (error) {
+      console.error("Error al crear gasto:", error);
+      res.status(500).send("Error al crear gasto");
+    }
+  });
 };
-
 // Eliminar un presupuesto
 export const eliminarPresupuesto = async (req, res) => {
   const { id } = req.params;

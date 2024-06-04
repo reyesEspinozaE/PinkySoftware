@@ -5,6 +5,8 @@ import { fileURLToPath } from 'url'
 import indexRoutes from './routes/index.js'
 // Importa tu archivo de asociaciones
 import './models/associations.js';
+// PATH
+import path from 'path';
 
 const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url)) // Con esto obtengo la ruta del proyecto
@@ -13,15 +15,13 @@ const __dirname = dirname(fileURLToPath(import.meta.url)) // Con esto obtengo la
 app.set('views', join(__dirname, 'views'))
 app.set('view engine', 'ejs') // motor de plantilla ejs, en vez de html
 
-// Configurar el middleware para servir archivos estáticos
-//app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
 // Uso de las rutas
 app.use(indexRoutes);
 
 console.log(__dirname);
 
 // Servir archivos estáticos desde la carpeta public
+// Cualquier solicitud a / será manejada por este middleware, que buscará los archivos en la carpeta 'public'
 app.use(express.static(join(__dirname, 'public')))
 
 app.listen(3000, () => {

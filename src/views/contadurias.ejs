@@ -49,9 +49,8 @@
                                                     <th>Acción</th>
                                                     <th>ID Proyecto</th>
                                                     <th>Monto total</th>
-                                                    <!-- <th>Saldo pendiente</th> -->
+                                                    <th>Saldo pendiente</th>
                                                     <th>Área</th>
-                                                    <th>Descripción</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="table-group-divider">
@@ -75,9 +74,9 @@
                                                             <td class="montoTotal">
                                                                 <%= presupuesto.montoTotal %>
                                                             </td>
-                                                            <!-- <td>
+                                                            <td>
                                                                 <%= presupuesto.saldoPendiente %>
-                                                            </td> -->
+                                                            </td>
                                                             <td>
                                                                 <%= presupuesto.area %>
                                                             </td>
@@ -169,9 +168,9 @@
                                                             <td class="montoTotalGasto">
                                                                 <%= gasto.montoGasto %>
                                                             </td>
-                                                            <!-- <td class="idProyecto">
+                                                            <td class="idProyecto">
                                                                 <%= gasto.idProyecto %>
-                                                            </td> -->
+                                                            </td>
                                                         </tr>
                                                         <% }) %>
                                                             <% } else { %>
@@ -211,15 +210,17 @@
 <footer>
     <%- include('partials/footer.ejs')%>
 </footer>
+
 </html>
 
 
 
 <script>
-
+    // Función para desplegar el alert de saldo proximo a vencer
     document.addEventListener("DOMContentLoaded", function () {
         const presupuestoRows = document.querySelectorAll(".presupuesto-row");
         const gastoRows = document.querySelectorAll(".gasto-row");
+        const limiteProximidad = 0.9; // 90% del presupuesto
 
         // Agrupar los gastos por idProyecto
         const gastosPorProyecto = {};
@@ -238,15 +239,13 @@
             const idProyecto = row.querySelector(".idProyecto").innerText.trim();
             const montoTotal = parseFloat(row.querySelector(".montoTotal").innerText.trim()) || 0;
             const sumaGastos = gastosPorProyecto[idProyecto] || 0;
+            const porcentajeGasto = sumaGastos / montoTotal;
 
-            if (sumaGastos >= montoTotal) {
-                alert(`El proyecto con ID ${idProyecto} tiene gastos (${sumaGastos}) que están próximos o superan el presupuesto total (${montoTotal})`);
+            if (porcentajeGasto >= limiteProximidad) {
+                alert(`El proyecto con ID ${idProyecto} tiene gastos (${sumaGastos}) que están próximos a agotar el presupuesto total (${montoTotal}). Actualmente ha gastado el ${Math.round(porcentajeGasto * 100)}% del presupuesto.`);
             }
         });
     });
-
-
-
 
     //////////////////////////////////////// SUMA PRESUPUESTOS ////////////////////////////////////////
 
@@ -314,7 +313,7 @@
     // Llama a la función para que se ejecute al cargar la página
     document.addEventListener('DOMContentLoaded', sumaGastos);
 
-    //////////////////////////////////////// FIN SUMA GASTOS ////////////////////////////////////////
+    //////////////////////////////////////// FIN SUMA GASTOS ///////////////////////////////////////////////
 
 
     //////////////////////////////////////// AHORRRO MENSUAL GASTOS ////////////////////////////////////////
@@ -494,7 +493,8 @@
                 <p ><strong>Monto del gasto:</strong> ${gasto.montoGasto}</p>
                 <p ><strong>Fecha del gasto:</strong> ${gasto.fechaGasto}</p>
                 <p><strong>Imagen del gasto:</strong></p>
-                <img src="${gasto.imagen}" alt="Imagen del gasto" style="max-width: auto; height: auto;" />
+                <img src="${gasto.imagen}" alt="Imagen del gasto" style="max-width: auto; height: auto;" /><br>
+                <br>
                 <button class="btnPopup" type="button" onclick="window.close()">Cerrar</button>
               </div>
             </body>
