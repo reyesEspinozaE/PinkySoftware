@@ -104,6 +104,8 @@ body {
 .popup-form input[type="date"],
 .popup-form input[type="file"],
 .popup-form input[type="number"],
+.popup-form input[type="email"],
+.popup-form input[type="password"],
 .popup-form textarea {
     width: 100%;
     padding: 8px;
@@ -137,6 +139,21 @@ body {
 
 .popup-form button.btnPopup:hover {
     background-color: #0056b3;
+}
+
+.popup-form button.btnPopupSuccess {
+    background-color: #1fec1f;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.popup-form button.btnPopupSuccess:hover {
+    background-color: #228322;
 }
 
 .popup-form button[type="button"] {

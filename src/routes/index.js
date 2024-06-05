@@ -18,6 +18,7 @@ import {
 } from '../controllers/contaduriaController.js';
 import { getProyectosGastos } from "../controllers/gastosController.js";
 import { getProyectosPresupuesto } from "../controllers/presupuestosController.js";
+import { login, forgotPassword, resetPassword } from '../controllers/authController.js';
 
 import bodyParser from 'body-parser';
 
@@ -26,23 +27,37 @@ const router = Router();
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
+
+// Metodos para el Login
+router.post('/login', login);
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password', resetPassword);
+
+
 // Se enruta a las views
 
 // Esta es la primer view que se va a tener al buscar localhost:3000 en el navegador:
-router.get('/', (req, res) => res.render('contaduria.ejs', { title: "Contaduria" }));
+// View del login
+router.get('/', (req, res) => res.render('login', { title: "Pinky Software Login" }));
+
+
+//router.get('/', (req, res) => res.render('contaduria.ejs', { title: "Contaduria" }));
 
 // Demas vistas para para el navbar
 router.get('/index', (req, res) => res.render('index.ejs', { title: "Pinky Piensa Web" }));
+router.get('/users', getUsuarios);
+router.get('/proyectos', getProyectos);
+router.get('/partidas', renderPartidasView);
+router.get('/contadurias', getContaduriaData);
+
 
 // Llamadas para el controlador de users
-router.get('/users', getUsuarios);
 router.post('/users', crearUsuario);
 router.get('/users/:id', detallesUsuario);
 router.put('/users/:id', actualizarUsuario);
 router.delete('/users/:id', eliminarUsuario);
 
 // Llamadas para el controlador de proyectos
-router.get('/proyectos', getProyectos);
 router.post('/proyectos', crearProyecto);
 router.get('/proyectos/:idProyecto', detallesProyecto);
 router.put('/proyectos/:idProyecto', actualizarProyecto);
@@ -50,7 +65,6 @@ router.delete('/proyectos/:idProyecto', eliminarProyecto);
 
 // Llamadas para el controlador de partidas
 router.get('/partidasSelect', getPartidas);
-router.get('/partidas', renderPartidasView);
 router.post('/partidas', crearPartida);
 router.put('/partidas/:idPartida', actualizarPartida);
 router.get('/partidas/:idPartida', detallesPartida);
@@ -60,7 +74,6 @@ router.delete('/partidas/:idPartida', eliminarPartida);
 router.get('/proyectoUsuario', getProyectoUsuarios);
 
 // Llamadas para el controlador de contaduría
-router.get('/contadurias', getContaduriaData);
 
 // Rutas para presupuestos
 router.post('/presupuestos', crearPresupuesto);

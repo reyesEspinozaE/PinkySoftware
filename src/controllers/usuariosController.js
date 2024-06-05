@@ -1,4 +1,5 @@
 import Usuario from '../models/usuario.js';
+import bcrypt from 'bcrypt';
 
 // Obtener todos los registros
 export const getUsuarios = async (req, res) => {
@@ -52,10 +53,13 @@ export const crearUsuario = async (req, res) => {
     const { nombreUsuario, correo, contrasenia } = req.body;
     console.log('Datos recibidos en el servidor:', { nombreUsuario, correo, contrasenia });
 
+    // Cifrar la contraseña
+    const hashedPassword = await bcrypt.hash(contrasenia, 10);
+
     const nuevoUsuario = await Usuario.create({
       nombreUsuario,
       correo,
-      contrasenia
+      contrasenia: hashedPassword
     });
     res.status(201).json({ mensaje: 'Usuario creado exitosamente', usuario: nuevoUsuario });
   } catch (error) {
@@ -84,7 +88,6 @@ export const eliminarUsuario = async (req, res) => {
 };
 
 // Actualizar un usuario por su ID
-
 export const actualizarUsuario = async (req, res) => {
   const { id } = req.params;
   const { nombreUsuario, correo, contrasenia } = req.body;
@@ -94,7 +97,13 @@ export const actualizarUsuario = async (req, res) => {
     if (usuario) {
       usuario.nombreUsuario = nombreUsuario;
       usuario.correo = correo;
-      usuario.contrasenia = contrasenia;
+
+      // Verifica si se proporcionó una nueva contraseña y se cifra
+      if (contrasenia) {
+        const hashedPassword = await bcrypt.hash(contrasenia, 10);
+        usuario.contrasenia = hashedPassword;
+      }
+
       await usuario.save();
       res.status(200).json({ mensaje: 'Usuario actualizado exitosamente' });
     } else {

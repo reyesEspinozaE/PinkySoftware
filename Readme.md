@@ -5,8 +5,8 @@ Currently working on this project, approximate date to finish it: "05/07/2024" -
 Para iniciar el proyecto:
 
     - Se debe abrir la terminal
-    - Escribir npm run dev, para iniciar el servidor
-    - Escribir localhost:3000/index, en tu navegador
+    - Escribir " npm run dev ", para iniciar el servidor
+    - Escribir localhost:3000/, en tu navegador
 
 Paquetes instalados
 
@@ -26,7 +26,7 @@ Sequelize y tedious
 
 npm install sequelize tedious
 
-// Para subir un repo ya creado xd
+// Para subir un repo ya existente
 
 -- cd "direccion local del proyecto"
 -- git init
@@ -37,3 +37,11 @@ npm install sequelize tedious
 -- git branch -m main
 -- git remote add origin "direccion del repo... .git"
 -- git push -u origin main
+
+// Proposito para la autenticacion de usuarios
+bcrypt
+npm install bcrypt
+
+// Para la carga de archivos { img, pdf, etc... }
+Multer 
+npm install multer

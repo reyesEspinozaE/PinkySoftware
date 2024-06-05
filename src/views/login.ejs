@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <link rel="stylesheet" href="/css/main.css">
+    <style>
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+
+        .h-custom {
+            height: calc(100% - 73px);
+        }
+
+        @media (max-width: 450px) {
+            .h-custom {
+                height: 100%;
+            }
+        }
+
+        .imagen-centrada {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <section class="vh-100">
+            <div class="container-fluid h-custom">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="mt-2 col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                        <div class="imagen-centrada">
+                            <img src="img/Logo.jpg" class="img-fluid text-align: center" alt="Sample image">
+                        </div>
+                        <form id="loginForm">
+                            <h1>Login</h1>
+                            <!-- Email input -->
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <input type="email" id="emailUser" class="form-control form-control-lg"
+                                    placeholder="usuario@example.com" required />
+                                <label class="form-label" for="form3Example3">Ingrese su dirección de correo
+                                    electronico</label>
+                            </div>
+
+                            <!-- Password input -->
+                            <div data-mdb-input-init class="form-outline mb-3">
+                                <input type="password" id="userPassword" class="form-control form-control-lg"
+                                    placeholder="********" required />
+                                <label class="form-label" for="form3Example4">Ingrese su contraseña</label>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <!-- Checkbox -->
+                                <div class="form-check mb-0">
+                                    <input class="form-check-input me-2" type="checkbox" value="" id="rememberUser" />
+                                    <label class="form-check-label" for="form2Example3">
+                                        Recordar
+                                    </label>
+                                </div>
+                                <a href="#!" class="text-body" id="forgotPasswordLink">¿Has olvidado los datos de la
+                                    cuenta?</a>
+                            </div>
+
+                            <div class="text-center text-lg-start mt-4 pt-2">
+                                <button type="button" data-mdb-button-init data-mdb-ripple-init
+                                    class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem;"
+                                    id="btnLogin">Login
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+</body>
+<footer>
+    <%- include('partials/footer.ejs')%>
+</footer>
+
+</html>
+<script>
+    document.getElementById('forgotPasswordLink').addEventListener('click', function () {
+        popup = window.open('', 'popup', 'width=350,height=350');
+
+        var formContent = `
+        <!DOCTYPE html>
+        <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Recuperar contraseña</title>
+                <link rel="stylesheet" href="/css/main.css">
+            </head>
+            <body class="bodyPopup">
+                <form class="popup-form">
+                    <label for="resetEmail">Ingrese su dirección de correo electrónico:</label><br>
+                    <input type="email" id="resetEmail" name="resetEmail" placeholder="user@example.com" required><br>
+
+                    <label for="newPassword">Ingrese su dirección de correo electrónico:</label><br>
+                    <input type="password" id="newPassword" name="newPassword" placeholder="********" required><br>
+
+                    <label for="confirmPassword">Confirme su nueva contraseña:</label>
+                    <input type="password" id="confirmPassword"  placeholder="********" required /><br>
+
+                    <button type="success" class="btnPopupSuccess" id="btnResetPassword">Guardar</button>
+                </form>
+            </body>
+        </html>
+        `
+        popup.document.write(formContent);
+        popup.document.querySelector('form').addEventListener('success', function (event) {
+            event.preventDefault();
+            // Llamar a la función
+            btnResetPassword();
+        });
+    });
+
+    function cerrarPopup() {
+        if (popup) {
+            popup.close();
+        }
+    }
+
+    async function btnResetPassword() {
+        const email = document.getElementById('resetEmail').value;
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (newPassword !== confirmPassword) {
+            alert('Las contraseñas no coinciden.');
+            return;
+        }
+
+        const response = await fetch('/auth/reset-password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, newPassword })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert(data.message);
+            document.getElementById('forgotPasswordModal').style.display = 'none';
+        } else {
+            alert(data.message);
+        }
+    };
+
+    document.getElementById('btnLogin').onclick = async function () {
+        const email = document.getElementById('emailUser').value;
+        const password = document.getElementById('userPassword').value;
+
+        if (email === "" || password === "") {
+            alert('Debe completar todos los campos.');
+        } else {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert(data.message);
+                // Redirigir al usuario a la página principal
+                window.location.href = '/contadurias';
+            } else {
+                alert(data.message);
+            }
+        }
+    };
+</script>
+<!-- Bootstrap JavaScript Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+    integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+    crossorigin="anonymous"></script>
