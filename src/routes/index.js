@@ -18,7 +18,7 @@ import {
 } from '../controllers/contaduriaController.js';
 import { getProyectosGastos } from "../controllers/gastosController.js";
 import { getProyectosPresupuesto } from "../controllers/presupuestosController.js";
-import { login, forgotPassword, resetPassword } from '../controllers/authController.js';
+import { login, resetPassword, findNombreUsuarioByEmail } from '../controllers/authController.js';
 
 import bodyParser from 'body-parser';
 
@@ -28,9 +28,9 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
 
+
 // Metodos para el Login
 router.post('/login', login);
-router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', resetPassword);
 
 
@@ -39,9 +39,6 @@ router.post('/reset-password', resetPassword);
 // Esta es la primer view que se va a tener al buscar localhost:3000 en el navegador:
 // View del login
 router.get('/', (req, res) => res.render('login', { title: "Pinky Software Login" }));
-
-
-//router.get('/', (req, res) => res.render('contaduria.ejs', { title: "Contaduria" }));
 
 // Demas vistas para para el navbar
 router.get('/index', (req, res) => res.render('index.ejs', { title: "Pinky Piensa Web" }));
@@ -72,6 +69,9 @@ router.delete('/partidas/:idPartida', eliminarPartida);
 
 // Llamadas para obtener usuarios para el select en la view de proyectos
 router.get('/proyectoUsuario', getProyectoUsuarios);
+
+// Ruta para obtener el nombre del usuario en formato JSON
+router.get('/nombre-usuario-json', findNombreUsuarioByEmail);
 
 // Llamadas para el controlador de contaduría
 

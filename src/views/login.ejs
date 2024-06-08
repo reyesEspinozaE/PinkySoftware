@@ -97,58 +97,51 @@
 </html>
 <script>
     document.getElementById('forgotPasswordLink').addEventListener('click', function () {
-        popup = window.open('', 'popup', 'width=350,height=350');
-
+        var popup = window.open('', 'popup', 'width=350,height=350');
         var formContent = `
-        <!DOCTYPE html>
-        <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Recuperar contraseña</title>
-                <link rel="stylesheet" href="/css/main.css">
-            </head>
-            <body class="bodyPopup">
-                <form class="popup-form">
-                    <label for="resetEmail">Ingrese su dirección de correo electrónico:</label><br>
-                    <input type="email" id="resetEmail" name="resetEmail" placeholder="user@example.com" required><br>
-
-                    <label for="newPassword">Ingrese su dirección de correo electrónico:</label><br>
-                    <input type="password" id="newPassword" name="newPassword" placeholder="********" required><br>
-
-                    <label for="confirmPassword">Confirme su nueva contraseña:</label>
-                    <input type="password" id="confirmPassword"  placeholder="********" required /><br>
-
-                    <button type="success" class="btnPopupSuccess" id="btnResetPassword">Guardar</button>
-                </form>
-            </body>
-        </html>
-        `
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Recuperar contraseña</title>
+            <link rel="stylesheet" href="/css/main.css">
+        </head>
+        <body class="bodyPopup">
+            <form class="popup-form" id="resetPasswordForm">
+                <label for="resetEmail">Ingrese su dirección de correo electrónico:</label><br>
+                <input type="email" id="resetEmail" name="resetEmail" placeholder="user@example.com" required><br>
+                <label for="newPassword">Ingrese su nueva contraseña:</label><br>
+                <input type="password" id="newPassword" name="newPassword" placeholder="********" required><br>
+                <label for="confirmPassword">Confirme su nueva contraseña:</label>
+                <input type="password" id="confirmPassword" placeholder="********" required /><br>
+                <button type="submit" class="btnPopupSuccess">Guardar</button>
+            </form>
+        </body>
+    </html>
+    `;
         popup.document.write(formContent);
-        popup.document.querySelector('form').addEventListener('success', function (event) {
-            event.preventDefault();
-            // Llamar a la función
-            btnResetPassword();
-        });
+        popup.document.close();
+
+        popup.onload = function () {
+            popup.document.getElementById('resetPasswordForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+                btnResetPassword(popup);
+            });
+        };
     });
 
-    function cerrarPopup() {
-        if (popup) {
-            popup.close();
-        }
-    }
-
-    async function btnResetPassword() {
-        const email = document.getElementById('resetEmail').value;
-        const newPassword = document.getElementById('newPassword').value;
-        const confirmPassword = document.getElementById('confirmPassword').value;
+    async function btnResetPassword(popup) {
+        const email = popup.document.getElementById('resetEmail').value;
+        const newPassword = popup.document.getElementById('newPassword').value;
+        const confirmPassword = popup.document.getElementById('confirmPassword').value;
 
         if (newPassword !== confirmPassword) {
             alert('Las contraseñas no coinciden.');
             return;
         }
 
-        const response = await fetch('/auth/reset-password', {
+        const response = await fetch('/reset-password', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -160,7 +153,7 @@
 
         if (response.ok) {
             alert(data.message);
-            document.getElementById('forgotPasswordModal').style.display = 'none';
+            popup.close();
         } else {
             alert(data.message);
         }

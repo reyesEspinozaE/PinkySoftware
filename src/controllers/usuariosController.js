@@ -15,19 +15,6 @@ export const getUsuarios = async (req, res) => {
   }
 };
 
-// Obtener todas las partidas y renderizar una vista
-export const renderPartidasView = async (req, res) => {
-  try {
-    const partidas = await Partida.findAll();
-    res.render('partidas.ejs', {
-      title: "Partidas",
-      partidas
-    });
-  } catch (error) {
-    console.error("Error al obtener las partidas:", error);
-    res.status(500).send("Error al obtener las partidas");
-  }
-};
 
 // Detalles de un usuario especifico
 

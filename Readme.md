@@ -24,6 +24,9 @@ npm i express
 // Para conseguir interactuar con la DB
 Sequelize y tedious
 
+// Bcrypt para encriptar las contraseñas
+npm install bcrypt
+
 npm install sequelize tedious
 
 // Para subir un repo ya existente

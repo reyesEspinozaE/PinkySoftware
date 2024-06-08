@@ -23,7 +23,7 @@ export const getContaduriaData = async (req, res) => {
     res.render('contadurias.ejs', {
       title: 'Contaduría',
       presupuestos,
-      gastos
+      gastos,
     });
   } catch (error) {
     console.error("Error al obtener los datos de contaduría:", error);

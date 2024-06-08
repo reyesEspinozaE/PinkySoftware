@@ -25,22 +25,6 @@ export const login = async (req, res) => {
     }
 };
 
-export const forgotPassword = async (req, res) => {
-    const { email } = req.body;
-
-    try {
-        const usuario = await Usuario.findOne({ where: { correo: email } });
-
-        if (!usuario) {
-            return res.status(404).json({ message: 'Usuario no encontrado.' });
-        }
-
-        // Aquí puedes enviar un correo electrónico al usuario con un token de restablecimiento de contraseña.
-        res.status(200).json({ message: 'Correo de recuperación enviado.' });
-    } catch (error) {
-        res.status(500).json({ message: 'Error en el servidor.' });
-    }
-};
 
 export const resetPassword = async (req, res) => {
     const { email, newPassword } = req.body;
@@ -52,11 +36,30 @@ export const resetPassword = async (req, res) => {
             return res.status(404).json({ message: 'Usuario no encontrado.' });
         }
 
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
-        usuario.contrasenia = hashedPassword;
+        // Verifica si se proporcionó una nueva contraseña y se cifra
+        if (newPassword) {
+            const hashedPassword = await bcrypt.hash(newPassword, 10);
+            usuario.contrasenia = hashedPassword;
+        }
         await usuario.save();
 
         res.status(200).json({ message: 'Contraseña actualizada correctamente.' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error en el servidor.' });
+    }
+};
+
+// Método para buscar un usuario por correo y devolver su nombre en formato JSON
+export const findNombreUsuarioByEmail = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const usuario = await findUsuarioByEmail(email);
+        if (!usuario) {
+            return res.status(404).json({ message: 'Usuario no encontrado.' });
+        }
+        // Devuelve el nombre del usuario si se encuentra en formato JSON
+        res.status(200).json({ nombreUsuario: usuario.nombreUsuario });
     } catch (error) {
         res.status(500).json({ message: 'Error en el servidor.' });
     }
