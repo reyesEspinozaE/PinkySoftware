@@ -48,3 +48,6 @@ npm install bcrypt
 // Para la carga de archivos { img, pdf, etc... }
 Multer 
 npm install multer
+
+// Morgan 
+npm i morgan
