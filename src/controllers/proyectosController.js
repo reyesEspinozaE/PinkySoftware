@@ -117,16 +117,51 @@ export const actualizarProyecto = async (req, res) => {
 
 // Eliminar un proyecto
 
+// export const eliminarProyecto = async (req, res) => {
+//   const { idProyecto } = req.params;
+//   try {
+//     // Eliminar la relacion con el usuario
+//     const proyectoUsuarioEliminado = await ProyectoUsuario.destroy({
+//       where: { idProyecto: idProyecto }
+//     });
+//     const proyectoEliminado = await Proyecto.destroy({
+//       where: { idProyecto: idProyecto }
+//     });
+//     if (proyectoEliminado ) {
+//       res.status(200).json({ mensaje: 'Proyecto eliminado exitosamente' });
+//     } else {
+//       res.status(404).json({ mensaje: 'Proyecto no encontrado' });
+//     }
+//   } catch (error) {
+//     console.error("Error al eliminar el proyecto: ", error);
+//     res.status(500).send("Error al eliminar el proyecto");
+//   }
+// };
+
+// Eliminar un proyecto
 export const eliminarProyecto = async (req, res) => {
   const { idProyecto } = req.params;
   try {
-    const proyectoEliminado = await Proyecto.destroy({
+    // Eliminar la relación con los usuarios primero
+    const proyectoUsuarioEliminado = await ProyectoUsuario.destroy({
       where: { idProyecto: idProyecto }
     });
-    if (proyectoEliminado) {
-      res.status(200).json({ mensaje: 'Proyecto eliminado exitosamente' });
+
+    // Verificar si se eliminaron las relaciones con los usuarios
+    if (proyectoUsuarioEliminado !== undefined) {
+      // Luego, eliminar el proyecto
+      const proyectoEliminado = await Proyecto.destroy({
+        where: { idProyecto: idProyecto }
+      });
+
+      // Verificar si se eliminó el proyecto
+      if (proyectoEliminado === 1) {
+        res.status(200).json({ mensaje: 'Proyecto eliminado exitosamente' });
+      } else {
+        res.status(404).json({ mensaje: 'Proyecto no encontrado' });
+      }
     } else {
-      res.status(404).json({ mensaje: 'Proyecto no encontrado' });
+      res.status(500).json({ mensaje: 'Error al eliminar las relaciones de usuario' });
     }
   } catch (error) {
     console.error("Error al eliminar el proyecto: ", error);

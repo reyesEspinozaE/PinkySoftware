@@ -51,3 +51,6 @@ npm install multer
 
 // Morgan 
 npm i morgan
+
+// Nodemon 
+npm i nodemon

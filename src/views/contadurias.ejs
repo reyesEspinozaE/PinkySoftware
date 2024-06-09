@@ -29,7 +29,8 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-6 mb-3">
-                                    <label for="presupuestoTotal">Presupuesto Total:</label>
+                                    <label for="presupuestoTotal" title="Ingrese el presupuesto total">Presupuesto
+                                        Total:</label>
                                     <input type="number" id="presupuestoTotal" class="form-control"
                                         placeholder="oooo.oo">
                                 </div>
@@ -49,7 +50,6 @@
                                                     <th>Acción</th>
                                                     <th>ID Proyecto</th>
                                                     <th>Monto total</th>
-                                                    <th>Saldo pendiente</th>
                                                     <th>Área</th>
                                                 </tr>
                                             </thead>
@@ -75,14 +75,11 @@
                                                                 <%= presupuesto.montoTotal %>
                                                             </td>
                                                             <td>
-                                                                <%= presupuesto.saldoPendiente %>
-                                                            </td>
-                                                            <td>
                                                                 <%= presupuesto.area %>
                                                             </td>
-                                                            <td>
+                                                            <!-- <td>
                                                                 <%= presupuesto.descripcion %>
-                                                            </td>
+                                                            </td> -->
                                                         </tr>
                                                         <% }) %>
                                                             <% } else { %>
@@ -142,9 +139,9 @@
                                             <thead class="table-light">
                                                 <tr>
                                                     <th>Acción</th>
-                                                    <th>Descripción</th>
-                                                    <th>Lugar</th>
+                                                    <th>ID Proyecto</th>
                                                     <th>Monto Gasto</th>
+                                                    <th>Descripción</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="table-group-divider">
@@ -160,13 +157,13 @@
                                                                     data-gasto-id="<%= gasto.idGasto %>">Eliminar</a>
                                                             </td>
                                                             <td>
-                                                                <%= gasto.descripcionGasto %>
-                                                            </td>
-                                                            <td>
-                                                                <%= gasto.lugar %>
+                                                                <%= gasto.idProyecto %>
                                                             </td>
                                                             <td class="montoTotalGasto">
                                                                 <%= gasto.montoGasto %>
+                                                            </td>
+                                                            <td>
+                                                                <%= gasto.descripcionGasto %>
                                                             </td>
                                                             <td class="idProyecto">
                                                                 <%= gasto.idProyecto %>
@@ -216,6 +213,31 @@
 
 
 <script>
+
+    //////////////////////////////////////// AHORRRO MENSUAL PRESUPUESTOS ////////////////////////////////////////
+
+    function ahorroMensualPresupuestos() {
+        // Obtiene los valores de los inputs
+        const presupuestoTotal = parseFloat(document.getElementById('presupuestoTotal').value) || 0;
+        const sumaPresupuesto = parseFloat(document.getElementById('sumaPresupuesto').value) || 0;
+
+        // Calcula el ahorro mensual
+        const ahorroMensual = presupuestoTotal - sumaPresupuesto;
+
+        // Actualiza el input con el id 'ahorroMensualPresupuesto' con el resultado del cálculo
+        document.getElementById('ahorroMensualPresupuesto').value = ahorroMensual.toFixed(2);
+    }
+
+    // Llama a la función para que se ejecute al cargar la página
+    document.addEventListener('DOMContentLoaded', () => {
+        sumaPresupuestos();
+
+        // Agrega un evento para recalcular el ahorro mensual cuando cambia el presupuesto total
+        document.getElementById('presupuestoTotal').addEventListener('input', ahorroMensualPresupuestos);
+    });
+
+    /////////////////////////////////////// FIN AHORRRO MENSUAL PRESUPUESTOS //////////////////////////////////////
+
     // Función para desplegar el alert de saldo proximo a vencer
     document.addEventListener("DOMContentLoaded", function () {
         const presupuestoRows = document.querySelectorAll(".presupuesto-row");
@@ -267,32 +289,6 @@
     document.addEventListener('DOMContentLoaded', sumaPresupuestos);
 
     //////////////////////////////////////// FIN SUMA PRESUPUESTOS ////////////////////////////////////////
-
-
-    //////////////////////////////////////// AHORRRO MENSUAL PRESUPUESTOS ////////////////////////////////////////
-
-    function ahorroMensualPresupuestos() {
-        // Obtiene los valores de los inputs
-        const presupuestoTotal = parseFloat(document.getElementById('presupuestoTotal').value) || 0;
-        const sumaPresupuesto = parseFloat(document.getElementById('sumaPresupuesto').value) || 0;
-
-        // Calcula el ahorro mensual
-        const ahorroMensual = presupuestoTotal - sumaPresupuesto;
-
-        // Actualiza el input con el id 'ahorroMensualPresupuesto' con el resultado del cálculo
-        document.getElementById('ahorroMensualPresupuesto').value = ahorroMensual.toFixed(2);
-    }
-
-    // Llama a la función para que se ejecute al cargar la página
-    document.addEventListener('DOMContentLoaded', () => {
-        sumaPresupuestos();
-
-        // Agrega un evento para recalcular el ahorro mensual cuando cambia el presupuesto total
-        document.getElementById('presupuestoTotal').addEventListener('input', ahorroMensualPresupuestos);
-    });
-
-    //////////////////////////////////////// FIN AHORRRO MENSUAL PRESUPUESTOS ////////////////////////////////////////
-
 
     ///////////////////////////////////////// SUMA GASTOS ///////////////////////////////////////////
 

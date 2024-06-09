@@ -18,7 +18,11 @@ export const login = async (req, res) => {
             return res.status(401).json({ message: 'Correo o contraseña incorrecta.' });
         }
 
-        res.status(200).json({ message: 'Login exitoso.' });
+        // Incluir el nombre del usuario en la respuesta
+        res.status(200).json({
+            message: 'Login exitoso.',
+            nombreUsuario: usuario.nombreUsuario
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error en el servidor.' });

@@ -81,6 +81,8 @@
                                     class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem;"
                                     id="btnLogin">Login
                                 </button>
+                                <button type="button" class="btn btn-secondary btn-lg ms-3" id="btnGuest">Ingresar como
+                                    Invitado</button>
                             </div>
                         </form>
                     </div>
@@ -95,6 +97,7 @@
 </footer>
 
 </html>
+
 <script>
     document.getElementById('forgotPasswordLink').addEventListener('click', function () {
         var popup = window.open('', 'popup', 'width=350,height=350');
@@ -114,18 +117,17 @@
                 <label for="newPassword">Ingrese su nueva contraseña:</label><br>
                 <input type="password" id="newPassword" name="newPassword" placeholder="********" required><br>
                 <label for="confirmPassword">Confirme su nueva contraseña:</label>
-                <input type="password" id="confirmPassword" placeholder="********" required /><br>
-                <button type="submit" class="btnPopupSuccess">Guardar</button>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="********" required><br>
+                <button type="button" class="btn btn-primary" id="btnResetPassword">Resetear contraseña</button>
             </form>
         </body>
-    </html>
-    `;
+    </html>`;
+
         popup.document.write(formContent);
         popup.document.close();
 
         popup.onload = function () {
-            popup.document.getElementById('resetPasswordForm').addEventListener('submit', function (event) {
-                event.preventDefault();
+            popup.document.getElementById('btnResetPassword').addEventListener('click', function () {
                 btnResetPassword(popup);
             });
         };
@@ -133,31 +135,35 @@
 
     async function btnResetPassword(popup) {
         const email = popup.document.getElementById('resetEmail').value;
-        const newPassword = popup.document.getElementById('newPassword').value;
+        const password = popup.document.getElementById('newPassword').value;
         const confirmPassword = popup.document.getElementById('confirmPassword').value;
 
-        if (newPassword !== confirmPassword) {
+        if (password !== confirmPassword) {
             alert('Las contraseñas no coinciden.');
             return;
         }
 
-        const response = await fetch('/reset-password', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, newPassword })
-        });
+        try {
+            const response = await fetch('/reset-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
 
-        const data = await response.json();
+            const data = await response.json();
 
-        if (response.ok) {
-            alert(data.message);
-            popup.close();
-        } else {
-            alert(data.message);
+            if (response.ok) {
+                alert('Contraseña actualizada con éxito');
+                popup.close();
+            } else {
+                alert(data.message);
+            }
+        } catch (error) {
+            alert('Hubo un error al actualizar la contraseña.');
         }
-    };
+    }
 
     document.getElementById('btnLogin').onclick = async function () {
         const email = document.getElementById('emailUser').value;
@@ -177,6 +183,10 @@
             const data = await response.json();
 
             if (response.ok) {
+                // Guardar el nombre del usuario y la marca de login en localStorage
+                localStorage.setItem('nombreUsuario', data.nombreUsuario);
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.removeItem('isGuest');
                 alert(data.message);
                 // Redirigir al usuario a la página principal
                 window.location.href = '/contadurias';
@@ -185,12 +195,11 @@
             }
         }
     };
-</script>
-<!-- Bootstrap JavaScript Libraries -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-    crossorigin="anonymous"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-    integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-    crossorigin="anonymous"></script>
+    document.getElementById('btnGuest').onclick = function () {
+        localStorage.setItem('nombreUsuario', 'Invitado');
+        localStorage.setItem('isGuest', 'true');
+        localStorage.removeItem('isLoggedIn');
+        window.location.href = '/contadurias';
+    };
+</script>
