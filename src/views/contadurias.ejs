@@ -371,42 +371,43 @@
         popup = window.open('', 'popup', 'width=400,height=500');
 
         var formContent = `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Agregar Gasto</title>
-            <link rel="stylesheet" href="/css/main.css">
-        </head>
-        <body class="bodyPopup">
-            <form class="popup-form">
-                <label for="idProyecto">Nombre del proyecto:</label><br>
-                <select id="idProyecto" name="idProyecto" style="width: 200px; height: 30px;">
-                    <option value="">Seleccione un proyecto...</option>
-                </select><br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Gasto</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body class="bodyPopup">
+    <form class="popup-form" enctype="multipart/form-data" method="post" action="/gastos">
+        <label for="idProyecto">Nombre del proyecto:</label><br>
+        <select id="idProyecto" name="idProyecto" style="width: 200px; height: 30px;">
+            <option value="">Seleccione un proyecto...</option>
+        </select><br>
 
-                <label for="descripcionGasto">Descripción del gasto:</label><br>
-                <input type="text" id="descripcionGasto" name="descripcionGasto"><br>
-            
-                <label for="fechaGasto">Fecha del gasto:</label><br>
-                <input type="date" id="fechaGasto" name="fechaGasto"><br>
-            
-                <label for="lugarGasto">Lugar del gasto:</label><br>
-                <input type="text" id="lugarGasto" name="lugarGasto"><br>
-            
-                <label for="imagenGasto">Cargue su imagen:</label><br>
-                <input type="file" id="imagenGasto" name="imagenGasto" accept="image/*"><br>
-            
-                <label for="montoGasto">Monto del gasto:</label><br>
-                <input type="number" id="montoGasto" name="montoGasto"></input><br>
-            
-                <button class="btnPopup" type="submit">Guardar</button>
-                <button class="btnPopup" type="button" onclick="window.close()">Cancelar</button>
-            </form>
-        </body>
-        </html>
-    `;
+        <label for="descripcionGasto">Descripción del gasto:</label><br>
+        <input type="text" id="descripcionGasto" name="descripcionGasto"><br>
+    
+        <label for="fechaGasto">Fecha del gasto:</label><br>
+        <input type="date" id="fechaGasto" name="fechaGasto"><br>
+    
+        <label for="lugarGasto">Lugar del gasto:</label><br>
+        <input type="text" id="lugarGasto" name="lugarGasto"><br>
+    
+        <label for="imagenGasto">Cargue su imagen:</label><br>
+        <input type="file" id="imagenGasto" name="imagenGasto" accept="image/*"><br>
+        
+        <label for="montoGasto">Monto del gasto:</label><br>
+        <input type="number" id="montoGasto" name="montoGasto"><br>
+    
+        <button class="btnPopup" type="submit">Guardar</button>
+        <button class="btnPopup" type="button" onclick="window.close()">Cancelar</button>
+    </form>
+</body>
+</html>
+`;
+
 
         popup.document.write(formContent);
 
