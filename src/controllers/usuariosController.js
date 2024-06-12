@@ -37,7 +37,7 @@ export const detallesUsuario = async (req, res) => {
 
 export const crearUsuario = async (req, res) => {
   try {
-    const { nombreUsuario, correo, contrasenia } = req.body;
+    const { nombreUsuario, correo, contrasenia, rol } = req.body;
     console.log('Datos recibidos en el servidor:', { nombreUsuario, correo, contrasenia });
 
     // Cifrar la contraseña
@@ -46,7 +46,8 @@ export const crearUsuario = async (req, res) => {
     const nuevoUsuario = await Usuario.create({
       nombreUsuario,
       correo,
-      contrasenia: hashedPassword
+      contrasenia: hashedPassword,
+      rol: rol
     });
     res.status(201).json({ mensaje: 'Usuario creado exitosamente', usuario: nuevoUsuario });
   } catch (error) {
@@ -77,13 +78,15 @@ export const eliminarUsuario = async (req, res) => {
 // Actualizar un usuario por su ID
 export const actualizarUsuario = async (req, res) => {
   const { id } = req.params;
-  const { nombreUsuario, correo, contrasenia } = req.body;
+  const { nombreUsuario, correo, contrasenia, rol } = req.body;
 
   try {
     const usuario = await Usuario.findByPk(id);
+    console.log("Received data for updt user:", {nombreUsuario, correo, contrasenia, rol });
     if (usuario) {
       usuario.nombreUsuario = nombreUsuario;
       usuario.correo = correo;
+      usuario.rol = rol;
 
       // Verifica si se proporcionó una nueva contraseña y se cifra
       if (contrasenia) {

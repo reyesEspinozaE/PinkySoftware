@@ -13,7 +13,7 @@ Paquetes instalados
 // Para back end
 Node JS
 -- se descarga desde el navegador
-    - se hace un npm init
+    - se hace un npm init --y
     - se procede con las configs en package.json
 
 // Para front end

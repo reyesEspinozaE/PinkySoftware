@@ -18,10 +18,11 @@ export const login = async (req, res) => {
             return res.status(401).json({ message: 'Correo o contraseña incorrecta.' });
         }
 
-        // Incluir el nombre del usuario en la respuesta
+        // Incluir el nombre del usuario y rol en la respuesta
         res.status(200).json({
             message: 'Login exitoso.',
-            nombreUsuario: usuario.nombreUsuario
+            nombreUsuario: usuario.nombreUsuario,
+            rol: usuario.rol
         });
     } catch (error) {
         console.error(error);
@@ -48,22 +49,6 @@ export const resetPassword = async (req, res) => {
         await usuario.save();
 
         res.status(200).json({ message: 'Contraseña actualizada correctamente.' });
-    } catch (error) {
-        res.status(500).json({ message: 'Error en el servidor.' });
-    }
-};
-
-// Método para buscar un usuario por correo y devolver su nombre en formato JSON
-export const findNombreUsuarioByEmail = async (req, res) => {
-    const { email } = req.body;
-
-    try {
-        const usuario = await findUsuarioByEmail(email);
-        if (!usuario) {
-            return res.status(404).json({ message: 'Usuario no encontrado.' });
-        }
-        // Devuelve el nombre del usuario si se encuentra en formato JSON
-        res.status(200).json({ nombreUsuario: usuario.nombreUsuario });
     } catch (error) {
         res.status(500).json({ message: 'Error en el servidor.' });
     }

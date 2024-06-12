@@ -185,6 +185,9 @@
             if (response.ok) {
                 // Guardar el nombre del usuario y la marca de login en localStorage
                 localStorage.setItem('nombreUsuario', data.nombreUsuario);
+                // Guardar el rol del usuario y la marca de login en localStorage
+                localStorage.setItem('rolUsuario', data.rol);
+
                 localStorage.setItem('isLoggedIn', 'true');
                 localStorage.removeItem('isGuest');
                 alert(data.message);
@@ -200,6 +203,6 @@
         localStorage.setItem('nombreUsuario', 'Invitado');
         localStorage.setItem('isGuest', 'true');
         localStorage.removeItem('isLoggedIn');
-        window.location.href = '/contadurias';
+        window.location.href = '/index';
     };
 </script>
