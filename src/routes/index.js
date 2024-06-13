@@ -1,9 +1,27 @@
+// /src/routes/index.js
 import { Router } from 'express';
-
-// Importando los controladores
-import { actualizarUsuario, crearUsuario, detallesUsuario, eliminarUsuario, getUsuarios } from "../controllers/usuariosController.js";
-import { actualizarProyecto, crearProyecto, detallesProyecto, eliminarProyecto, getProyectos } from "../controllers/proyectosController.js";
-import { getPartidas, renderPartidasView, crearPartida, actualizarPartida, eliminarPartida, detallesPartida } from "../controllers/partidasController.js";
+import {
+    actualizarUsuario,
+    crearUsuario,
+    detallesUsuario,
+    eliminarUsuario,
+    getUsuarios
+} from "../controllers/usuariosController.js";
+import {
+    actualizarProyecto,
+    crearProyecto,
+    detallesProyecto,
+    eliminarProyecto,
+    getProyectos
+} from "../controllers/proyectosController.js";
+import {
+    getPartidas,
+    renderPartidasView,
+    crearPartida,
+    actualizarPartida,
+    eliminarPartida,
+    detallesPartida
+} from "../controllers/partidasController.js";
 import { getProyectoUsuarios } from "../controllers/proyectoUsuarioController.js";
 import {
     getContaduriaData,
@@ -19,8 +37,8 @@ import {
 import { getProyectosGastos } from "../controllers/gastosController.js";
 import { getProyectosPresupuesto } from "../controllers/presupuestosController.js";
 import { login, resetPassword } from '../controllers/authController.js';
-// Para analizar JSON y datos URL-encoded
 import bodyParser from 'body-parser';
+import { isAuthenticated, isAdmin } from '../middleware/authMiddleware.js';
 
 const router = Router();
 
@@ -31,67 +49,50 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.post('/login', login);
 router.post('/reset-password', resetPassword);
 
-// Se enruta a las views
-// Esta es la primer view que se va a tener al buscar localhost:3000 en el navegador:
-// View del login
+// Rutas de vistas
 router.get('/', (req, res) => res.render('login', { title: "Pinky Software Login" }));
+router.get('/index', isAuthenticated, (req, res) => res.render('index', { title: "Pinky Piensa Web" }));
 
+// Rutas protegidas
+router.get('/users', isAuthenticated, isAdmin, getUsuarios);
+router.get('/proyectos', isAuthenticated, getProyectos);
+router.get('/partidas', isAuthenticated, renderPartidasView);
+router.get('/contadurias', isAuthenticated, getContaduriaData);
 
-router.get('/index', (req, res) => res.render('index.ejs', { title: "Pinky Piensa Web" }));
-router.get('/users',  getUsuarios);
-router.get('/proyectos',  getProyectos);
-router.get('/partidas', renderPartidasView);
-router.get('/contadurias', getContaduriaData);
+// Rutas para el controlador de usuarios
+router.post('/users', isAuthenticated, isAdmin, crearUsuario);
+router.get('/users/:id', isAuthenticated, isAdmin, detallesUsuario);
+router.put('/users/:id', isAuthenticated, isAdmin, actualizarUsuario);
+router.delete('/users/:id', isAuthenticated, isAdmin, eliminarUsuario);
 
+// Rutas para el controlador de proyectos
+router.post('/proyectos', isAuthenticated, crearProyecto);
+router.get('/proyectos/:idProyecto', isAuthenticated, detallesProyecto);
+router.put('/proyectos/:idProyecto', isAuthenticated, actualizarProyecto);
+router.delete('/proyectos/:idProyecto', isAuthenticated, eliminarProyecto);
 
-// Llamadas para el controlador de users
-router.post('/users', crearUsuario);
-router.get('/users/:id', detallesUsuario);
-router.put('/users/:id', actualizarUsuario);
-router.delete('/users/:id', eliminarUsuario);
+// Rutas para el controlador de partidas
+router.get('/partidasSelect', isAuthenticated, getPartidas);
+router.post('/partidas', isAuthenticated, crearPartida);
+router.put('/partidas/:idPartida', isAuthenticated, actualizarPartida);
+router.get('/partidas/:idPartida', isAuthenticated, detallesPartida);
+router.delete('/partidas/:idPartida', isAuthenticated, eliminarPartida);
 
-// Llamadas para el controlador de proyectos
-router.post('/proyectos', crearProyecto);
-router.get('/proyectos/:idProyecto', detallesProyecto);
-router.put('/proyectos/:idProyecto', actualizarProyecto);
-router.delete('/proyectos/:idProyecto', eliminarProyecto);
+// Rutas para obtener usuarios para el select en la view de proyectos
+router.get('/proyectoUsuario', isAuthenticated, getProyectoUsuarios);
 
-// Llamadas para el controlador de partidas
-router.get('/partidasSelect', getPartidas);
-router.post('/partidas', crearPartida);
-router.put('/partidas/:idPartida', actualizarPartida);
-router.get('/partidas/:idPartida', detallesPartida);
-router.delete('/partidas/:idPartida', eliminarPartida);
+// Rutas para el controlador de contaduría
+router.post('/presupuestos', isAuthenticated, crearPresupuesto);
+router.delete('/presupuestos/:id', isAuthenticated, eliminarPresupuesto);
+router.put('/presupuestos/:id', isAuthenticated, actualizarPresupuesto);
+router.get('/presupuestos/:id', isAuthenticated, detallesPresupuesto);
 
-// Llamadas para obtener usuarios para el select en la view de proyectos
-router.get('/proyectoUsuario', getProyectoUsuarios);
+router.post('/gastos', isAuthenticated, crearGasto);
+router.delete('/gastos/:id', isAuthenticated, eliminarGasto);
+router.put('/gastos/:id', isAuthenticated, actualizarGasto);
+router.get('/gastos/:id', isAuthenticated, detallesGasto);
 
-// Llamadas para el controlador de contaduría
-
-// Rutas para presupuestos
-router.post('/presupuestos', crearPresupuesto);
-router.delete('/presupuestos/:id', eliminarPresupuesto);
-router.put('/presupuestos/:id', actualizarPresupuesto);
-router.get('/presupuestos/:id', detallesPresupuesto);
-
-// Rutas para gastos
-router.post('/gastos', crearGasto);
-router.delete('/gastos/:id', eliminarGasto);
-router.put('/gastos/:id', actualizarGasto);
-router.get('/gastos/:id', detallesGasto);
-
-// Rutas para obtener los proyectos de presupuestos y gastos
-// Presupuestos 
-router.get('/presupuestosProyecto', getProyectosPresupuesto);
-
-// Gastos
-router.get('/gastosProyecto', getProyectosGastos);
+router.get('/presupuestosProyecto', isAuthenticated, getProyectosPresupuesto);
+router.get('/gastosProyecto', isAuthenticated, getProyectosGastos);
 
 export default router;
-
-
-
-
-
-
-

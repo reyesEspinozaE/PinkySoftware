@@ -9,6 +9,8 @@
     </title>
     <%- include("partials/head") %>
         <%- include("partials/navigation.ejs") %>
+            <!-- Uso de sweetalert2 -->
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 
 <body>
@@ -55,7 +57,7 @@
                                 </tr>
                                 <% }) %>
                                     <% } else { %>
-                                            <div class="alert alert-info">No hay partidas disponibles</div>
+                                        <div class="alert alert-info">No hay partidas disponibles</div>
                                         <% } %>
                     </tbody>
                 </table>
@@ -68,6 +70,9 @@
 </footer>
 
 </html>
+
+<!-- Uso de sweetalert2 para las alertas (presupuesto agotado) -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 
 <!-- Bootstrap JavaScript Libraries -->
 
@@ -128,6 +133,17 @@
         var nombrePartida = popup.document.getElementById('nombrePartida').value;
         var descripcionPartida = popup.document.getElementById('descripcionPartida').value;
 
+        // Verificar si todos los campos están completos
+        if (!nombrePartida || !descripcionPartida) {
+            Swal.fire({
+                title: 'Datos incompletos',
+                text: 'Por favor complete todos los campos del formulario.',
+                icon: 'warning',
+                confirmButtonText: 'Entendido',
+            });
+            return; // Detener la ejecución de la función si los campos están incompletos
+        }
+
         var nuevaPartida = {
             nombrePartida: nombrePartida,
             descripcionPartida: descripcionPartida
@@ -144,9 +160,22 @@
             .then(data => {
                 if (data.mensaje === 'Partida creada exitosamente') {
                     popup.close();
-                    window.location.reload();
+                    Swal.fire({
+                        title: 'Partida creado exitosamente',
+                        text: 'El proyecto se ha registrado exitosamente',
+                        icon: 'success',
+                        confirmButtonText: 'Entendido',
+                    }).then(() => {
+                        // Esta línea se ejecutará cuando el usuario presione "Entendido"
+                        window.location.reload();
+                    });
                 } else {
-                    console.error('Error al guardar la nueva partida:', data);
+                    Swal.fire({
+                        title: 'Error al guardar la nueva partida',
+                        text: 'Error al crear el registro de la nueva partida',
+                        icon: 'success',
+                        confirmButtonText: 'Entendido'
+                    })
                 }
             })
             .catch(error => {
@@ -242,6 +271,17 @@
         const nombrePartida = popup.document.getElementById('nombrePartida').value;
         const descripcionPartida = popup.document.getElementById('descripcionPartida').value;
 
+        // Verificar si todos los campos están completos
+        if (!nombrePartida || !descripcionPartida) {
+            Swal.fire({
+                title: 'Datos incompletos',
+                text: 'Por favor complete todos los campos del formulario.',
+                icon: 'warning',
+                confirmButtonText: 'Entendido',
+            });
+            return; // Detener la ejecución de la función si los campos están incompletos
+        }
+
         const partidaActualizada = {
             nombrePartida: nombrePartida,
             descripcionPartida: descripcionPartida
@@ -258,9 +298,22 @@
             .then(data => {
                 if (data.mensaje === 'Partida actualizada exitosamente') {
                     popup.close();
-                    window.location.reload();
+                    Swal.fire({
+                        title: 'Partida modificada exitosamente',
+                        text: `La partida se ha actualizado exitosamente`,
+                        icon: 'success',
+                        confirmButtonText: 'Entendido'
+                    }).then(() => {
+                        // Esta línea se ejecutará cuando el usuario presione "Entendido"
+                        window.location.reload();
+                    });
                 } else {
-                    console.error('Error al actualizar la partida:', data);
+                    Swal.fire({
+                        title: 'Error al guardar la partida',
+                        text: 'No se ha podido completar la actualización del registro de partida.',
+                        icon: 'warning',
+                        confirmButtonText: 'Entendido',
+                    });
                 }
             })
             .catch(error => {
@@ -274,15 +327,34 @@
     document.querySelectorAll('[name="eliminarPartida"]').forEach(btn => {
         btn.addEventListener('click', async function () {
             const idPartida = this.getAttribute('data-partida-id');
-            const confirmacion = confirm('¿Estás seguro de que quieres eliminar esta partida?');
-            if (confirmacion) {
+
+            // Usar Swal para la confirmación
+            const result = await Swal.fire({
+                title: '¿Estás seguro?',
+                text: '¿Estás seguro de que quieres eliminar esta partida?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            });
+
+            if (result.isConfirmed) {
                 const response = await fetch(`/partidas/${idPartida}`, {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' }
                 });
                 const data = await response.json();
-                console.log(data);
-                window.location.reload();
+                // Aquí se muestra un mensaje de éxito
+                //console.log(data);
+                Swal.fire({
+                    title: 'Se ha elimnado el registro',
+                    text: 'Se ha eliminado el registro de partida de manera exitosa.',
+                    icon: 'success',
+                    confirmButtonText: 'Entendido',
+                }).then(() => {
+                    // Esta línea se ejecutará cuando el usuario presione "Entendido"
+                    window.location.reload();// Recargar la página después de eliminar el usuario
+                });
             }
         });
     });

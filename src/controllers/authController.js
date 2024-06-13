@@ -1,3 +1,4 @@
+// /src/controllers/authController.js
 import bcrypt from 'bcrypt';
 import Usuario from '../models/usuario.js';
 
@@ -18,7 +19,11 @@ export const login = async (req, res) => {
             return res.status(401).json({ message: 'Correo o contraseña incorrecta.' });
         }
 
-        // Incluir el nombre del usuario y rol en la respuesta
+        // Establecer sesión
+        req.session.isLoggedIn = true;
+        req.session.rolUsuario = usuario.rol;
+        req.session.nombreUsuario = usuario.nombreUsuario;
+
         res.status(200).json({
             message: 'Login exitoso.',
             nombreUsuario: usuario.nombreUsuario,
@@ -29,7 +34,6 @@ export const login = async (req, res) => {
         res.status(500).json({ message: 'Error en el servidor.' });
     }
 };
-
 
 export const resetPassword = async (req, res) => {
     const { email, newPassword } = req.body;

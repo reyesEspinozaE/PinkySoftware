@@ -7,6 +7,8 @@
     <title>
         <%= title %>
     </title>
+    <!-- Uso de sweetalert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <%- include("partials/head") %>
         <%- include('partials/navigation.ejs') %>
 </head>
@@ -210,7 +212,8 @@
 
 </html>
 
-
+<!-- Uso de sweetalert2 para las alertas (presupuesto agotado) -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 
 <script>
 
@@ -263,8 +266,17 @@
             const sumaGastos = gastosPorProyecto[idProyecto] || 0;
             const porcentajeGasto = sumaGastos / montoTotal;
 
+            // if (porcentajeGasto >= limiteProximidad) {
+            //     alert(`El proyecto con ID ${idProyecto} tiene gastos (${sumaGastos}) que están próximos a agotar el presupuesto total (${montoTotal}). Actualmente ha gastado el ${Math.round(porcentajeGasto * 100)}% del presupuesto.`);
+            // }
+
             if (porcentajeGasto >= limiteProximidad) {
-                alert(`El proyecto con ID ${idProyecto} tiene gastos (${sumaGastos}) que están próximos a agotar el presupuesto total (${montoTotal}). Actualmente ha gastado el ${Math.round(porcentajeGasto * 100)}% del presupuesto.`);
+                Swal.fire({
+                    title: 'Presupuesto Próximo a Agotarse',
+                    text: `El proyecto con ID ${idProyecto} tiene gastos (${sumaGastos}) que están próximos a agotar el presupuesto total (${montoTotal}). Actualmente ha gastado el ${Math.round(porcentajeGasto * 100)}% del presupuesto.`,
+                    icon: 'warning',
+                    confirmButtonText: 'Entendido'
+                });
             }
         });
     });
@@ -407,8 +419,6 @@
 </body>
 </html>
 `;
-
-
         popup.document.write(formContent);
 
         setTimeout(() => {
@@ -428,6 +438,17 @@
         var montoGasto = popup.document.getElementById('montoGasto').value;
         var fechaGasto = new Date(popup.document.getElementById('fechaGasto').value);
         var imagenGasto = popup.document.getElementById('imagenGasto').value;
+
+        // Verificar si todos los campos están completos
+        if (!idProyecto || !descripcionGasto || !lugarGasto || !montoGasto || !fechaGasto || !imagenGasto) {
+            Swal.fire({
+                title: 'Datos incompletos',
+                text: 'Por favor complete todos los campos del formulario.',
+                icon: 'warning',
+                confirmButtonText: 'Entendido',
+            });
+            return; // Detener la ejecución de la función si los campos están incompletos
+        }
 
         var nuevoGasto = {
             idProyecto: idProyecto,
@@ -449,9 +470,23 @@
             .then(data => {
                 if (data.mensaje === 'Gasto creado exitosamente') {
                     popup.close();
-                    window.location.reload();
+                    Swal.fire({
+                        title: 'Gasto creado exitosamente',
+                        text: `El gasto se ha registrado exitosamente`,
+                        icon: 'success',
+                        confirmButtonText: 'Entendido',
+                    }).then(() => {
+                        // Esta línea se ejecutará cuando el usuario presione "Entendido"
+                        window.location.reload();
+                    });
                 } else {
-                    console.error('Error al guardar el nuevo gasto:', data);
+                    //console.error('Error al guardar el nuevo gasto:', data);
+                    Swal.fire({
+                        title: 'Error al guardar el registro',
+                        text: 'No se ha podido completar el registro de gasto.',
+                        icon: 'warning',
+                        confirmButtonText: 'Entendido',
+                    });
                 }
             })
             .catch(error => {
@@ -595,6 +630,17 @@
         const fechaGasto = new Date(popup.document.getElementById('fechaGasto').value);
         const imagen = popup.document.getElementById('imagen').value;
 
+        // Verificar si todos los campos están completos
+        if (!idProyecto || !descripcionGasto || !lugarGasto || !montoGasto || !fechaGasto || !imagen) {
+            Swal.fire({
+                title: 'Datos incompletos',
+                text: 'Por favor complete todos los campos del formulario.',
+                icon: 'warning',
+                confirmButtonText: 'Entendido',
+            });
+            return; // Detener la ejecución de la función si los campos están incompletos
+        }
+
         const proyectoActualizado = {
             idProyecto: idProyecto,
             descripcionGasto: descripcionGasto,
@@ -615,9 +661,23 @@
             .then(data => {
                 if (data.mensaje === 'Gasto actualizado exitosamente') {
                     popup.close();
-                    window.location.reload();
+                    Swal.fire({
+                        title: 'Gasto modificado exitosamente',
+                        text: `El gasto se ha actualizado exitosamente`,
+                        icon: 'success',
+                        confirmButtonText: 'Entendido'
+                    }).then(() => {
+                        // Esta línea se ejecutará cuando el usuario presione "Entendido"
+                        window.location.reload();
+                    });
                 } else {
-                    console.error('Error al actualizar el gasto:', data);
+                    //console.error('Error al actualizar el gasto:', data);
+                    Swal.fire({
+                        title: 'Error al guardar el registro',
+                        text: 'No se ha podido completar la actualización del registro de gasto.',
+                        icon: 'warning',
+                        confirmButtonText: 'Entendido',
+                    });
                 }
             })
             .catch(error => {
@@ -632,16 +692,33 @@
     document.querySelectorAll('[name="eliminarGasto"]').forEach(btn => {
         btn.addEventListener('click', async function () {
             const idGasto = this.getAttribute('data-gasto-id');
-            const confirmacion = confirm('¿Estás seguro de que quieres eliminar este registro de gasto?');
-            if (confirmacion) {
+            // Usar Swal para la confirmación
+            const result = await Swal.fire({
+                title: '¿Estás seguro?',
+                text: '¿Estás seguro de que quieres eliminar este registro de gasto?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            });
+
+            if (result.isConfirmed) {
                 const response = await fetch(`/gastos/${idGasto}`, {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' }
                 });
                 const data = await response.json();
                 // Aquí se muestra un mensaje de éxito
-                console.log(data);
-                window.location.reload(); // Recargar la página después de eliminar el usuario
+                //console.log(data);
+                Swal.fire({
+                    title: 'Se ha elimnado el registro',
+                    text: 'Se ha eliminado el registro de gasto de manera exitosa.',
+                    icon: 'success',
+                    confirmButtonText: 'Entendido',
+                }).then(() => {
+                    // Esta línea se ejecutará cuando el usuario presione "Entendido"
+                    window.location.reload();// Recargar la página después de eliminar el usuario
+                });
             }
         });
     });
@@ -737,6 +814,17 @@
         var fechaMonto = new Date(popup.document.getElementById('fechaMonto').value);
         var descripcion = popup.document.getElementById('descripcion').value;
 
+        // Verificar si todos los campos están completos
+        if (!idProyecto || !montoTotal || !saldoPendiente || !area || !fechaMonto || !descripcion) {
+            Swal.fire({
+                title: 'Datos incompletos',
+                text: 'Por favor complete todos los campos del formulario.',
+                icon: 'warning',
+                confirmButtonText: 'Entendido',
+            });
+            return; // Detener la ejecución de la función si los campos están incompletos
+        }
+
         var nuevoPresupuesto = {
             idProyecto: idProyecto,
             montoTotal: montoTotal,
@@ -757,9 +845,23 @@
             .then(data => {
                 if (data.mensaje === 'Presupuesto creado exitosamente') {
                     popup.close();
-                    window.location.reload();
+                    Swal.fire({
+                        title: 'Presupuesto creado exitosamente',
+                        text: 'El presupuesto se ha registrado exitosamente',
+                        icon: 'success',
+                        confirmButtonText: 'Entendido',
+                    }).then(() => {
+                        // Esta línea se ejecutará cuando el usuario presione "Entendido"
+                        window.location.reload();
+                    });
                 } else {
-                    console.error('Error al guardar el nuevo presupuesto:', data);
+                    //console.error('Error al guardar el nuevo presupuesto:', data);
+                    Swal.fire({
+                        title: 'Error al guardar el nuevo presupuesto',
+                        text: 'Error al crear el registro del nuevo presupuesto',
+                        icon: 'success',
+                        confirmButtonText: 'Entendido'
+                    })
                 }
             })
             .catch(error => {
@@ -900,6 +1002,17 @@
         const fechaMonto = new Date(popup.document.getElementById('fechaMonto').value);
         const descripcion = popup.document.getElementById('descripcion').value;
 
+        // Verificar si todos los campos están completos
+        if (!idProyecto || !montoTotal || !saldoPendiente || !area || !fechaMonto || !descripcion) {
+            Swal.fire({
+                title: 'Datos incompletos',
+                text: 'Por favor complete todos los campos del formulario.',
+                icon: 'warning',
+                confirmButtonText: 'Entendido',
+            });
+            return; // Detener la ejecución de la función si los campos están incompletos
+        }
+
         const presupuestoActualizado = {
             idProyecto: idProyecto,
             montoTotal: montoTotal,
@@ -920,9 +1033,23 @@
             .then(data => {
                 if (data.mensaje === 'Presupuesto actualizado exitosamente') {
                     popup.close();
-                    window.location.reload();
+                    Swal.fire({
+                        title: 'Presupuesto modificado exitosamente',
+                        text: `El presupuesto se ha actualizado exitosamente`,
+                        icon: 'success',
+                        confirmButtonText: 'Entendido'
+                    }).then(() => {
+                        // Esta línea se ejecutará cuando el usuario presione "Entendido"
+                        window.location.reload();
+                    });
                 } else {
-                    console.error('Error al actualizar el presupuesto:', data);
+                    //console.error('Error al actualizar el gasto:', data);
+                    Swal.fire({
+                        title: 'Error al actualizar el presupuesto',
+                        text: 'No se ha podido completar la actualización del registro de presupuesto.',
+                        icon: 'warning',
+                        confirmButtonText: 'Entendido',
+                    });
                 }
             })
             .catch(error => {
@@ -937,16 +1064,34 @@
     document.querySelectorAll('[name="eliminarPresupuesto"]').forEach(btn => {
         btn.addEventListener('click', async function () {
             const idPresupuesto = this.getAttribute('data-presupuesto-id');
-            const confirmacion = confirm('¿Estás seguro de que quieres eliminar este registro de presupuesto?');
-            if (confirmacion) {
+
+            // Usar Swal para la confirmación
+            const result = await Swal.fire({
+                title: '¿Estás seguro?',
+                text: '¿Estás seguro de que quieres eliminar este registro de presupuesto?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            });
+
+            if (result.isConfirmed) {
                 const response = await fetch(`/presupuestos/${idPresupuesto}`, {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' }
                 });
                 const data = await response.json();
                 // Aquí se muestra un mensaje de éxito
-                console.log(data);
-                window.location.reload(); // Recargar la página después de eliminar el usuario
+                //console.log(data);
+                Swal.fire({
+                    title: 'Se ha elimnado el registro',
+                    text: 'Se ha eliminado el registro de presupuesto de manera exitosa.',
+                    icon: 'success',
+                    confirmButtonText: 'Entendido',
+                }).then(() => {
+                    // Esta línea se ejecutará cuando el usuario presione "Entendido"
+                    window.location.reload();// Recargar la página después de eliminar el usuario
+                });
             }
         });
     });
