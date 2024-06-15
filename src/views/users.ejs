@@ -102,7 +102,8 @@
   // Seleccionamos el botón por su id
   var btnAddUsuario = document.getElementById('btnAddUsuario').addEventListener('click', function () {
     // Abre la ventana emergente para agregar un usuario
-    popup = window.open('', 'popup', 'width=400,height=370');
+    popup = window.open('', 'popup', `width=400,height=370,left=${(window.screen.width/2)-(400/2)},top=${(window.screen.height/2)-(500/2)}`);
+    //'width=400,height=370');
 
     // Contenido del formulario dentro de la ventana emergente
     var formContent = `
@@ -250,7 +251,8 @@
             </body>
             </html>
           `;
-        var popup = window.open('', 'popup', 'width=600,height=300');
+        var popup = window.open('', 'popup', `width=600,height=300,left=${(window.screen.width/2)-(400/2)},top=${(window.screen.height/2)-(500/2)}`);
+        //'width=600,height=300');
         popup.document.write(formContent);
       } else {
         console.error('Error al obtener los detalles del usuario:', await response.text());
@@ -296,7 +298,8 @@
             </body>
             </html>
           `;
-        var popup = window.open('', 'popup', 'width=400,height=400');
+        var popup = window.open('', 'popup', `width=400,height=400,left=${(window.screen.width/2)-(400/2)},top=${(window.screen.height/2)-(500/2)}`);
+        //'width=400,height=400');
         popup.document.write(formContent);
         popup.document.querySelector('form').addEventListener('submit', function (event) {
           event.preventDefault();

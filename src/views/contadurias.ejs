@@ -158,7 +158,7 @@
                                                                 <a name="eliminarGasto" class="btn btn-danger btn-sm"
                                                                     data-gasto-id="<%= gasto.idGasto %>">Eliminar</a>
                                                             </td>
-                                                            <td>
+                                                            <td class="idProyecto">
                                                                 <%= gasto.idProyecto %>
                                                             </td>
                                                             <td class="montoTotalGasto">
@@ -166,9 +166,6 @@
                                                             </td>
                                                             <td>
                                                                 <%= gasto.descripcionGasto %>
-                                                            </td>
-                                                            <td class="idProyecto">
-                                                                <%= gasto.idProyecto %>
                                                             </td>
                                                         </tr>
                                                         <% }) %>
@@ -241,8 +238,7 @@
 
     /////////////////////////////////////// FIN AHORRRO MENSUAL PRESUPUESTOS //////////////////////////////////////
 
-    // Función para desplegar el alert de saldo proximo a vencer
-    document.addEventListener("DOMContentLoaded", function () {
+    function presupuestoAVencer() {
         const presupuestoRows = document.querySelectorAll(".presupuesto-row");
         const gastoRows = document.querySelectorAll(".gasto-row");
         const limiteProximidad = 0.9; // 90% del presupuesto
@@ -250,8 +246,20 @@
         // Agrupar los gastos por idProyecto
         const gastosPorProyecto = {};
         gastoRows.forEach(row => {
-            const idProyecto = row.querySelector(".idProyecto").innerText.trim();
-            const montoGasto = parseFloat(row.querySelector(".montoTotalGasto").innerText.trim()) || 0;
+            const idProyectoElement = row.querySelector(".idProyecto");
+            const montoGastoElement = row.querySelector(".montoTotalGasto");
+
+            if (!idProyectoElement) {
+                console.error("ID Proyecto element not found in gasto-row:", row);
+                return;
+            }
+            if (!montoGastoElement) {
+                console.error("Monto Total Gasto element not found in gasto-row:", row);
+                return;
+            }
+
+            const idProyecto = idProyectoElement.innerText.trim();
+            const montoGasto = parseFloat(montoGastoElement.innerText.trim()) || 0;
 
             if (!gastosPorProyecto[idProyecto]) {
                 gastosPorProyecto[idProyecto] = 0;
@@ -261,14 +269,22 @@
 
         // Comparar los gastos con los presupuestos
         presupuestoRows.forEach(row => {
-            const idProyecto = row.querySelector(".idProyecto").innerText.trim();
-            const montoTotal = parseFloat(row.querySelector(".montoTotal").innerText.trim()) || 0;
+            const idProyectoElement = row.querySelector(".idProyecto");
+            const montoTotalElement = row.querySelector(".montoTotal");
+
+            if (!idProyectoElement) {
+                console.error("ID Proyecto element not found in presupuesto-row:", row);
+                return;
+            }
+            if (!montoTotalElement) {
+                console.error("Monto Total element not found in presupuesto-row:", row);
+                return;
+            }
+
+            const idProyecto = idProyectoElement.innerText.trim();
+            const montoTotal = parseFloat(montoTotalElement.innerText.trim()) || 0;
             const sumaGastos = gastosPorProyecto[idProyecto] || 0;
             const porcentajeGasto = sumaGastos / montoTotal;
-
-            // if (porcentajeGasto >= limiteProximidad) {
-            //     alert(`El proyecto con ID ${idProyecto} tiene gastos (${sumaGastos}) que están próximos a agotar el presupuesto total (${montoTotal}). Actualmente ha gastado el ${Math.round(porcentajeGasto * 100)}% del presupuesto.`);
-            // }
 
             if (porcentajeGasto >= limiteProximidad) {
                 Swal.fire({
@@ -279,7 +295,11 @@
                 });
             }
         });
-    });
+    }
+
+    // Llama a la función para que se ejecute al cargar la página
+    document.addEventListener('DOMContentLoaded', presupuestoAVencer);
+
 
     //////////////////////////////////////// SUMA PRESUPUESTOS ////////////////////////////////////////
 
@@ -356,7 +376,153 @@
     ////////////////////////////////////////////////////////
     /////////////////// CREATE /////////////////////////////
 
-    async function cargarProyectosGastos() {
+    document.getElementById('btnGasto').addEventListener('click', function () {
+        const popup = window.open('', 'popup', `width=400,height=500,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
+
+        const formContent = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Agregar Gasto</title>
+            <link rel="stylesheet" href="/css/main.css">
+        </head>
+        <body class="bodyPopup">
+            <form id="gastoForm" class="popup-form" enctype="multipart/form-data" method="post" action="/gastos">
+                <label for="idProyecto">Nombre del proyecto:</label><br>
+                <select id="idProyecto" name="idProyecto" style="width: 200px; height: 30px;">
+                    <option value="">Seleccione un proyecto...</option>
+                </select><br>
+
+                <label for="descripcionGasto">Descripción del gasto:</label><br>
+                <input type="text" id="descripcionGasto" name="descripcionGasto"><br>
+            
+                <label for="fechaGasto">Fecha del gasto:</label><br>
+                <input type="date" id="fechaGasto" name="fechaGasto"><br>
+            
+                <label for="lugarGasto">Lugar del gasto:</label><br>
+                <input type="text" id="lugarGasto" name="lugarGasto"><br>
+            
+                <label for="imagenGasto">Cargue su imagen:</label><br>
+                <input type="file" id="imagenGasto" name="imagenGasto" accept="image/*"><br>
+                
+                <label for="montoGasto">Monto del gasto:</label><br>
+                <input type="number" id="montoGasto" name="montoGasto"><br>
+            
+                <button class="btnPopup" type="submit">Guardar</button>
+                <button class="btnPopup" type="button" onclick="window.close()">Cancelar</button>
+            </form>
+        </body>
+        </html>
+    `;
+        popup.document.write(formContent);
+
+        // Esperar a que se cargue completamente el contenido del popup antes de ejecutar funciones
+        setTimeout(() => {
+            cargarProyectosGastos(popup);
+
+            popup.document.querySelector('form').addEventListener('submit', function (event) {
+                event.preventDefault();
+                btnPopupGuardarGasto(popup);
+            });
+        });
+    });
+
+    async function btnPopupGuardarGasto(popup) {
+        const form = popup.document.getElementById('gastoForm');
+        const formData = new FormData(form);
+
+        // Validación de campos
+        if (!formData.get('idProyecto') || !formData.get('descripcionGasto') || !formData.get('fechaGasto') ||
+            !formData.get('lugarGasto') || !formData.get('montoGasto') || !formData.get('imagenGasto')) {
+            Swal.fire({
+                title: 'Datos incompletos',
+                text: 'Por favor complete todos los campos del formulario.',
+                icon: 'warning',
+                confirmButtonText: 'Entendido',
+            });
+            return; // Detener la ejecución de la función si los campos están incompletos
+        }
+
+        // Convertir idProyecto a string
+        const idProyecto = formData.get('idProyecto').toString();
+
+        // Verificar si existe un presupuesto para el proyecto seleccionado
+        const presupuestoExiste = verificarPresupuestoHTML(popup, idProyecto);
+
+        if (!presupuestoExiste) {
+            Swal.fire({
+                title: 'Proyecto sin presupuesto',
+                text: 'No existe un presupuesto asignado para el proyecto seleccionado.',
+                icon: 'warning',
+                confirmButtonText: 'Entendido',
+            });
+            return; // Detener la ejecución de la función si no hay presupuesto
+        }
+
+        try {
+            // Enviar datos al servidor
+            const response = await fetch('/gastos', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            if (data.mensaje === 'Gasto creado exitosamente') {
+                popup.close();
+                Swal.fire({
+                    title: 'Gasto creado exitosamente',
+                    text: `El gasto se ha registrado exitosamente`,
+                    icon: 'success',
+                    confirmButtonText: 'Entendido',
+                }).then(() => {
+                    window.location.reload();
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error al guardar el registro',
+                    text: 'No se ha podido completar el registro de gasto.',
+                    icon: 'warning',
+                    confirmButtonText: 'Entendido',
+                });
+            }
+        } catch (error) {
+            console.error('Error al realizar la solicitud:', error);
+        }
+    }
+
+    // function verificarPresupuestoHTML(popup, idProyecto) {
+    //     const idsProyectos = popup.document.querySelectorAll('.idProyecto');
+    //     let presupuestoExiste = false;
+
+    //     idsProyectos.forEach(celda => {
+    //         console.log('Comparando:', celda.textContent.trim(), 'con', idProyecto);
+    //         if (celda.textContent.trim() === idProyecto) {
+    //             presupuestoExiste = true;
+    //         }
+    //     });
+
+    //     return presupuestoExiste;
+    // }
+
+    function verificarPresupuestoHTML(popup, idProyecto) {
+        // Selecciona todas las celdas que contienen los IDs de proyecto en la tabla de presupuestos
+        const idsProyectos = popup.document.querySelectorAll('.idProyecto');
+        let presupuestoExiste = false;
+
+        // Verifica si el idProyecto proporcionado existe en la lista de IDs de proyectos
+        idsProyectos.forEach(celda => {
+            console.log('Comparando:', celda.textContent.trim(), 'con', idProyecto);
+            if (celda.textContent.trim() === idProyecto) {
+                presupuestoExiste = true;
+            }
+        });
+
+        return presupuestoExiste;
+    }
+
+    async function cargarProyectosGastos(popup) {
         try {
             const response = await fetch('/gastosProyecto');
             if (response.ok) {
@@ -377,122 +543,6 @@
         }
     }
 
-    var popup;
-
-    var btnGasto = document.getElementById('btnGasto').addEventListener('click', function () {
-        popup = window.open('', 'popup', 'width=400,height=500');
-
-        var formContent = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agregar Gasto</title>
-    <link rel="stylesheet" href="/css/main.css">
-</head>
-<body class="bodyPopup">
-    <form class="popup-form" enctype="multipart/form-data" method="post" action="/gastos">
-        <label for="idProyecto">Nombre del proyecto:</label><br>
-        <select id="idProyecto" name="idProyecto" style="width: 200px; height: 30px;">
-            <option value="">Seleccione un proyecto...</option>
-        </select><br>
-
-        <label for="descripcionGasto">Descripción del gasto:</label><br>
-        <input type="text" id="descripcionGasto" name="descripcionGasto"><br>
-    
-        <label for="fechaGasto">Fecha del gasto:</label><br>
-        <input type="date" id="fechaGasto" name="fechaGasto"><br>
-    
-        <label for="lugarGasto">Lugar del gasto:</label><br>
-        <input type="text" id="lugarGasto" name="lugarGasto"><br>
-    
-        <label for="imagenGasto">Cargue su imagen:</label><br>
-        <input type="file" id="imagenGasto" name="imagenGasto" accept="image/*"><br>
-        
-        <label for="montoGasto">Monto del gasto:</label><br>
-        <input type="number" id="montoGasto" name="montoGasto"><br>
-    
-        <button class="btnPopup" type="submit">Guardar</button>
-        <button class="btnPopup" type="button" onclick="window.close()">Cancelar</button>
-    </form>
-</body>
-</html>
-`;
-        popup.document.write(formContent);
-
-        setTimeout(() => {
-            cargarProyectosGastos();
-
-            popup.document.querySelector('form').addEventListener('submit', function (event) {
-                event.preventDefault();
-                btnPopupGuardarGasto();
-            });
-        }, 100);
-    });
-
-    async function btnPopupGuardarGasto() {
-        var idProyecto = popup.document.getElementById('idProyecto').value;
-        var descripcionGasto = popup.document.getElementById('descripcionGasto').value;
-        var lugarGasto = popup.document.getElementById('lugarGasto').value;
-        var montoGasto = popup.document.getElementById('montoGasto').value;
-        var fechaGasto = new Date(popup.document.getElementById('fechaGasto').value);
-        var imagenGasto = popup.document.getElementById('imagenGasto').value;
-
-        // Verificar si todos los campos están completos
-        if (!idProyecto || !descripcionGasto || !lugarGasto || !montoGasto || !fechaGasto || !imagenGasto) {
-            Swal.fire({
-                title: 'Datos incompletos',
-                text: 'Por favor complete todos los campos del formulario.',
-                icon: 'warning',
-                confirmButtonText: 'Entendido',
-            });
-            return; // Detener la ejecución de la función si los campos están incompletos
-        }
-
-        var nuevoGasto = {
-            idProyecto: idProyecto,
-            descripcionGasto: descripcionGasto,
-            lugar: lugarGasto,
-            montoGasto: montoGasto,
-            fechaGasto: fechaGasto,
-            imagen: imagenGasto
-        };
-
-        fetch('/gastos', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(nuevoGasto)
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.mensaje === 'Gasto creado exitosamente') {
-                    popup.close();
-                    Swal.fire({
-                        title: 'Gasto creado exitosamente',
-                        text: `El gasto se ha registrado exitosamente`,
-                        icon: 'success',
-                        confirmButtonText: 'Entendido',
-                    }).then(() => {
-                        // Esta línea se ejecutará cuando el usuario presione "Entendido"
-                        window.location.reload();
-                    });
-                } else {
-                    //console.error('Error al guardar el nuevo gasto:', data);
-                    Swal.fire({
-                        title: 'Error al guardar el registro',
-                        text: 'No se ha podido completar el registro de gasto.',
-                        icon: 'warning',
-                        confirmButtonText: 'Entendido',
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error al realizar la solicitud:', error);
-            });
-    }
 
     ////////////////////////////////////////////////////////
     /////////////////// Read ///////////////////////////////
@@ -507,38 +557,42 @@
             });
             if (response.ok) {
                 const gasto = await response.json();
+                const imagenPath = gasto.imagen ? `/uploads/${gasto.imagen}` : ''; // Asegúrate de que la ruta de la imagen es correcta
                 var formContent = `
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Detalles de Gastos</title>
-              <link rel="stylesheet" href="/css/main.css">
-            </head>
-            <body class="bodyPopup">
-              <div class="popup-form">
-                <p ><strong>ID Gasto:</strong> ${gasto.idGasto}</p>
-                <p ><strong>ID Proyecto:</strong> ${gasto.idProyecto}</p>
-                <p ><strong>Descripción del gasto:</strong> ${gasto.descripcionGasto}</p>
-                <p ><strong>Lugar del gasto:</strong> ${gasto.lugar}</p>
-                <p ><strong>Monto del gasto:</strong> ${gasto.montoGasto}</p>
-                <p ><strong>Fecha del gasto:</strong> ${gasto.fechaGasto}</p>
-                <p><strong>Imagen del gasto:</strong></p>
-                <img src="${gasto.imagen}" alt="Imagen del gasto" style="max-width: auto; height: auto;" /><br>
-                <br>
-                <button class="btnPopup" type="button" onclick="window.close()">Cerrar</button>
-              </div>
-            </body>
-            </html>
-          `;
-                var popup = window.open('', 'popup', 'width=400,height=500');
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Detalles de Gastos</title>
+          <link rel="stylesheet" href="/css/main.css">
+        </head>
+        <body class="bodyPopup">
+          <div class="popup-form">
+            <p><strong>ID Gasto:</strong> ${gasto.idGasto}</p>
+            <p><strong>ID Proyecto:</strong> ${gasto.idProyecto}</p>
+            <p><strong>Descripción del gasto:</strong> ${gasto.descripcionGasto}</p>
+            <p><strong>Lugar del gasto:</strong> ${gasto.lugar}</p>
+            <p><strong>Monto del gasto:</strong> ${gasto.montoGasto}</p>
+            <p><strong>Fecha del gasto:</strong> ${gasto.fechaGasto}</p>
+            <p><strong>Imagen del gasto:</strong></p>
+            ${imagenPath ? `<img src="${imagenPath}" alt="Imagen del gasto" style="max-width: 100%; height: auto;" /><br>` : '<p>No hay imagen disponible</p>'}
+            <br>
+            <button class="btnPopup" type="button" onclick="window.close()">Cerrar</button>
+          </div>
+        </body>
+        </html>
+      `;
+                var popup = window.open('', 'popup', `width=400,height=500,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
+                //'width=400,height=500');
                 popup.document.write(formContent);
             } else {
                 console.error('Error al obtener los detalles del gasto:', await response.text());
             }
         });
     });
+
+
 
     ////////////////////////////////////////////////////////
     /////////////////// Update /////////////////////////////
@@ -610,7 +664,8 @@
         </html>
 `;
 
-                const popup = window.open('', 'popup', 'width=400,height=600');
+                const popup = window.open('', 'popup', `width=400,height=600,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
+                //'width=400,height=600');
                 popup.document.write(formContent);
                 popup.document.querySelector('form').addEventListener('submit', function (event) {
                     event.preventDefault();
@@ -754,7 +809,8 @@
     var popup;
 
     var btnPresupuesto = document.getElementById('btnPresupuesto').addEventListener('click', function () {
-        popup = window.open('', 'popup', 'width=400,height=500');
+        popup = window.open('', 'popup', `width=400,height=500,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
+        //'width=400,height=500');
 
         var formContent = `
         <!DOCTYPE html>
@@ -905,7 +961,8 @@
             </body>
             </html>
           `;
-                var popup = window.open('', 'popup', 'width=400,height=500');
+                var popup = window.open('', 'popup', `width=400,height=500,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
+                //'width=400,height=500');
                 popup.document.write(formContent);
             } else {
                 console.error('Error al obtener los detalles del presupuesto:', await response.text());
@@ -982,7 +1039,8 @@
         </html>
 `;
 
-                const popup = window.open('', 'popup', 'width=400,height=600');
+                const popup = window.open('', 'popup', `width=400,height=600,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
+                //'width=400,height=600');
                 popup.document.write(formContent);
                 popup.document.querySelector('form').addEventListener('submit', function (event) {
                     event.preventDefault();

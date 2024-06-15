@@ -89,7 +89,8 @@
     var popup;
 
     var btnAddPartida = document.getElementById('btnAddPartida').addEventListener('click', function () {
-        popup = window.open('', 'popup', 'width=400,height=300');
+        popup = window.open('', 'popup', `width=400,height=300,left=${(window.screen.width/2)-(400/2)},top=${(window.screen.height/2)-(500/2)}`);
+        //'width=400,height=300');
 
         var formContent = `
         <!DOCTYPE html>
@@ -214,7 +215,8 @@
             </body>
             </html>
           `;
-                var popup = window.open('', 'popup', 'width=300,height=300');
+                var popup = window.open('', 'popup', `width=300,height=300,left=${(window.screen.width/2)-(400/2)},top=${(window.screen.height/2)-(500/2)}`);
+                //'width=300,height=300');
                 popup.document.write(formContent);
             } else {
                 console.error('Error al obtener los detalles de la partida:', await response.text());
@@ -255,7 +257,8 @@
             </body>
             </html>
           `;
-                const popup = window.open('', 'popup', 'width=400,height=400');
+                const popup = window.open('', 'popup', `width=400,height=400,left=${(window.screen.width/2)-(400/2)},top=${(window.screen.height/2)-(500/2)}`);
+                //'width=400,height=400');
                 popup.document.write(formContent);
                 popup.document.querySelector('form').addEventListener('submit', function (event) {
                     event.preventDefault();

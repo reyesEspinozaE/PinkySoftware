@@ -180,7 +180,8 @@
 
     // Funcionalidad para abrir el formulario de recuperación de contraseña
     document.getElementById('forgotPasswordLink').addEventListener('click', function () {
-        var popup = window.open('', 'popup', 'width=350,height=350');
+        var popup = window.open('', 'popup', `width=350,height=350,left=${(window.screen.width/2)-(400/2)},top=${(window.screen.height/2)-(500/2)}`);
+        //'width=350,height=350');
         var formContent = `
             <!DOCTYPE html>
             <html lang="en">

@@ -141,7 +141,8 @@
   }
 
   var btnAddProyecto = document.getElementById('btnAddProyecto').addEventListener('click', function () {
-    popup = window.open('', 'popup', 'width=400,height=600');
+    popup = window.open('', 'popup', `width=400,height=600,left=${(window.screen.width/2)-(400/2)},top=${(window.screen.height/2)-(500/2)}`);
+    //'width=400,height=600');
 
     var formContent = `
       <!DOCTYPE html>
@@ -268,7 +269,6 @@
       });
   }
 
-
   //////////////////////////////////////////////////////
   /////////////////// READ /////////////////////////////
 
@@ -352,7 +352,8 @@
 
   </html>
   `;
-        var popup = window.open('', 'popup', 'width=700,height=320');
+        var popup = window.open('', 'popup', `width=700,height=320,left=${(window.screen.width/2)-(400/2)},top=${(window.screen.height/2)-(500/2)}`);
+        //'width=700,height=320');
         popup.document.write(formContent);
       } else {
         console.error('Error al obtener los detalles del proyecto:', await response.text());
@@ -458,7 +459,8 @@
 </html>
 `;
 
-        const popup = window.open('', 'popup', 'width=400,height=600');
+        const popup = window.open('', 'popup', `width=400,height=600,left=${(window.screen.width/2)-(400/2)},top=${(window.screen.height/2)-(500/2)}`);
+        //'width=400,height=600');
         popup.document.write(formContent);
         popup.document.querySelector('form').addEventListener('submit', function (event) {
           event.preventDefault();
@@ -536,40 +538,6 @@
 
   ////////////////////////////////////////////////////////
   /////////////////// Delete /////////////////////////////
-
-  // document.querySelectorAll('[name="eliminar"]').forEach(btn => {
-  //   btn.addEventListener('click', async function () {
-  //     const idProyecto = this.getAttribute('data-project-id');
-  //     // Usar Swal para la confirmación
-  //     const result = await Swal.fire({
-  //       title: '¿Estás seguro?',
-  //       text: '¿Estás seguro de que quieres eliminar este registro de proyecto?',
-  //       icon: 'warning',
-  //       showCancelButton: true,
-  //       confirmButtonText: 'Sí, eliminar',
-  //       cancelButtonText: 'Cancelar'
-  //     });
-
-  //     if (result.isConfirmed) {
-  //       const response = await fetch(`/proyectos/${idProyecto}`, {
-  //         method: 'DELETE',
-  //         headers: { 'Content-Type': 'application/json' }
-  //       });
-  //       const data = await response.json();
-  //       // Aquí se muestra un mensaje de éxito
-  //       //console.log(data);
-  //       Swal.fire({
-  //         title: 'Se ha elimnado el registro',
-  //         text: 'Se ha eliminado el registro de proyecto de manera exitosa.',
-  //         icon: 'success',
-  //         confirmButtonText: 'Entendido',
-  //       }).then(() => {
-  //         // Esta línea se ejecutará cuando el usuario presione "Entendido"
-  //         window.location.reload();// Recargar la página después de eliminar el usuario
-  //       });
-  //     }
-  //   });
-  // });
 
   document.querySelectorAll('[name="eliminar"]').forEach(btn => {
     btn.addEventListener('click', async function () {

@@ -1,3 +1,15 @@
+// // Configuración para manejar la subida de imágenes
+// app.post('/images/single', upload.single('imagenGasto'), (req, res) => {
+//     console.log(req.file);
+//     saveImage(req.file);
+//     res.send('Termina img');
+// });
+
+// function saveImage(file) {
+//     const newPath = `./uploads/${file.originalname}`;
+//     fs.renameSync(file.path, newPath);
+//     return newPath;
+// }
 // /src/index.js
 import express from 'express';
 import { dirname, join } from 'path';
@@ -5,10 +17,13 @@ import { fileURLToPath } from 'url';
 import indexRoutes from './routes/index.js';
 import './models/associations.js';
 import multer from 'multer';
-import fs from 'node:fs';
+import fs from 'fs';
 import expressSession from 'express-session';
 
-const upload = multer({ dest: 'uploads/' });
+// Obtener el directorio actual
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// Crear la aplicación de Express
 const app = express();
 
 // Configuración de sesiones
@@ -19,20 +34,8 @@ app.use(expressSession({
     cookie: { secure: false } // Cambia a true si usas HTTPS
 }));
 
-// Configuración para manejar la subida de imágenes
-app.post('/images/single', upload.single('imagenGasto'), (req, res) => {
-    console.log(req.file);
-    saveImage(req.file);
-    res.send('Termina img');
-});
-
-function saveImage(file) {
-    const newPath = `./uploads/${file.originalname}`;
-    fs.renameSync(file.path, newPath);
-    return newPath;
-}
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
+// Middleware para servir archivos estáticos desde la carpeta 'uploads'
+app.use('/uploads', express.static(join(__dirname, '../../uploads')));
 
 app.set('views', join(__dirname, 'views'));
 app.set('view engine', 'ejs');
