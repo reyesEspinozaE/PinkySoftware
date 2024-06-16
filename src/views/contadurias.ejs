@@ -468,6 +468,12 @@
                 body: formData
             });
 
+            // Mostrar los datos del formulario en la consola
+            console.info('Los datos tomados de la view son:');
+            for (let pair of formData.entries()) {
+                console.log(`${pair[0]}: ${pair[1]}`);
+            }
+
             const data = await response.json();
             if (data.mensaje === 'Gasto creado exitosamente') {
                 popup.close();

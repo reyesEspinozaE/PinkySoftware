@@ -238,50 +238,37 @@ import multer from 'multer';
 import path from 'path';
 import upload from '../config/multerConfig.js';
 
-
-// Configurar almacenamiento con multer
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '../../uploads'));
-  },
-  filename: function (req, file, cb) {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  }
-});
-
-// Obtener todos los registros de presupuestos y gastos
-export const getContaduriaData = async (req, res) => {
+export const crearGasto = async (req, res) => {
   try {
-    const [presupuestos, gastos] = await Promise.all([Presupuesto.findAll(), Gasto.findAll()]);
-    res.render('contadurias.ejs', {
-      title: 'Contaduría',
-      presupuestos,
-      gastos,
+    upload.single('imagenGasto')(req, res, async (err) => {
+      if (err instanceof multer.MulterError) {
+        console.error('Error de Multer:', err.message);
+        return res.status(500).json({ error: err.message });
+      } else if (err) {
+        console.error('Error al subir el archivo:', err.message);
+        return res.status(500).json({ error: err.message });
+      }
+
+      const { idProyecto, descripcionGasto, lugarGasto, montoGasto, fechaGasto } = req.body;
+      const imagen = req.file ? `/uploads/${req.file.filename}` : null; // Ruta donde se guardó la imagen
+
+      console.log('Datos recibidos en el servidor:', { idProyecto, descripcionGasto, lugarGasto, montoGasto, fechaGasto, imagen });
+
+      // Crear el gasto en la base de datos
+      const nuevoGasto = await Gasto.create({
+        idProyecto,
+        descripcionGasto,
+        lugar: lugarGasto,  // Asegúrate de que los nombres de las propiedades coincidan
+        montoGasto,
+        fechaGasto,
+        imagen
+      });
+
+      res.status(201).json({ mensaje: 'Gasto creado exitosamente', gasto: nuevoGasto });
     });
   } catch (error) {
-    console.error("Error al obtener los datos de contaduría:", error);
-    res.status(500).send("Error al obtener los datos de contaduría");
-  }
-};
-
-// Crear un nuevo presupuesto
-export const crearPresupuesto = async (req, res) => {
-  try {
-    const { idProyecto, montoTotal, saldoPendiente, area, fechaMonto, descripcion } = req.body;
-    console.log('Datos recibidos en el servidor:', { idProyecto, montoTotal, saldoPendiente, area, fechaMonto, descripcion });
-
-    const nuevoPresupuesto = await Presupuesto.create({
-      idProyecto,
-      montoTotal,
-      saldoPendiente,
-      area,
-      fechaMonto,
-      descripcion
-    });
-    res.status(201).json({ mensaje: 'Presupuesto creado exitosamente', presupuesto: nuevoPresupuesto });
-  } catch (error) {
-    console.error("Error al crear presupuesto:", error);
-    res.status(500).send("Error al crear presupuesto");
+    console.error("Error al crear gasto:", error);
+    res.status(500).send("Error al crear gasto");
   }
 };
 
@@ -318,39 +305,41 @@ export const crearPresupuesto = async (req, res) => {
 //   }
 // };
 
-// Crear un gasto con imagen
-export const crearGasto = async (req, res) => {
+// Obtener todos los registros de presupuestos y gastos
+export const getContaduriaData = async (req, res) => {
   try {
-    upload.single('imagenGasto')(req, res, async (err) => {
-      if (err instanceof multer.MulterError) {
-        return res.status(500).json({ error: err.message });
-      } else if (err) {
-        return res.status(500).json({ error: err.message });
-      }
-
-      const { idProyecto, descripcionGasto, lugar, montoGasto, fechaGasto } = req.body;
-      const imagen = req.file ? `/uploads/${req.file.filename}` : null; // Ruta donde se guardó la imagen
-
-      console.log('Datos recibidos en el servidor:', { idProyecto, descripcionGasto, lugar, montoGasto, fechaGasto, imagen });
-
-      // Crear el gasto en la base de datos
-      const nuevoGasto = await Gasto.create({
-        idProyecto,
-        descripcionGasto,
-        lugar,
-        montoGasto,
-        fechaGasto,
-        imagen
-      });
-
-      res.status(201).json({ mensaje: 'Gasto creado exitosamente', gasto: nuevoGasto });
+    const [presupuestos, gastos] = await Promise.all([Presupuesto.findAll(), Gasto.findAll()]);
+    res.render('contadurias.ejs', {
+      title: 'Contaduría',
+      presupuestos,
+      gastos,
     });
   } catch (error) {
-    console.error("Error al crear gasto:", error);
-    res.status(500).send("Error al crear gasto");
+    console.error("Error al obtener los datos de contaduría:", error);
+    res.status(500).send("Error al obtener los datos de contaduría");
   }
 };
 
+// Crear un nuevo presupuesto
+export const crearPresupuesto = async (req, res) => {
+  try {
+    const { idProyecto, montoTotal, saldoPendiente, area, fechaMonto, descripcion } = req.body;
+    console.log('Datos recibidos en el servidor:', { idProyecto, montoTotal, saldoPendiente, area, fechaMonto, descripcion });
+
+    const nuevoPresupuesto = await Presupuesto.create({
+      idProyecto,
+      montoTotal,
+      saldoPendiente,
+      area,
+      fechaMonto,
+      descripcion
+    });
+    res.status(201).json({ mensaje: 'Presupuesto creado exitosamente', presupuesto: nuevoPresupuesto });
+  } catch (error) {
+    console.error("Error al crear presupuesto:", error);
+    res.status(500).send("Error al crear presupuesto");
+  }
+};
 
 // Eliminar un presupuesto
 export const eliminarPresupuesto = async (req, res) => {
