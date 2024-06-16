@@ -492,23 +492,9 @@
         }
     }
 
-    // function verificarPresupuestoHTML(popup, idProyecto) {
-    //     const idsProyectos = popup.document.querySelectorAll('.idProyecto');
-    //     let presupuestoExiste = false;
-
-    //     idsProyectos.forEach(celda => {
-    //         console.log('Comparando:', celda.textContent.trim(), 'con', idProyecto);
-    //         if (celda.textContent.trim() === idProyecto) {
-    //             presupuestoExiste = true;
-    //         }
-    //     });
-
-    //     return presupuestoExiste;
-    // }
-
     function verificarPresupuestoHTML(popup, idProyecto) {
         // Selecciona todas las celdas que contienen los IDs de proyecto en la tabla de presupuestos
-        const idsProyectos = popup.document.querySelectorAll('.idProyecto');
+        const idsProyectos = document.querySelectorAll('.idProyecto');
         let presupuestoExiste = false;
 
         // Verifica si el idProyecto proporcionado existe en la lista de IDs de proyectos
