@@ -1,22 +1,8 @@
-// // Configuración para manejar la subida de imágenes
-// app.post('/images/single', upload.single('imagenGasto'), (req, res) => {
-//     console.log(req.file);
-//     saveImage(req.file);
-//     res.send('Termina img');
-// });
-
-// function saveImage(file) {
-//     const newPath = `./uploads/${file.originalname}`;
-//     fs.renameSync(file.path, newPath);
-//     return newPath;
-// }
-// /src/index.js
 import express from 'express';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import indexRoutes from './routes/index.js';
 import './models/associations.js';
-import multer from 'multer';
 import fs from 'fs';
 import expressSession from 'express-session';
 
@@ -31,11 +17,11 @@ app.use(expressSession({
     secret: 'this_is_a_super_secret_key',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } // Cambia a true si usas HTTPS
+    cookie: { secure: false } // Cambiar a true si se usa HTTPS
 }));
 
 // Middleware para servir archivos estáticos desde la carpeta 'uploads'
-app.use('/uploads', express.static(join(__dirname, '../../uploads')));
+app.use('/uploads', express.static(join(__dirname, 'uploads')));
 
 app.set('views', join(__dirname, 'views'));
 app.set('view engine', 'ejs');

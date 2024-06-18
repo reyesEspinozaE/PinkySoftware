@@ -1,4 +1,3 @@
-// /src/config/multerConfig.js
 import multer from 'multer';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
@@ -14,6 +13,7 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
 export default upload;
+

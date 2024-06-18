@@ -488,7 +488,7 @@
             } else {
                 Swal.fire({
                     title: 'Error al guardar el registro',
-                    text: 'No se ha podido completar el registro de gasto.',
+                    text: 'No se ha podido completar el registro de gasto. (No se fue posible enviar los datos al servidor)',
                     icon: 'warning',
                     confirmButtonText: 'Entendido',
                 });
@@ -538,7 +538,7 @@
 
     ////////////////////////////////////////////////////////
     /////////////////// Read ///////////////////////////////
-
+    
     // Ventana emergente para detalles de gasto
     document.querySelectorAll('[name="detallesGasto"]').forEach(btn => {
         btn.addEventListener('click', async function () {
@@ -549,32 +549,34 @@
             });
             if (response.ok) {
                 const gasto = await response.json();
-                const imagenPath = gasto.imagen ? `/uploads/${gasto.imagen}` : ''; // Asegúrate de que la ruta de la imagen es correcta
+                const imagenPath = gasto.imagen ? `${gasto.imagen}` : ''; // Asegúrate de que la ruta de la imagen es correcta
+                console.log('Ruta de la imagen:', imagenPath); // Agregar console.log para verificar la ruta de la imagen
                 var formContent = `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Detalles de Gastos</title>
-          <link rel="stylesheet" href="/css/main.css">
-        </head>
-        <body class="bodyPopup">
-          <div class="popup-form">
-            <p><strong>ID Gasto:</strong> ${gasto.idGasto}</p>
-            <p><strong>ID Proyecto:</strong> ${gasto.idProyecto}</p>
-            <p><strong>Descripción del gasto:</strong> ${gasto.descripcionGasto}</p>
-            <p><strong>Lugar del gasto:</strong> ${gasto.lugar}</p>
-            <p><strong>Monto del gasto:</strong> ${gasto.montoGasto}</p>
-            <p><strong>Fecha del gasto:</strong> ${gasto.fechaGasto}</p>
-            <p><strong>Imagen del gasto:</strong></p>
-            ${imagenPath ? `<img src="${imagenPath}" alt="Imagen del gasto" style="max-width: 100%; height: auto;" /><br>` : '<p>No hay imagen disponible</p>'}
-            <br>
-            <button class="btnPopup" type="button" onclick="window.close()">Cerrar</button>
-          </div>
-        </body>
-        </html>
-      `;
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Detalles de Gastos</title>
+      <link rel="stylesheet" href="/css/main.css">
+    </head>
+    <body class="bodyPopup">
+      <div class="popup-form">
+        <p><strong>ID Gasto:</strong> ${gasto.idGasto}</p>
+        <p><strong>ID Proyecto:</strong> ${gasto.idProyecto}</p>
+        <p><strong>Descripción del gasto:</strong> ${gasto.descripcionGasto}</p>
+        <p><strong>Lugar del gasto:</strong> ${gasto.lugar}</p>
+        <p><strong>Monto del gasto:</strong> ${gasto.montoGasto}</p>
+        <p><strong>Fecha del gasto:</strong> ${new Date(gasto.fechaGasto).toLocaleDateString()}</p>
+        <p><strong>Imagen del gasto:</strong></p>
+        ${gasto.imagen}
+        ${imagenPath ? `<img src="${imagenPath}" alt="Imagen del gasto" style="max-width: 100%; height: auto;" /><br>` : '<p>No hay imagen disponible</p>'}
+        <br>
+        <button class="btnPopup" type="button" onclick="window.close()">Cerrar</button>
+      </div>
+    </body>
+    </html>
+  `;
                 var popup = window.open('', 'popup', `width=400,height=500,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
                 //'width=400,height=500');
                 popup.document.write(formContent);
@@ -583,6 +585,7 @@
             }
         });
     });
+
 
 
 
@@ -620,117 +623,107 @@
                     option.value = proyecto.idProyecto;
                     option.textContent = proyecto.nombreProyecto;
                     if (gasto.idProyecto === proyecto.idProyecto) {
-                        option.selected = true; // Seleccionar el proyecto correspondiente al proyecto
+                        option.selected = true; // Seleccionar el proyecto correspondiente al gasto
                     }
                     selectProyecto.appendChild(option);
                 });
 
                 const formContent = `
-                <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Actualizar gasto</title>
-            <link rel="stylesheet" href="/css/main.css">
-        </head>
-        <body class="bodyPopup">
-            <form class="popup-form">
-                <label for="idProyecto">Nombre del proyecto:</label><br>
-                ${selectProyecto.outerHTML}<br>
-                <label for="descripcionGasto">Descripción del gasto:</label><br>
-                <input type="text" id="descripcionGasto" name="descripcionGasto" value="${gasto.descripcionGasto}" required><br>
-                <label for="lugar">Lugar del gasto:</label><br>
-                <textarea id="lugar" name="lugar">${gasto.lugar}</textarea><br>
-                <label for="montoGasto">Monto del gasto:</label><br>
-                <textarea type="number" id="montoGasto" name="montoGasto">${gasto.montoGasto}</textarea><br>
-                <label for="fechaGasto">Fecha del Gasto:</label><br>
-                <input type="date" id="fechaGasto" name="fechaGasto" value="${gasto.fechaGasto}"><br>
-                <label for="imagen">Imagen del gasto:</label><br>
-                <input type="file" id="imagen" name="imagen" value="${gasto.imagenGasto}" required><br>
-                <button class="btnPopup" type="submit">Guardar</button>
-                <button class="btnPopup" type="button" onclick="window.close()">Cancelar</button>
-                            
-            </form>
-        </body>
-        </html>
-`;
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Actualizar gasto</title>
+                <link rel="stylesheet" href="/css/main.css">
+            </head>
+            <body class="bodyPopup">
+                <form class="popup-form" enctype="multipart/form-data">
+                    <label for="idProyecto">Nombre del proyecto:</label><br>
+                    ${selectProyecto.outerHTML}<br>
+                    <label for="descripcionGasto">Descripción del gasto:</label><br>
+                    <input type="text" id="descripcionGasto" name="descripcionGasto" value="${gasto.descripcionGasto}" required><br>
+                    <label for="lugar">Lugar del gasto:</label><br>
+                    <textarea id="lugar" name="lugar">${gasto.lugar}</textarea><br>
+                    <label for="montoGasto">Monto del gasto:</label><br>
+                    <input type="number" id="montoGasto" name="montoGasto" value="${gasto.montoGasto}"><br>
+                    <label for="fechaGasto">Fecha del Gasto:</label><br>
+                    <input type="date" id="fechaGasto" name="fechaGasto" value="${gasto.fechaGasto}"><br>
+                    <label for="imagenGasto">Imagen del gasto:</label><br>
+                    <input type="file" id="imagenGasto" name="imagenGasto" value="${gasto.imagenGasto}" accept="image/*" required><br>
+
+                    <button class="btnPopup" type="submit">Guardar</button>
+                    <button class="btnPopup" type="button" onclick="window.close()">Cancelar</button>
+                </form>
+            </body>
+            </html>
+            `;
 
                 const popup = window.open('', 'popup', `width=400,height=600,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
-                //'width=400,height=600');
                 popup.document.write(formContent);
                 popup.document.querySelector('form').addEventListener('submit', function (event) {
                     event.preventDefault();
                     btnPopupActualizarGasto(idGasto, popup);
                 });
             } else {
-                console.error('Error al actualizar el gasto:', await response.text());
+                console.error('Error al obtener el gasto:', await response.text());
             }
         });
     });
 
-    function btnPopupActualizarGasto(idGasto, popup) {
-        const idProyecto = popup.document.getElementById('idProyecto').value;
-        const descripcionGasto = popup.document.getElementById('descripcionGasto').value;
-        const lugarGasto = popup.document.getElementById('lugar').value;
-        const montoGasto = popup.document.getElementById('montoGasto').value;
-        const fechaGasto = new Date(popup.document.getElementById('fechaGasto').value);
-        const imagen = popup.document.getElementById('imagen').value;
+    async function btnPopupActualizarGasto(idGasto, popup) {
+        const form = popup.document.querySelector('form');
+        const formData = new FormData(form);
 
-        // Verificar si todos los campos están completos
-        if (!idProyecto || !descripcionGasto || !lugarGasto || !montoGasto || !fechaGasto || !imagen) {
+        // Validar que todos los campos obligatorios estén completos
+        if (!form.checkValidity()) {
+            // Mostrar mensaje de error utilizando SweetAlert
             Swal.fire({
-                title: 'Datos incompletos',
-                text: 'Por favor complete todos los campos del formulario.',
+                title: 'Campos incompletos',
+                text: 'Por favor complete todos los campos antes de guardar.',
+                icon: 'error',
+                confirmButtonText: 'Entendido'
+            });
+            return;
+        }
+
+        try {
+            const response = await fetch(`/gastos/${idGasto}`, {
+                method: 'PUT',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.mensaje === 'Gasto actualizado exitosamente') {
+                popup.close();
+                Swal.fire({
+                    title: 'Gasto modificado exitosamente',
+                    text: 'El gasto se ha actualizado exitosamente',
+                    icon: 'success',
+                    confirmButtonText: 'Entendido'
+                }).then(() => {
+                    window.location.reload();
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error al guardar el registro',
+                    text: 'No se ha podido completar la actualización del registro de gasto.',
+                    icon: 'warning',
+                    confirmButtonText: 'Entendido',
+                });
+            }
+        } catch (error) {
+            console.error('Error al realizar la solicitud:', error);
+            Swal.fire({
+                title: 'Error al guardar el registro',
+                text: 'No se ha podido completar la actualización del registro de gasto.',
                 icon: 'warning',
                 confirmButtonText: 'Entendido',
             });
-            return; // Detener la ejecución de la función si los campos están incompletos
         }
-
-        const proyectoActualizado = {
-            idProyecto: idProyecto,
-            descripcionGasto: descripcionGasto,
-            lugar: lugarGasto,
-            montoGasto: montoGasto,
-            fechaGasto: fechaGasto,
-            imagen: imagen
-        };
-
-        fetch(`/gastos/${idGasto}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(proyectoActualizado)
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.mensaje === 'Gasto actualizado exitosamente') {
-                    popup.close();
-                    Swal.fire({
-                        title: 'Gasto modificado exitosamente',
-                        text: `El gasto se ha actualizado exitosamente`,
-                        icon: 'success',
-                        confirmButtonText: 'Entendido'
-                    }).then(() => {
-                        // Esta línea se ejecutará cuando el usuario presione "Entendido"
-                        window.location.reload();
-                    });
-                } else {
-                    //console.error('Error al actualizar el gasto:', data);
-                    Swal.fire({
-                        title: 'Error al guardar el registro',
-                        text: 'No se ha podido completar la actualización del registro de gasto.',
-                        icon: 'warning',
-                        confirmButtonText: 'Entendido',
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error al realizar la solicitud:', error);
-            });
     }
+
 
     ////////////////////////////////////////////////////////
     /////////////////// Delete /////////////////////////////
