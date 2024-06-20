@@ -147,6 +147,8 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 // Ruta para crear un nuevo gasto
 router.post('/gastos', isAuthenticated, upload.single('imagenGasto'), crearGasto);
+// Ruta para actualizar un gasto con imagen
+router.put('/gastos/:id', isAuthenticated, upload.single('imagenGasto'), actualizarGasto);
 
 // Metodos para el Login
 router.post('/login', login);
@@ -189,9 +191,6 @@ router.post('/presupuestos', isAuthenticated, crearPresupuesto);
 router.delete('/presupuestos/:id', isAuthenticated, eliminarPresupuesto);
 router.put('/presupuestos/:id', isAuthenticated, actualizarPresupuesto);
 router.get('/presupuestos/:id', isAuthenticated, detallesPresupuesto);
-
-// Ruta para actualizar un gasto con imagen
-router.put('/gastos/:id', isAuthenticated, upload.single('imagenGasto'), actualizarGasto);
 
 // Rutas restantes para el controlador de contaduría
 router.delete('/gastos/:id', isAuthenticated, eliminarGasto);

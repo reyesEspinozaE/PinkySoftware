@@ -4,7 +4,7 @@ import Gasto from '../models/gasto.js';
 export const crearGasto = async (req, res) => {
   try {
     const { idProyecto, descripcionGasto, lugarGasto, montoGasto, fechaGasto } = req.body;
-    const imagen = req.file ? `/uploads/${req.file.filename}` : null; // Ruta donde se guardó la imagen
+    const imagen = req.file ? req.file.filename : null; // Guardar solo el nombre del archivo
 
     console.log('Datos recibidos en el servidor:', { idProyecto, descripcionGasto, lugarGasto, montoGasto, fechaGasto, imagen });
 
@@ -24,6 +24,7 @@ export const crearGasto = async (req, res) => {
     res.status(500).send("Error al crear gasto");
   }
 };
+
 
 // Controlador para actualizar un gasto
 export const actualizarGasto = async (req, res) => {
@@ -55,12 +56,15 @@ export const actualizarGasto = async (req, res) => {
 };
 
 
-// Detalles de un gasto especifico
 export const detallesGasto = async (req, res) => {
   const { id } = req.params;
   try {
     const gasto = await Gasto.findByPk(id);
     if (gasto) {
+      // Ajustar la ruta de la imagen para que sea accesible
+      if (gasto.imagen) {
+        gasto.imagen = `/uploads/${gasto.imagen}`; // Asegurar que la ruta sea correcta
+      }
       res.status(200).json(gasto);
       console.log('Los datos solicitados son:', gasto); // Aquí se envían los datos a la consola
     } else {

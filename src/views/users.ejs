@@ -93,6 +93,7 @@
   integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
 
 <script>
+
   ////////////////////////////////////////////////////////
   /////////////////// CREATE /////////////////////////////
 
@@ -102,7 +103,7 @@
   // Seleccionamos el botón por su id
   var btnAddUsuario = document.getElementById('btnAddUsuario').addEventListener('click', function () {
     // Abre la ventana emergente para agregar un usuario
-    popup = window.open('', 'popup', `width=400,height=370,left=${(window.screen.width/2)-(400/2)},top=${(window.screen.height/2)-(500/2)}`);
+    popup = window.open('', 'popup', `width=400,height=370,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
     //'width=400,height=370');
 
     // Contenido del formulario dentro de la ventana emergente
@@ -251,7 +252,7 @@
             </body>
             </html>
           `;
-        var popup = window.open('', 'popup', `width=600,height=300,left=${(window.screen.width/2)-(400/2)},top=${(window.screen.height/2)-(500/2)}`);
+        var popup = window.open('', 'popup', `width=600,height=300,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
         //'width=600,height=300');
         popup.document.write(formContent);
       } else {
@@ -298,7 +299,7 @@
             </body>
             </html>
           `;
-        var popup = window.open('', 'popup', `width=400,height=400,left=${(window.screen.width/2)-(400/2)},top=${(window.screen.height/2)-(500/2)}`);
+        var popup = window.open('', 'popup', `width=400,height=400,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
         //'width=400,height=400');
         popup.document.write(formContent);
         popup.document.querySelector('form').addEventListener('submit', function (event) {
@@ -409,4 +410,5 @@
       }
     });
   });
+
 </script>

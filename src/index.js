@@ -1,9 +1,8 @@
+import './models/associations.js';
 import express from 'express';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import indexRoutes from './routes/index.js';
-import './models/associations.js';
-import fs from 'fs';
+import indexRoutes from './routes/index.js'; // Asegúrate de que la ruta es correcta
 import expressSession from 'express-session';
 
 // Obtener el directorio actual
@@ -21,7 +20,13 @@ app.use(expressSession({
 }));
 
 // Middleware para servir archivos estáticos desde la carpeta 'uploads'
-app.use('/uploads', express.static(join(__dirname, 'uploads')));
+app.use('/uploads', express.static(join(__dirname, '../uploads')));
+
+// Middleware de depuración para verificar solicitudes a 'uploads'
+app.use('/uploads', (req, res, next) => {
+    console.log(`Request for ${req.path}`);
+    next();
+});
 
 app.set('views', join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -31,8 +36,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // Uso de las rutas
 app.use(indexRoutes);
-
-console.log(__dirname);
 
 // Servir archivos estáticos
 app.use(express.static(join(__dirname, 'public')));

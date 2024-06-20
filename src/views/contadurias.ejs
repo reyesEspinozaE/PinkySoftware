@@ -538,7 +538,7 @@
 
     ////////////////////////////////////////////////////////
     /////////////////// Read ///////////////////////////////
-    
+
     // Ventana emergente para detalles de gasto
     document.querySelectorAll('[name="detallesGasto"]').forEach(btn => {
         btn.addEventListener('click', async function () {
@@ -549,44 +549,65 @@
             });
             if (response.ok) {
                 const gasto = await response.json();
-                const imagenPath = gasto.imagen ? `${gasto.imagen}` : ''; // Asegúrate de que la ruta de la imagen es correcta
+                const imagenPath = gasto.imagen ? `${gasto.imagen}` : ''; // Asegurarse de que la ruta de la imagen es correcta
                 console.log('Ruta de la imagen:', imagenPath); // Agregar console.log para verificar la ruta de la imagen
+
                 var formContent = `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Detalles de Gastos</title>
-      <link rel="stylesheet" href="/css/main.css">
-    </head>
-    <body class="bodyPopup">
-      <div class="popup-form">
-        <p><strong>ID Gasto:</strong> ${gasto.idGasto}</p>
-        <p><strong>ID Proyecto:</strong> ${gasto.idProyecto}</p>
-        <p><strong>Descripción del gasto:</strong> ${gasto.descripcionGasto}</p>
-        <p><strong>Lugar del gasto:</strong> ${gasto.lugar}</p>
-        <p><strong>Monto del gasto:</strong> ${gasto.montoGasto}</p>
-        <p><strong>Fecha del gasto:</strong> ${new Date(gasto.fechaGasto).toLocaleDateString()}</p>
-        <p><strong>Imagen del gasto:</strong></p>
-        ${gasto.imagen}
-        ${imagenPath ? `<img src="${imagenPath}" alt="Imagen del gasto" style="max-width: 100%; height: auto;" /><br>` : '<p>No hay imagen disponible</p>'}
-        <br>
-        <button class="btnPopup" type="button" onclick="window.close()">Cerrar</button>
-      </div>
-    </body>
-    </html>
-  `;
-                var popup = window.open('', 'popup', `width=400,height=500,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
-                //'width=400,height=500');
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Detalles de Gastos</title>
+                    <link rel="stylesheet" href="/css/main.css">
+                </head>
+                <body class="bodyPopup">
+                    <div class="popup-form">
+                        <table>
+                            <tr>
+                                <td><strong>ID Gasto:</strong></td>
+                                <td>${gasto.idGasto}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ID Proyecto:</strong></td>
+                                <td>${gasto.idProyecto}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Descripción del gasto:</strong></td>
+                                <td>${gasto.descripcionGasto}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Lugar del gasto:</strong></td>
+                                <td>${gasto.lugar}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Monto del gasto:</strong></td>
+                                <td>${gasto.montoGasto}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Fecha del gasto:</strong></td>
+                                <td>${new Date(gasto.fechaGasto).toLocaleDateString()}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Imagen del gasto:</strong></td>
+                                <td>
+                                    ${imagenPath ? `<img src="${imagenPath}" alt="Imagen del gasto" style="max-width: 100%; height: auto;" />` : 'No hay imagen disponible'}
+                                </td>
+                            </tr>
+                        </table>
+                        <br>
+                        <button class="btnPopup" type="button" onclick="window.close()">Cerrar</button>
+                    </div>
+                </body>
+                </html>
+            `;
+                var popup = window.open('', 'popup', `width=600,height=650,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
                 popup.document.write(formContent);
             } else {
                 console.error('Error al obtener los detalles del gasto:', await response.text());
             }
         });
     });
-
-
 
 
     ////////////////////////////////////////////////////////

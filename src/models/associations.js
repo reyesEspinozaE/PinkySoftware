@@ -1,9 +1,9 @@
 // models/associations.js
 import Proyecto from './proyecto.js';
+import Partida from './partida.js';
 import Gasto from './gasto.js';
 import Presupuesto from './presupuesto.js';
 import Usuario from './usuario.js';
-import Partida from './partida.js';
 import ProyectoUsuario from './proyectoUsuario.js';
 
 // Relación entre Proyecto y Partida
