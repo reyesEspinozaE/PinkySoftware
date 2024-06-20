@@ -1,6 +1,10 @@
 import Presupuesto from '../models/presupuesto.js';
 import Gasto from '../models/gasto.js';
+import fs from 'fs';
+import path from 'path';
+import { uploadsDir } from '../config/multerConfig.js';
 
+// Crear un nuevo Gasto
 export const crearGasto = async (req, res) => {
   try {
     const { idProyecto, descripcionGasto, lugarGasto, montoGasto, fechaGasto } = req.body;
@@ -25,25 +29,31 @@ export const crearGasto = async (req, res) => {
   }
 };
 
-
-// Controlador para actualizar un gasto
+//  Actualizar un Gasto
 export const actualizarGasto = async (req, res) => {
   const { id } = req.params;
   const { idProyecto, descripcionGasto, lugar, montoGasto, fechaGasto } = req.body;
-  const imagen = req.file ? `/uploads/${req.file.filename}` : null; // Ruta donde se guardó la imagen
+  const imagen = req.file ? req.file.filename : null; // Guardar solo el nombre del archivo
   console.log('Datos recibidos en el servidor:', { idProyecto, descripcionGasto, lugar, montoGasto, fechaGasto, imagen });
 
   try {
     const gasto = await Gasto.findByPk(id);
     if (gasto) {
+      if (imagen) {
+        // Eliminar la imagen antigua si existe
+        if (gasto.imagen) {
+          const oldImagePath = path.join(uploadsDir, gasto.imagen);
+          fs.unlink(oldImagePath, (err) => {
+            if (err) console.error(`Error al eliminar la imagen antigua: ${err.message}`);
+          });
+        }
+        gasto.imagen = imagen; // Actualiza la imagen si se ha subido una nueva
+      }
       gasto.idProyecto = idProyecto;
       gasto.descripcionGasto = descripcionGasto;
       gasto.lugar = lugar; // Aquí se mapea, solo en caso
       gasto.montoGasto = montoGasto;
       gasto.fechaGasto = fechaGasto;
-      if (imagen) {
-        gasto.imagen = imagen; // Actualiza la imagen si se ha subido una nueva
-      }
       await gasto.save();
       res.status(200).json({ mensaje: 'Gasto actualizado exitosamente' });
     } else {
@@ -55,7 +65,7 @@ export const actualizarGasto = async (req, res) => {
   }
 };
 
-
+// Detalles de un Gasto especifico
 export const detallesGasto = async (req, res) => {
   const { id } = req.params;
   try {
@@ -76,6 +86,31 @@ export const detallesGasto = async (req, res) => {
   }
 };
 
+// Eliminar un gasto
+export const eliminarGasto = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const gasto = await Gasto.findByPk(id);
+    if (gasto) {
+      // Eliminar la imagen asociada si existe
+      if (gasto.imagen) {
+        const imagePath = path.join(uploadsDir, gasto.imagen);
+        fs.unlink(imagePath, (err) => {
+          if (err) console.error(`Error al eliminar la imagen: ${err.message}`);
+        });
+      }
+      await Gasto.destroy({
+        where: { idGasto: id }
+      });
+      res.status(200).json({ mensaje: 'Gasto eliminado exitosamente' });
+    } else {
+      res.status(404).json({ mensaje: 'Gasto no encontrado' });
+    }
+  } catch (error) {
+    console.error("Error al eliminar el gasto:", error);
+    res.status(500).send("Error al eliminar gasto");
+  }
+};
 
 // Obtener todos los registros de presupuestos y gastos
 export const getContaduriaData = async (req, res) => {
@@ -131,24 +166,6 @@ export const eliminarPresupuesto = async (req, res) => {
   }
 };
 
-// Eliminar un gasto
-export const eliminarGasto = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const gastoEliminado = await Gasto.destroy({
-      where: { idGasto: id }
-    });
-    if (gastoEliminado) {
-      res.status(200).json({ mensaje: 'Gasto eliminado exitosamente' });
-    } else {
-      res.status(404).json({ mensaje: 'Gasto no encontrado' });
-    }
-  } catch (error) {
-    console.error("Error al eliminar el gasto:", error);
-    res.status(500).send("Error al eliminar gasto");
-  }
-};
-
 // Actualizar un presupuesto
 export const actualizarPresupuesto = async (req, res) => {
   const { id } = req.params;
@@ -174,31 +191,7 @@ export const actualizarPresupuesto = async (req, res) => {
   }
 };
 
-// Actualizar un gasto
-// export const actualizarGasto = async (req, res) => {
-//   const { id } = req.params;
-//   const { idProyecto, descripcionGasto, lugar, montoGasto, fechaGasto, imagen } = req.body;
-
-//   try {
-//     const gasto = await Gasto.findByPk(id);
-//     if (gasto) {
-//       gasto.idProyecto = idProyecto;
-//       gasto.descripcionGasto = descripcionGasto;
-//       gasto.lugar = lugar;
-//       gasto.montoGasto = montoGasto;
-//       gasto.fechaGasto = fechaGasto;
-//       gasto.imagen = imagen;
-//       await gasto.save();
-//       res.status(200).json({ mensaje: 'Gasto actualizado exitosamente' });
-//     } else {
-//       res.status(404).json({ mensaje: 'Gasto no encontrado' });
-//     }
-//   } catch (error) {
-//     console.error('Error al actualizar el gasto:', error);
-//     res.status(500).send('Error al actualizar el gasto');
-//   }
-// };
-
+// Detalles de un presupuesto especifico
 export const detallesPresupuesto = async (req, res) => {
   const { id } = req.params;
   try {
