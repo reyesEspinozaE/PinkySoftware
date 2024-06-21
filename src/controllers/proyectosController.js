@@ -34,11 +34,34 @@ export const detallesProyecto = async (req, res) => {
   }
 };
 
+// Verificar si el proyecto ya existe
+export const verificarProyectoExistente = async (req, res) => {
+  try {
+    const { nombreProyecto } = req.query;
+    const proyectoExistente = await Proyecto.findOne({ where: { nombreProyecto } });
+
+    if (proyectoExistente) {
+      return res.json({ existe: true });
+    } else {
+      return res.json({ existe: false });
+    }
+  } catch (error) {
+    console.error("Error al verificar el proyecto:", error);
+    res.status(500).send("Error al verificar el proyecto");
+  }
+};
+
 // Crear un nuevo proyecto
 export const crearProyecto = async (req, res) => {
   try {
     const { idPartida, nombreProyecto, descripcionProyecto, nombreEncargado, fechaInicio, fechaFin } = req.body;
     console.log('Datos recibidos en el servidor:', { idPartida, nombreProyecto, descripcionProyecto, nombreEncargado, fechaInicio, fechaFin });
+
+    // Verificar que no exista el proyecto
+    const proyectoExistente = await Proyecto.findOne({ where: { nombreProyecto } });
+    if (proyectoExistente) {
+      return res.status(400).json({ mensaje: 'El proyecto ya se encuentra registrado' });
+    }
 
     // Crear el nuevo proyecto
     const nuevoProyecto = await Proyecto.create({
@@ -69,8 +92,8 @@ export const crearProyecto = async (req, res) => {
   }
 };
 
-// Actualizar un proyecto por su ID
 
+// Actualizar un proyecto por su ID
 export const actualizarProyecto = async (req, res) => {
   const { idProyecto } = req.params;
   const { idPartida, nombreProyecto, descripcionProyecto, nombreEncargado, fechaInicio, fechaFin } = req.body;

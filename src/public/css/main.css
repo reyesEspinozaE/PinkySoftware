@@ -106,7 +106,8 @@ body {
 .popup-form input[type="number"],
 .popup-form input[type="email"],
 .popup-form input[type="password"],
-.popup-form textarea {
+.popup-form select,
+.popup-form option .popup-form textarea {
     width: 100%;
     padding: 8px;
     margin-top: 10px;
@@ -206,7 +207,8 @@ body {
 
 /* Card styles */
 .card {
-    background-color: #fff;
+    /* background-color: #FFF1ED; */
+    background-color: #f7a1c2;
     /* Shorthand for white */
     padding: 20px;
     border-radius: 10px;
@@ -285,6 +287,7 @@ body {
     height: 100%;
     margin: 0;
 }
+
 .backgroundIndex {
     position: relative;
     background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('/img/Logo.jpg') no-repeat center center;
@@ -294,7 +297,7 @@ body {
 }
 
 .profile-card {
-    background-color: #fff;
+    background-color: #fff; 
     border: 1px solid #e0e0e0;
     border-radius: 10px;
     text-align: center;

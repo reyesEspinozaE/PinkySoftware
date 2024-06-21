@@ -132,7 +132,7 @@ export const crearPresupuesto = async (req, res) => {
   try {
     const { idProyecto, montoTotal, saldoPendiente, area, fechaMonto, descripcion } = req.body;
     console.log('Datos recibidos en el servidor:', { idProyecto, montoTotal, saldoPendiente, area, fechaMonto, descripcion });
-
+    
     const nuevoPresupuesto = await Presupuesto.create({
       idProyecto,
       montoTotal,

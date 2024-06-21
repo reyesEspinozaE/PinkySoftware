@@ -48,10 +48,63 @@
     crossorigin="anonymous"></script>
 
   <script>
+    // document.addEventListener('DOMContentLoaded', function () {
+    //   //'/navigation'
+    //   const nombreUsuario = localStorage.getItem('nombreUsuario');
+    //   //const emailUsuario = localStorage.getItem('email');
+    //   const rolUsuario = localStorage.getItem('rolUsuario');
+    //   const isLoggedIn = localStorage.getItem('isLoggedIn');
+    //   const isGuest = localStorage.getItem('isGuest');
+
+    //   if (nombreUsuario) {
+    //     document.getElementById('nombreUsuario').textContent = nombreUsuario;
+    //   }
+
+    //   if (isLoggedIn === 'true') { // Si esta logueado
+    //     if (rolUsuario === 'admin' || rolUsuario === 'Admin') { // Si es un admin
+    //       document.getElementById('loginLink').classList.add('d-none');
+    //       document.getElementById('logoutLink').classList.remove('d-none');
+    //       document.getElementById('partidasNav').classList.remove('d-none');
+    //       document.getElementById('usersNav').classList.remove('d-none');
+    //     } else { // Si es un user comun
+    //       document.getElementById('partidasNav').classList.remove('d-none');
+    //       document.getElementById('loginLink').classList.add('d-none');
+    //       document.getElementById('logoutLink').classList.remove('d-none');
+    //       document.getElementById('usersNav').classList.add('d-none');
+    //     }
+    //   } else if (isGuest === 'true') { // Si se ingresa como invitado
+    //     document.getElementById('loginLink').classList.remove('d-none');
+    //     document.getElementById('logoutLink').classList.add('d-none');
+    //     document.getElementById('contadurias').classList.add('d-none');
+    //     document.getElementById('proyectos').classList.add('d-none');
+    //     document.getElementById('usersNav').classList.add('d-none');
+    //     //window.location.href = '/'; // Redirigir a la página de inicio de sesión
+    //   } else {
+    //     document.getElementById('proyectos').classList.add('d-none');
+    //     document.getElementById('partidasNav').classList.add('d-none');
+    //     document.getElementById('usersNav').classList.add('d-none');
+    //     document.getElementById('contadurias').classList.add('d-none');
+    //     document.getElementById('proyectos').classList.add('d-none');
+    //     document.getElementById('index').classList.remove('d-none');
+    //     window.location.href = '/'; // Redirigir a la página de inicio de sesión
+    //   }
+
+    //   document.getElementById('logoutButton').addEventListener('click', function () {
+    //     localStorage.removeItem('nombreUsuario');
+    //     localStorage.removeItem('isLoggedIn');
+    //     localStorage.removeItem('isGuest');
+    //     //window.location.href = '/'; // Redirigir a la página de inicio de sesión
+    //   });
+
+    //   document.getElementById('loginLink').addEventListener('click', function () {
+    //     localStorage.removeItem('nombreUsuario');
+    //     localStorage.removeItem('isLoggedIn');
+    //     localStorage.removeItem('isGuest');
+    //   });
+    // });
+
     document.addEventListener('DOMContentLoaded', function () {
-      //'/navigation'
       const nombreUsuario = localStorage.getItem('nombreUsuario');
-      //const emailUsuario = localStorage.getItem('email');
       const rolUsuario = localStorage.getItem('rolUsuario');
       const isLoggedIn = localStorage.getItem('isLoggedIn');
       const isGuest = localStorage.getItem('isGuest');
@@ -60,48 +113,28 @@
         document.getElementById('nombreUsuario').textContent = nombreUsuario;
       }
 
-      if (isLoggedIn === 'true') { // Si esta logueado
-        if (rolUsuario === 'admin' || rolUsuario === 'Admin') { // Si es un admin
+      if (isLoggedIn === 'true') {
+        if (rolUsuario === 'admin' || rolUsuario === 'Admin') {
           document.getElementById('loginLink').classList.add('d-none');
           document.getElementById('logoutLink').classList.remove('d-none');
           document.getElementById('partidasNav').classList.remove('d-none');
           document.getElementById('usersNav').classList.remove('d-none');
-        } else { // Si es un user comun
+        } else {
           document.getElementById('partidasNav').classList.remove('d-none');
           document.getElementById('loginLink').classList.add('d-none');
           document.getElementById('logoutLink').classList.remove('d-none');
           document.getElementById('usersNav').classList.add('d-none');
         }
-      } else if (isGuest === 'true') { // Si se ingresa como invitado
+      } else if (isGuest === 'true') {
         document.getElementById('loginLink').classList.remove('d-none');
         document.getElementById('logoutLink').classList.add('d-none');
         document.getElementById('contadurias').classList.add('d-none');
         document.getElementById('proyectos').classList.add('d-none');
-        document.getElementById('usersNav').classList.add('d-none');
-        //window.location.href = '/'; // Redirigir a la página de inicio de sesión
-      } else {
-        document.getElementById('proyectos').classList.add('d-none');
         document.getElementById('partidasNav').classList.add('d-none');
         document.getElementById('usersNav').classList.add('d-none');
-        document.getElementById('contadurias').classList.add('d-none');
-        document.getElementById('proyectos').classList.add('d-none');
-        document.getElementById('index').classList.remove('d-none');
-        window.location.href = '/'; // Redirigir a la página de inicio de sesión
       }
-
-      document.getElementById('logoutButton').addEventListener('click', function () {
-        localStorage.removeItem('nombreUsuario');
-        localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem('isGuest');
-        //window.location.href = '/'; // Redirigir a la página de inicio de sesión
-      });
-
-      document.getElementById('loginLink').addEventListener('click', function () {
-        localStorage.removeItem('nombreUsuario');
-        localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem('isGuest');
-      });
     });
+
   </script>
 
 </body>

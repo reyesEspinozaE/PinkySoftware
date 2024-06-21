@@ -2,7 +2,7 @@ import './models/associations.js';
 import express from 'express';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import indexRoutes from './routes/index.js'; // Asegúrate de que la ruta es correcta
+import indexRoutes from './routes/index.js';
 import expressSession from 'express-session';
 
 // Obtener el directorio actual
@@ -37,7 +37,7 @@ app.use(express.urlencoded({ extended: true }));
 // Uso de las rutas
 app.use(indexRoutes);
 
-// Servir archivos estáticos
+// Servir archivos estáticos, desde la carpeta "src/public"
 app.use(express.static(join(__dirname, 'public')));
 
 app.listen(3000, () => {

@@ -7,94 +7,382 @@
     <title>
         <%= title %>
     </title>
-    <%- include("partials/head") %>
     <%- include('partials/navigation.ejs')%>
+
+        <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+        <style>
+            .profile-card {
+                display: none;
+                border: 0;
+                border-bottom: 3px solid #DB7093;
+                box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+                overflow: hidden;
+            }
+
+            .profile-card img {
+                width: 100%;
+                height: auto;
+            }
+
+            .profile-card h4 {
+                margin-bottom: 0.5rem;
+            }
+
+            .profile-card p {
+                margin-bottom: 0;
+                color: #6c757d;
+            }
+
+            .profile-card .social-icons a {
+                margin-right: 0.5rem;
+                color: #0d6efd;
+            }
+
+            /* Custom button styles */
+            .btn-custom {
+                background-color: #dd729b;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                padding: 10px 20px;
+                transition: all 0.3s ease-in-out;
+                cursor: pointer;
+                margin: 5px;
+            }
+
+            .btn-custom:hover {
+                background-color: #b63767;
+            }
+
+            /* Estilos para el pseudo-elemento :after */
+            .btn-custom.selected::after {
+                content: '';
+                position: absolute;
+                width: calc(100% - 20px);
+                /* Ajusta el ancho según el padding del botón */
+                height: 3px;
+                bottom: -3px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .social-icons {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                padding: 0.5 em;
+                color: #DB7093;
+            }
+
+            .social-icons a {
+                font-size: 2em;
+                color: #DB7093;
+                padding: 0px 0.25em;
+            }
+
+            .navbar {
+                background: black;
+                color: white;
+            }
+
+            .navbar-brand,
+            .nav-link {
+                color: white;
+            }
+
+            .navbar-brand:focus,
+            .navbar-brand:active,
+            .nav-link:focus,
+            .nav-link:active {
+                color: #bb7181;
+            }
+
+            .navbar-brand:hover,
+            .nav-link:hover {
+                color: #bb7181;
+            }
+
+            .ftr {
+                background: black;
+                color: white;
+                text-align: center;
+                padding: 1rem;
+                width: 100%;
+            }
+        </style>
+
 </head>
 
 <body class="bodyIndex">
-    <div class="backgroundIndex">
-        <div class="containerIndex mt-4">
-            <div class="row justify-content-center">
-                <div class="col-md-4">
-                    <div class="profile-card">
-                        <img src="img/UserImg.png" alt="Darren Warner">
-                        <h4>Richard Chaves</h4>
-                        <p>Coordinador de proyecto</p>
-                        <div class="social-icons">
-                            <a href="#"><i class="fab fa-linkedin"></i></a>
-                            <a href="#"><i class="fab fa-skype"></i></a>
-                            <a href="#"><i class="fab fa-github"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
+    <section class="bg-light py-3 py-md-5 py-xl-8">
+        <div class="container">
+            <div class="row justify-content-md-center">
+                <div class="col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6">
+                    <h2 class="mb-4 display-5 text-center">Nuestro Equipo</h2>
+                    <p class="text-secondary mb-5 text-center lead fs-4">Somos un grupo de innovadores,
+                        experimentados y competentes. Te encantará colaborar con nosotros.</p>
+                    <hr class="w-50 mx-auto mb-5 mb-xl-9 border-dark-subtle">
+                </div>
+            </div>
+        </div>
+
+        <div class="container overflow-hidden">
+            <div class="row gy-4 gy-lg-0 gx-xxl-5">
+                <div class="col-12 col-md-6 col-lg-3 text-center mb-3">
+                    <button onclick="toggleSelected(this)" id="btnCoordinadorProyecto"
+                        class="btn btn-custom btn-primary w-100">Coordinador</button>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3 text-center mb-3">
+                    <button onclick="toggleSelected(this)" id="btnCoordinadorModelado"
+                        class="btn btn-custom btn-primary w-100">Modelado</button>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3 text-center mb-3">
+                    <button onclick="toggleSelected(this)" id="btnCoordinadorAnalisis"
+                        class="btn btn-custom btn-primary w-100">Análisis</button>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3 text-center mb-3">
+                    <button onclick="toggleSelected(this)" id="btnCoordinadorCalidad"
+                        class="btn btn-custom btn-primary w-100">Calidad</button>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3 text-center mb-3">
+                    <button onclick="toggleSelected(this)" id="btnCoordinadorDocumentacion"
+                        class="btn btn-custom btn-primary w-100">Documentación</button>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3 text-center mb-3">
+                    <button onclick="toggleSelected(this)" id="btnCoordinadorProgramacion"
+                        class="btn btn-custom btn-primary w-100">Programación</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container overflow-hidden">
+            <div class="row gy-4 gy-lg-0 gx-xxl-5">
+                <!-- Cards -->
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div id="cardProyecto" class="profile-card card">
+                        <div class="card-body p-0">
+                            <figure class="m-0 p-0">
+                                <img class="img-fluid" src="img/UserImg.png" alt="Richard Chaves">
+                                <figcaption class="m-0 p-4">
+                                    <h4 class="mb-1">Richard Chaves</h4>
+                                    <p class="text-secondary mb-0">Coordinador de proyecto</p>
+                                    <div class="social-icons mt-3">
+                                        <!-- Social Icons -->
+                                        <a
+                                            href="https://www.linkedin.com/login/es?fromSignIn=true&trk=guest_homepage-basic_nav-header-signin">
+                                            <i class="fab fa-linkedin"></i> <!-- Cambio aquí -->
+                                        </a>
+                                        <a href="https://github.com/">
+                                            <i class="fab fa-github"></i> <!-- Cambio aquí -->
+                                        </a>
+                                        <a href="https://www.skype.com/en/">
+                                            <i class="fab fa-skype"></i> <!-- Cambio aquí -->
+                                        </a>
+                                        <!-- Fin social icons -->
+                                    </div>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div id="cardModelado" class="profile-card card">
+                        <div class="card-body p-0">
+                            <figure class="m-0 p-0">
+                                <img class="img-fluid" src="img/UserImg.png" alt="Fabricio Gallo">
+                                <figcaption class="m-0 p-4">
+                                    <h4 class="mb-1">Fabricio Gallo</h4>
+                                    <p class="text-secondary mb-0">Coordinador de modelado</p>
+                                    <div class="social-icons mt-3">
+                                        <!-- Social Icons -->
+                                        <a
+                                            href="https://www.linkedin.com/login/es?fromSignIn=true&trk=guest_homepage-basic_nav-header-signin">
+                                            <i class="fab fa-linkedin"></i> <!-- Cambio aquí -->
+                                        </a>
+                                        <a href="https://github.com/">
+                                            <i class="fab fa-github"></i> <!-- Cambio aquí -->
+                                        </a>
+                                        <a href="https://www.skype.com/en/">
+                                            <i class="fab fa-skype"></i> <!-- Cambio aquí -->
+                                        </a>
+                                        <!-- Fin social icons -->
+                                    </div>
+                                </figcaption>
+                            </figure>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="profile-card">
-                        <img src="img/UserImg.png" alt="Kattie Perry">
-                        <h4>Fabricio Gallo</h4>
-                        <p>Coordinador de modelado</p>
-                        <div class="social-icons">
-                            <a href="#"><i class="fab fa-skype"></i></a>
-                            <a href="#"><i class="fab fa-github"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div id="cardAnalisis" class="profile-card card">
+                        <div class="card-body p-0">
+                            <figure class="m-0 p-0">
+                                <img class="img-fluid" src="img/UserImg.png" alt="Andrey Rodríguez">
+                                <figcaption class="m-0 p-4">
+                                    <h4 class="mb-1">Andrey Rodríguez</h4>
+                                    <p class="text-secondary mb-0">Coordinador de análisis</p>
+                                    <div class="social-icons mt-3">
+                                        <!-- Social Icons -->
+                                        <a
+                                            href="https://www.linkedin.com/login/es?fromSignIn=true&trk=guest_homepage-basic_nav-header-signin">
+                                            <i class="fab fa-linkedin"></i> <!-- Cambio aquí -->
+                                        </a>
+                                        <a href="https://github.com/">
+                                            <i class="fab fa-github"></i> <!-- Cambio aquí -->
+                                        </a>
+                                        <a href="https://www.skype.com/en/">
+                                            <i class="fab fa-skype"></i> <!-- Cambio aquí -->
+                                        </a>
+                                        <!-- Fin social icons -->
+                                    </div>
+                                </figcaption>
+                            </figure>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="profile-card">
-                        <img src="img/UserImg.png" alt="Diana Johnson">
-                        <h4>Andrey Rodríguez</h4>
-                        <p>Coordinador de análisis</p>
-                        <div class="social-icons">
-                            <a href="#"><i class="fab fa-linkedin"></i></a>
-                            <a href="#"><i class="fab fa-skype"></i></a>
-                            <a href="#"><i class="fab fa-github"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div id="cardCalidad" class="profile-card card">
+                        <div class="card-body p-0">
+                            <figure class="m-0 p-0">
+                                <img class="img-fluid" src="img/UserImg.png" alt="Jairo Marenco">
+                                <figcaption class="m-0 p-4">
+                                    <h4 class="mb-1">Jairo Marenco</h4>
+                                    <p class="text-secondary mb-0">Coordinador de calidad</p>
+                                    <div class="social-icons mt-3">
+                                        <!-- Social Icons -->
+                                        <a href="https://www.linkedin.com/in/jairo-marenco-guevara-69a895244/">
+                                            <i class="fab fa-linkedin"></i> <!-- Cambio aquí -->
+                                        </a>
+                                        <a href="https://github.com/jairomague">
+                                            <i class="fab fa-github"></i> <!-- Cambio aquí -->
+                                        </a>
+                                        <a href="https://www.skype.com/en/">
+                                            <i class="fab fa-skype"></i> <!-- Cambio aquí -->
+                                        </a>
+                                        <!-- Fin social icons -->
+                                    </div>
+                                </figcaption>
+                            </figure>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="profile-card">
-                        <img src="img/UserImg.png" alt="George Vandiver">
-                        <h4>Jairo Marenco</h4>
-                        <p>Coordinador de calidad</p>
-                        <div class="social-icons">
-                            <a href="#"><i class="fab fa-skype"></i></a>
-                            <a href="#"><i class="fab fa-github"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div id="cardDocumentacion" class="profile-card card">
+                        <div class="card-body p-0">
+                            <figure class="m-0 p-0">
+                                <img class="img-fluid" src="img/UserImg.png" alt="Yerlin Dávila">
+                                <figcaption class="m-0 p-4">
+                                    <h4 class="mb-1">Yerlin Dávila</h4>
+                                    <p class="text-secondary mb-0">Coordinador de documentación</p>
+                                    <div class="social-icons mt-3">
+                                        <!-- Social Icons -->
+                                        <a
+                                            href="https://www.linkedin.com/login/es?fromSignIn=true&trk=guest_homepage-basic_nav-header-signin">
+                                            <i class="fab fa-linkedin"></i> <!-- Cambio aquí -->
+                                        </a>
+                                        <a href="https://github.com/">
+                                            <i class="fab fa-github"></i> <!-- Cambio aquí -->
+                                        </a>
+                                        <a href="https://www.skype.com/en/">
+                                            <i class="fab fa-skype"></i> <!-- Cambio aquí -->
+                                        </a>
+                                        <!-- Fin social icons -->
+                                    </div>
+                                </figcaption>
+                            </figure>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="profile-card">
-                        <img src="img/UserImg.png" alt="Rihanna Jonesy">
-                        <h4>Yerlin Dávila</h4>
-                        <p>Coordinador de documentación</p>
-                        <div class="social-icons">
-                            <a href="#"><i class="fab fa-linkedin"></i></a>
-                            <a href="#"><i class="fab fa-skype"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="profile-card">
-                        <img src="img/UserImg.png" alt="Rihanna Jonesy">
-                        <h4>Everth Reyes</h4>
-                        <p>Coordinador de programación</p>
-                        <div class="social-icons">
-                            <a href="#"><i class="fab fa-linkedin"></i></a>
-                            <a href="#"><i class="fab fa-skype"></i></a>
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div id="cardProgramacion" class="profile-card card">
+                        <div class="card-body p-0">
+                            <figure class="m-0 p-0">
+                                <img class="img-fluid" src="img/UserImg.png" alt="Everth Reyes">
+                                <figcaption class="m-0 p-4">
+                                    <h4 class="mb-1">Everth Reyes</h4>
+                                    <p class="text-secondary mb-0">Coordinador de programación</p>
+                                    <div class="social-icons mt-3">
+                                        <!-- Social Icons -->
+                                        <a href="https://www.linkedin.com/in/everth-reyes-espinoza-63b165251">
+                                            <i class="fab fa-linkedin"></i> <!-- Cambio aquí -->
+                                        </a>
+                                        <a href="https://github.com/reyesEspinozaE">
+                                            <i class="fab fa-github"></i> <!-- Cambio aquí -->
+                                        </a>
+                                        <a href="https://www.skype.com/en/">
+                                            <i class="fab fa-skype"></i> <!-- Cambio aquí -->
+                                        </a>
+                                        <!-- Fin social icons -->
+                                    </div>
+                                </figcaption>
+                            </figure>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-</body>
-<footer>
-    <%- include('partials/footer.ejs')%>
-</footer>
-</html>
+    <script>
+        function toggleSelected(button) {
+            // Remueve la clase 'selected' de todos los botones
+            document.querySelectorAll('.btn-custom').forEach(btn => btn.classList.remove('selected'));
 
+            // Agrega la clase 'selected' solo al botón clickeado
+            button.classList.add('selected');
+        }
+
+        document.getElementById('btnCoordinadorProyecto').addEventListener('click', function () {
+            showCard('cardProyecto');
+        });
+
+        document.getElementById('btnCoordinadorModelado').addEventListener('click', function () {
+            showCard('cardModelado');
+        });
+
+        document.getElementById('btnCoordinadorAnalisis').addEventListener('click', function () {
+            showCard('cardAnalisis');
+        });
+
+        document.getElementById('btnCoordinadorCalidad').addEventListener('click', function () {
+            showCard('cardCalidad');
+        });
+
+        document.getElementById('btnCoordinadorDocumentacion').addEventListener('click', function () {
+            showCard('cardDocumentacion');
+        });
+
+        document.getElementById('btnCoordinadorProgramacion').addEventListener('click', function () {
+            showCard('cardProgramacion');
+        });
+
+        function showCard(cardId) {
+            // Hide all cards
+            var cards = document.querySelectorAll('.profile-card');
+            cards.forEach(function (card) {
+                card.style.display = 'none';
+            });
+
+            // Show the selected card
+            if (cardId) {
+                document.getElementById(cardId).style.display = 'block';
+            }
+        }
+
+        // Initially hide all cards
+        window.onload = function () {
+            showCard(''); // This will hide all cards on page load
+        };
+    </script>
+</body>
+<footer class="ftr text-center text-lg-start bg-dark navbar-dark">
+    <div class="text-center p-3">
+        <p>© Pinky Software 2024</p>Copyright:
+        <a class="text-light" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+    </div>
+</footer>
+
+
+</html>

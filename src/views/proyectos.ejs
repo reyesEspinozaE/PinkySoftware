@@ -25,26 +25,31 @@
                 <h5 class="card-title">Proyecto #<%= proyecto.idProyecto %>
                 </h5>
               </div>
+
               <div class="card-body">
-                <p class="card-text"><strong>Nombre:</strong>
-                  <%= proyecto.nombreProyecto %>
-                </p>
-                <p class="card-text"><strong>Descripción:</strong>
-                  <%= proyecto.descripcionProyecto %>
-                </p>
-                <p class="card-text"><strong>Partida presupuestaria:</strong>
-                  <%= proyecto.Partida.nombrePartida %>
-                </p>
-                <p class="card-text"><strong>Encargado:</strong>
-                  <%= proyecto.nombreEncargado %>
-                </p>
-                <p class="card-text"><strong>Fecha Inicio:</strong>
-                  <%= new Date(proyecto.fechaInicio).toLocaleDateString() %>
-                </p>
-                <p class="card-text"><strong>Fecha Fin:</strong>
-                  <%= new Date(proyecto.fechaFin).toLocaleDateString() %>
-                </p>
+                <div class="card-body">
+                  <p class="card-text"><strong>Nombre:</strong>
+                    <%= proyecto.nombreProyecto %>
+                  </p>
+                  <p class="card-text"><strong>Descripción:</strong>
+                    <%= proyecto.descripcionProyecto %>
+                  </p>
+                  <p class="card-text"><strong>Partida presupuestaria:</strong>
+                    <%= proyecto.Partida.nombrePartida %>
+                  </p>
+                  <p class="card-text"><strong>Encargado:</strong>
+                    <%= proyecto.nombreEncargado %>
+                  </p>
+                  <p class="card-text"><strong>Fecha Inicio:</strong>
+                    <%= new Date(proyecto.fechaInicio).toLocaleDateString() %>
+                  </p>
+                  <p class="card-text"><strong>Fecha Fin:</strong>
+                    <%= new Date(proyecto.fechaFin).toLocaleDateString() %>
+                  </p>
+                </div>
               </div>
+
+
               <div class="card-footer">
                 <div class="table-responsive mt-2">
                   <table class="table table-striped table-hover table-borderless table-secondary align-middle">
@@ -97,7 +102,6 @@
 <script>
   ////////////////////////////////////////////////////////
   /////////////////// CREATE /////////////////////////////
-
   var popup;
 
   async function cargarPartidas() {
@@ -141,49 +145,48 @@
   }
 
   var btnAddProyecto = document.getElementById('btnAddProyecto').addEventListener('click', function () {
-    popup = window.open('', 'popup', `width=400,height=600,left=${(window.screen.width/2)-(400/2)},top=${(window.screen.height/2)-(500/2)}`);
+    popup = window.open('', 'popup', `width=400,height=600,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
     //'width=400,height=600');
 
     var formContent = `
-      <!DOCTYPE html>
-      <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Agregar Proyecto</title>
-              <link rel="stylesheet" href="/css/main.css">
-              </head>
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Agregar Proyecto</title>
+        <link rel="stylesheet" href="/css/main.css">
+      </head>
+      <body class="bodyPopup">
+        <form class="popup-form">
+          <label for="idPartida">ID Partida:</label><br>
+          <select id="idPartida" name="idPartida" style="width: 200px; height: 30px;">
+            <option value="">Seleccione una partida...</option>
+          </select><br>
 
-              <body class="bodyPopup">
-                <form class="popup-form">
-                  <label for="idPartida">ID Partida:</label><br>
-                    <select id="idPartida" name="idPartida" style="width: 200px; height: 30px;">
-                      <option value="">Seleccione una partida...</option>
-                    </select><br>
+          <label for="nombreProyecto">Nombre del Proyecto:</label><br>
+          <input type="text" id="nombreProyecto" name="nombreProyecto"><br>
 
-                      <label for="nombreProyecto">Nombre del Proyecto:</label><br>
-                        <input type="text" id="nombreProyecto" name="nombreProyecto"><br>
+          <label for="descripcionProyecto">Descripción:</label><br>
+          <textarea id="descripcionProyecto" name="descripcionProyecto"></textarea><br>
 
-                          <label for="descripcionProyecto">Descripción:</label><br>
-                            <textarea id="descripcionProyecto" name="descripcionProyecto"></textarea><br>
+          <label for="nombreEncargado">Nombre del Encargado:</label><br>
+          <select id="nombreEncargado" name="nombreEncargado" style="width: 200px; height: 30px;">
+            <option value="">Seleccione un encargado...</option>
+          </select><br>
 
-                              <label for="nombreEncargado">Nombre del Encargado:</label><br>
-                                <select id="nombreEncargado" name="nombreEncargado" style="width: 200px; height: 30px;">
-                                  <option value="">Seleccione un encargado...</option>
-                                </select><br>
+          <label for="fechaInicio">Fecha de Inicio:</label><br>
+          <input type="date" id="fechaInicio" name="fechaInicio"><br>
 
-                                  <label for="fechaInicio">Fecha de Inicio:</label><br>
-                                    <input type="date" id="fechaInicio" name="fechaInicio"><br>
+          <label for="fechaFin">Fecha de Fin:</label><br>
+          <input type="date" id="fechaFin" name="fechaFin"><br>
 
-                                      <label for="fechaFin">Fecha de Fin:</label><br>
-                                        <input type="date" id="fechaFin" name="fechaFin"><br>
-
-                                          <button class="btnPopup" type="submit">Guardar</button>
-                                          <button class="btnPopup" type="button" onclick="window.opener.cerrarPopup()">Cancelar</button>
-                                        </form>
-                                        </body>
-                                      </html>
-    `;
+          <button class="btnPopup" type="submit">Guardar</button>
+          <button class="btnPopup" type="button" onclick="window.opener.cerrarPopup()">Cancelar</button>
+        </form>
+      </body>
+    </html>
+  `;
 
     // Escribimos el contenido del formulario en la ventana emergente
     popup.document.write(formContent);
@@ -235,6 +238,30 @@
       fechaFin: fechaFin
     };
 
+    // Verificar si el proyecto ya existe
+    try {
+      const response = await fetch(`/proyectos/exists?nombreProyecto=${encodeURIComponent(nombreProyecto)}`);
+      const data = await response.json();
+      if (data.existe) {
+        Swal.fire({
+          title: 'Proyecto ya existe',
+          text: 'El proyecto que intenta registrar ya existe.',
+          icon: 'warning',
+          confirmButtonText: 'Entendido',
+        });
+        return;
+      }
+    } catch (error) {
+      console.error('Error al verificar si el proyecto ya existe:', error);
+      Swal.fire({
+        title: 'Error',
+        text: 'No se pudo verificar si el proyecto ya existe.',
+        icon: 'error',
+        confirmButtonText: 'Entendido',
+      });
+      return;
+    }
+
     fetch('/proyectos', {
       method: 'POST',
       headers: {
@@ -259,15 +286,16 @@
           Swal.fire({
             title: 'Error al guardar el nuevo proyecto',
             text: 'Error al crear el registro del nuevo proyecto',
-            icon: 'success',
+            icon: 'error',
             confirmButtonText: 'Entendido'
-          })
+          });
         }
       })
       .catch(error => {
         console.error('Error al realizar la solicitud:', error);
       });
   }
+
 
   //////////////////////////////////////////////////////
   /////////////////// READ /////////////////////////////
@@ -352,7 +380,7 @@
 
   </html>
   `;
-        var popup = window.open('', 'popup', `width=700,height=320,left=${(window.screen.width/2)-(400/2)},top=${(window.screen.height/2)-(500/2)}`);
+        var popup = window.open('', 'popup', `width=700,height=320,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
         //'width=700,height=320');
         popup.document.write(formContent);
       } else {
@@ -459,7 +487,7 @@
 </html>
 `;
 
-        const popup = window.open('', 'popup', `width=400,height=600,left=${(window.screen.width/2)-(400/2)},top=${(window.screen.height/2)-(500/2)}`);
+        const popup = window.open('', 'popup', `width=400,height=600,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
         //'width=400,height=600');
         popup.document.write(formContent);
         popup.document.querySelector('form').addEventListener('submit', function (event) {

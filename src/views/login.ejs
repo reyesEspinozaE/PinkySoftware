@@ -119,68 +119,66 @@
     document.getElementById('btnLogin').onclick = async function () {
         const email = document.getElementById('emailUser').value;
         const password = document.getElementById('userPassword').value;
-        const rememberUser = document.getElementById('rememberUser').checked;
 
-        if (rememberUser) {
-            // Si el usuario quiere que se recuerde su correo electrónico
-            localStorage.setItem('rememberedEmail', email);
-        } else {
-            // Si el usuario no quiere que se recuerde su correo electrónico, limpiamos el localStorage
-            localStorage.removeItem('rememberedEmail');
-        }
-
-        // Validaciones de campos de login
-        if (email === "" || password === "") {
+        if (!email || !password) {
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
-                text: 'Debe completar todos los campos.'
+                title: 'Faltan campos obligatorios',
+                text: 'Por favor completa ambos campos para iniciar sesión.'
             });
-        } else {
-            try {
-                const response = await fetch('/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
+            return;
+        }
+
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await response.json();
+
+            if (data.message === 'Login exitoso.') {
+                localStorage.setItem('nombreUsuario', data.nombreUsuario);
+                localStorage.setItem('rolUsuario', data.rolUsuario);
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.removeItem('isGuest');
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Inicio de sesión exitoso',
+                    text: `Bienvenido, ${data.nombreUsuario}!`
+                }).then(() => {
+                    window.location.href = '/index';
                 });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    localStorage.setItem('nombreUsuario', data.nombreUsuario);
-                    localStorage.setItem('rolUsuario', data.rol);
-                    localStorage.setItem('isLoggedIn', 'true');
-                    localStorage.removeItem('isGuest');
-
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Éxito',
-                        text: data.message
-                    }).then(() => {
-                        window.location.href = '/contadurias';
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: data.message
-                    });
-                }
-            } catch (error) {
+            } else {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error',
-                    text: 'Hubo un error al intentar iniciar sesión.'
+                    title: 'Error de inicio de sesión',
+                    text: data.message
                 });
             }
+        } catch (error) {
+            console.error('Error en la solicitud de inicio de sesión:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error en la solicitud',
+                text: 'Ocurrió un error al intentar iniciar sesión. Por favor, intenta nuevamente.'
+            });
         }
     };
 
+    document.getElementById('btnGuest').onclick = function () {
+        localStorage.setItem('nombreUsuario', 'Invitado');
+        localStorage.setItem('isGuest', 'true');
+        localStorage.removeItem('isLoggedIn');
+        window.location.href = '/index';
+    };
+
+
     // Funcionalidad para abrir el formulario de recuperación de contraseña
     document.getElementById('forgotPasswordLink').addEventListener('click', function () {
-        var popup = window.open('', 'popup', `width=350,height=350,left=${(window.screen.width/2)-(400/2)},top=${(window.screen.height/2)-(500/2)}`);
+        var popup = window.open('', 'popup', `width=350,height=350,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
         //'width=350,height=350');
         var formContent = `
             <!DOCTYPE html>
@@ -271,12 +269,4 @@
             }
         }
     }
-
-    // Función para ingresar como invitado
-    document.getElementById('btnGuest').onclick = function () {
-        localStorage.setItem('nombreUsuario', 'Invitado');
-        localStorage.setItem('isGuest', 'true');
-        localStorage.removeItem('isLoggedIn');
-        window.location.href = '/index';
-    };
 </script>

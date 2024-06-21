@@ -33,12 +33,55 @@ export const detallesUsuario = async (req, res) => {
   }
 };
 
-// Crear un nuevo usuario
+// Verificar si el usuario ya existe
+export const verificarUsuarioExistente = async (req, res) => {
+  try {
+    const { correo } = req.query;
+    const usuarioExistente = await Usuario.findOne({ where: { correo } });
 
+    if (usuarioExistente) {
+      return res.json({ existe: true });
+    } else {
+      return res.json({ existe: false });
+    }
+  } catch (error) {
+    console.error("Error al verificar el usuario:", error);
+    res.status(500).send("Error al verificar el usuario");
+  }
+};
+
+// Crear un nuevo usuario
+// export const crearUsuario = async (req, res) => {
+//   try {
+//     const { nombreUsuario, correo, contrasenia, rol } = req.body;
+//     console.log('Datos recibidos en el servidor:', { nombreUsuario, correo, contrasenia });
+
+//     // Cifrar la contraseña
+//     const hashedPassword = await bcrypt.hash(contrasenia, 10);
+
+//     const nuevoUsuario = await Usuario.create({
+//       nombreUsuario,
+//       correo,
+//       contrasenia: hashedPassword,
+//       rol: rol
+//     });
+//     res.status(201).json({ mensaje: 'Usuario creado exitosamente', usuario: nuevoUsuario });
+//   } catch (error) {
+//     console.error("Error al crear el usuario:", error);
+//     res.status(500).send("Error al crear el usuario");
+//   }
+// };
+// Crear un nuevo usuario
 export const crearUsuario = async (req, res) => {
   try {
     const { nombreUsuario, correo, contrasenia, rol } = req.body;
-    console.log('Datos recibidos en el servidor:', { nombreUsuario, correo, contrasenia });
+    console.log('Datos recibidos en el servidor:', { nombreUsuario, correo, contrasenia, rol });
+
+    // Verificar que no exista el usuario
+    const usuarioExistente = await Usuario.findOne({ where: { correo } });
+    if (usuarioExistente) {
+      return res.status(400).json({ mensaje: 'El usuario ya se encuentra registrado' });
+    }
 
     // Cifrar la contraseña
     const hashedPassword = await bcrypt.hash(contrasenia, 10);
@@ -56,8 +99,8 @@ export const crearUsuario = async (req, res) => {
   }
 };
 
-// Eliminar un usuario por su ID
 
+// Eliminar un usuario por su ID
 export const eliminarUsuario = async (req, res) => {
   const { id } = req.params;
   try {
@@ -82,7 +125,7 @@ export const actualizarUsuario = async (req, res) => {
 
   try {
     const usuario = await Usuario.findByPk(id);
-    console.log("Received data for updt user:", {nombreUsuario, correo, contrasenia, rol });
+    console.log("Received data for updt user:", { nombreUsuario, correo, contrasenia, rol });
     if (usuario) {
       usuario.nombreUsuario = nombreUsuario;
       usuario.correo = correo;
