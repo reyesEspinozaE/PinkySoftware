@@ -8,7 +8,7 @@ export const isAuthenticated = (req, res, next) => {
 };
 
 export const isGuest = (req, res, next) => {
-    if (req.session && req.session.isGuest) {
+    if (req.session.isGuest === 'true') {
     //if (req.session && req.session.rolUsuario.toLowerCase() === '') {
         return next();
     } else {
