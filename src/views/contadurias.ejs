@@ -9,6 +9,8 @@
     </title>
     <!-- Uso de sweetalert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- Uso de Font awesone -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
     <%- include("partials/head") %>
         <%- include('partials/navigation.ejs') %>
 </head>
@@ -24,15 +26,15 @@
                             <h2 class="text-center">Gestión de Presupuestos</h2>
                             <div class="row">
                                 <div class="col mb-3">
-                                    <button id="btnPresupuesto" class="btnCommon btn btn-primary w-100">+ Asignar
-                                        presupuesto</button>
+                                    <button id="btnPresupuesto" class="btnCommon btn btn-primary w-100">
+                                        <i class="fas fa-plus"></i> Asignar presupuesto
+                                    </button>
                                 </div>
-                                <!-- Cantidad inicial de presupuesto -->
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-6 mb-3">
-                                    <label for="presupuestoTotal" title="Ingrese el presupuesto total">Presupuesto
-                                        Total:</label>
+                                    <label for="presupuestoTotal" title="Ingrese el presupuesto disponible">Presupuesto
+                                        Disponible:</label>
                                     <input type="number" id="presupuestoTotal" class="form-control"
                                         placeholder="oooo.oo">
                                 </div>
@@ -40,7 +42,6 @@
                                     <label for="ahorroMensualPresupuesto">Ahorro Mensual:</label>
                                     <input type="number" id="ahorroMensualPresupuesto" class="form-control" readonly>
                                 </div>
-                                <!-- Ahorro mensual es la sumaPresupuestos - PresupuestoTotal -->
                             </div>
                             <div class="row mb-3">
                                 <div class="col">
@@ -51,6 +52,7 @@
                                                 <tr>
                                                     <th>Acción</th>
                                                     <th>ID Proyecto</th>
+                                                    <th>Nombre Proyecto</th>
                                                     <th>Monto total</th>
                                                     <th>Área</th>
                                                 </tr>
@@ -62,16 +64,25 @@
                                                             <td>
                                                                 <a name="detallesPresupuesto"
                                                                     class="btn btn-success btn-sm"
-                                                                    data-presupuesto-id="<%= presupuesto.idPresupuesto %>">Detalles</a>
+                                                                    data-presupuesto-id="<%= presupuesto.idPresupuesto %>">
+                                                                    <i class="fas fa-info-circle"></i> Detalles
+                                                                </a>
                                                                 <a name="editarPresupuesto"
                                                                     class="btn btn-primary btn-sm"
-                                                                    data-presupuesto-id="<%= presupuesto.idPresupuesto %>">Editar</a>
+                                                                    data-presupuesto-id="<%= presupuesto.idPresupuesto %>">
+                                                                    <i class="fas fa-pen"></i> Editar
+                                                                </a>
                                                                 <a name="eliminarPresupuesto"
                                                                     class="btn btn-danger btn-sm"
-                                                                    data-presupuesto-id="<%= presupuesto.idPresupuesto %>">Eliminar</a>
+                                                                    data-presupuesto-id="<%= presupuesto.idPresupuesto %>">
+                                                                    <i class="fas fa-trash"></i> Eliminar
+                                                                </a>
                                                             </td>
                                                             <td class="idProyecto">
                                                                 <%= presupuesto.idProyecto %>
+                                                            </td>
+                                                            <td class="nombreProyecto">
+                                                                <%= presupuesto.Proyecto.nombreProyecto %>
                                                             </td>
                                                             <td class="montoTotal">
                                                                 <%= presupuesto.montoTotal %>
@@ -79,9 +90,6 @@
                                                             <td>
                                                                 <%= presupuesto.area %>
                                                             </td>
-                                                            <!-- <td>
-                                                                <%= presupuesto.descripcion %>
-                                                            </td> -->
                                                         </tr>
                                                         <% }) %>
                                                             <% } else { %>
@@ -122,8 +130,9 @@
                             <h2 class="text-center">Gestión de Gastos</h2>
                             <div class="row">
                                 <div class="col mb-3">
-                                    <button id="btnGasto" class="btnCommon btn btn-primary w-100">+ Definir
-                                        gasto</button>
+                                    <button id="btnGasto" class="btnCommon btn btn-primary w-100">
+                                        <i class="fas fa-plus"></i> Definir gasto
+                                    </button>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -142,6 +151,7 @@
                                                 <tr>
                                                     <th>Acción</th>
                                                     <th>ID Proyecto</th>
+                                                    <th>Nombre Proyecto</th>
                                                     <th>Monto Gasto</th>
                                                     <th>Descripción</th>
                                                 </tr>
@@ -152,14 +162,23 @@
                                                         <tr class="table-secondary gasto-row">
                                                             <td>
                                                                 <a name="detallesGasto" class="btn btn-success btn-sm"
-                                                                    data-gasto-id="<%= gasto.idGasto %>">Detalles</a>
+                                                                    data-gasto-id="<%= gasto.idGasto %>">
+                                                                    <i class="fas fa-info-circle"></i> Detalles
+                                                                </a>
                                                                 <a name="editarGasto" class="btn btn-primary btn-sm"
-                                                                    data-gasto-id="<%= gasto.idGasto %>">Editar</a>
+                                                                    data-gasto-id="<%= gasto.idGasto %>">
+                                                                    <i class="fas fa-pen"></i> Editar
+                                                                </a>
                                                                 <a name="eliminarGasto" class="btn btn-danger btn-sm"
-                                                                    data-gasto-id="<%= gasto.idGasto %>">Eliminar</a>
+                                                                    data-gasto-id="<%= gasto.idGasto %>">
+                                                                    <i class="fas fa-trash"></i> Eliminar
+                                                                </a>
                                                             </td>
                                                             <td class="idProyecto">
                                                                 <%= gasto.idProyecto %>
+                                                            </td>
+                                                            <td class="nombreProyecto">
+                                                                <%= gasto.Proyecto.nombreProyecto %>
                                                             </td>
                                                             <td class="montoTotalGasto">
                                                                 <%= gasto.montoGasto %>
@@ -216,6 +235,28 @@
 
     //////////////////////////////////////// AHORRRO MENSUAL PRESUPUESTOS ////////////////////////////////////////
 
+    ////////////// TOMAR EL VALOR DEL INPUT PRESUPUESTOTOTAL
+
+    // Guardar el valor del input presupuestoTotal en localStorage
+    function savePresupuestoTotal() {
+        const presupuestoTotal = document.getElementById('presupuestoTotal').value;
+        localStorage.setItem('presupuestoTotal', presupuestoTotal);
+    }
+
+    // Obtener el input y agregar un evento de cambio
+    const inputPresupuestoTotal = document.getElementById('presupuestoTotal');
+    inputPresupuestoTotal.addEventListener('change', savePresupuestoTotal);
+
+    // Cargar el valor guardado al cargar la página
+    window.addEventListener('load', () => {
+        const savedPresupuestoTotal = localStorage.getItem('presupuestoTotal');
+        if (savedPresupuestoTotal !== null) {
+            document.getElementById('presupuestoTotal').value = savedPresupuestoTotal;
+        }
+    });
+
+    ////////////// FIN DE TOMAR EL VALOR PRESUPUESTOTOTAL
+
     function ahorroMensualPresupuestos() {
         // Obtiene los valores de los inputs
         const presupuestoTotal = parseFloat(document.getElementById('presupuestoTotal').value) || 0;
@@ -237,7 +278,6 @@
     });
 
     /////////////////////////////////////// FIN AHORRRO MENSUAL PRESUPUESTOS //////////////////////////////////////
-
     function presupuestoAVencer() {
         const presupuestoRows = document.querySelectorAll(".presupuesto-row");
         const gastoRows = document.querySelectorAll(".gasto-row");
@@ -271,6 +311,7 @@
         presupuestoRows.forEach(row => {
             const idProyectoElement = row.querySelector(".idProyecto");
             const montoTotalElement = row.querySelector(".montoTotal");
+            const nombreProyectoElement = row.querySelector(".nombreProyecto");
 
             if (!idProyectoElement) {
                 console.error("ID Proyecto element not found in presupuesto-row:", row);
@@ -280,8 +321,13 @@
                 console.error("Monto Total element not found in presupuesto-row:", row);
                 return;
             }
+            if (!nombreProyectoElement) {
+                console.error("Nombre proyecto element not found in presupuesto-row:", row);
+                return;
+            }
 
             const idProyecto = idProyectoElement.innerText.trim();
+            const nombreProyecto = nombreProyectoElement.innerText.trim();
             const montoTotal = parseFloat(montoTotalElement.innerText.trim()) || 0;
             const sumaGastos = gastosPorProyecto[idProyecto] || 0;
             const porcentajeGasto = sumaGastos / montoTotal;
@@ -289,7 +335,7 @@
             if (porcentajeGasto >= limiteProximidad) {
                 Swal.fire({
                     title: 'Presupuesto Próximo a Agotarse',
-                    text: `El proyecto con ID ${idProyecto} tiene gastos (${sumaGastos}) que están próximos a agotar el presupuesto total (${montoTotal}). Actualmente ha gastado el ${Math.round(porcentajeGasto * 100)}% del presupuesto.`,
+                    text: `El proyecto: ${nombreProyecto}, con ID: ${idProyecto}, tiene los gastos: (${sumaGastos}), que están próximos a agotar el presupuesto total (${montoTotal}). Actualmente ha gastado el ${Math.round(porcentajeGasto * 100)}% del presupuesto.`,
                     icon: 'warning',
                     confirmButtonText: 'Entendido'
                 });
@@ -299,7 +345,6 @@
 
     // Llama a la función para que se ejecute al cargar la página
     document.addEventListener('DOMContentLoaded', presupuestoAVencer);
-
 
     //////////////////////////////////////// SUMA PRESUPUESTOS ////////////////////////////////////////
 
@@ -375,50 +420,48 @@
 
     ////////////////////////////////////////////////////////
     /////////////////// CREATE /////////////////////////////
-
     document.getElementById('btnGasto').addEventListener('click', function () {
         const popup = window.open('', 'popup', `width=400,height=500,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
 
         const formContent = `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Agregar Gasto</title>
-            <link rel="stylesheet" href="/css/main.css">
-        </head>
-        <body class="bodyPopup">
-            <form id="gastoForm" class="popup-form" enctype="multipart/form-data" method="post" action="/gastos">
-                <label for="idProyecto">Nombre del proyecto:</label><br>
-                <select id="idProyecto" name="idProyecto" style="width: 200px; height: 30px;">
-                    <option value="">Seleccione un proyecto...</option>
-                </select><br>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Agregar Gasto</title>
+        <link rel="stylesheet" href="/css/main.css">
+    </head>
+    <body class="bodyPopup">
+        <form id="gastoForm" class="popup-form" enctype="multipart/form-data" method="post" action="/gastos">
+            <label for="idProyecto">Nombre del proyecto:</label><br>
+            <select id="idProyecto" name="idProyecto" style="width: 200px; height: 30px;">
+                <option value="">Seleccione un proyecto...</option>
+            </select><br>
 
-                <label for="descripcionGasto">Descripción del gasto:</label><br>
-                <input type="text" id="descripcionGasto" name="descripcionGasto"><br>
+            <label for="descripcionGasto">Descripción del gasto:</label><br>
+            <input type="text" id="descripcionGasto" name="descripcionGasto"><br>
+        
+            <label for="fechaGasto">Fecha del gasto:</label><br>
+            <input type="date" id="fechaGasto" name="fechaGasto"><br>
+        
+            <label for="lugarGasto">Lugar del gasto:</label><br>
+            <input type="text" id="lugarGasto" name="lugarGasto"><br>
+        
+            <label for="imagenGasto">Cargue su imagen:</label><br>
+            <input type="file" id="imagenGasto" name="imagenGasto" accept="image/*"><br>
             
-                <label for="fechaGasto">Fecha del gasto:</label><br>
-                <input type="date" id="fechaGasto" name="fechaGasto"><br>
-            
-                <label for="lugarGasto">Lugar del gasto:</label><br>
-                <input type="text" id="lugarGasto" name="lugarGasto"><br>
-            
-                <label for="imagenGasto">Cargue su imagen:</label><br>
-                <input type="file" id="imagenGasto" name="imagenGasto" accept="image/*"><br>
-                
-                <label for="montoGasto">Monto del gasto:</label><br>
-                <input type="number" id="montoGasto" name="montoGasto"><br>
-            
-                <button class="btnPopup" type="submit">Guardar</button>
-                <button class="btnPopup" type="button" onclick="window.close()">Cancelar</button>
-            </form>
-        </body>
-        </html>
+            <label for="montoGasto">Monto del gasto:</label><br>
+            <input type="number" id="montoGasto" name="montoGasto"><br>
+        
+            <button class="btnPopup" type="submit">Guardar</button>
+            <button class="btnPopup" type="button" onclick="window.close()">Cancelar</button>
+        </form>
+    </body>
+    </html>
     `;
         popup.document.write(formContent);
 
-        // Esperar a que se cargue completamente el contenido del popup antes de ejecutar funciones
         setTimeout(() => {
             cargarProyectosGastos(popup);
 
@@ -433,7 +476,6 @@
         const form = popup.document.getElementById('gastoForm');
         const formData = new FormData(form);
 
-        // Validación de campos
         if (!formData.get('idProyecto') || !formData.get('descripcionGasto') || !formData.get('fechaGasto') ||
             !formData.get('lugarGasto') || !formData.get('montoGasto') || !formData.get('imagenGasto')) {
             Swal.fire({
@@ -442,15 +484,13 @@
                 icon: 'warning',
                 confirmButtonText: 'Entendido',
             });
-            return; // Detener la ejecución de la función si los campos están incompletos
+            return;
         }
 
-        // Convertir idProyecto a string
         const idProyecto = formData.get('idProyecto').toString();
+        const montoGastoNuevo = parseFloat(formData.get('montoGasto'));
 
-        // Verificar si existe un presupuesto para el proyecto seleccionado
         const presupuestoExiste = verificarPresupuestoHTML(popup, idProyecto);
-
         if (!presupuestoExiste) {
             Swal.fire({
                 title: 'Proyecto sin presupuesto',
@@ -458,21 +498,28 @@
                 icon: 'warning',
                 confirmButtonText: 'Entendido',
             });
-            return; // Detener la ejecución de la función si no hay presupuesto
+            return;
+        }
+
+        const presupuestoTotal = obtenerPresupuestoTotal(idProyecto);
+        const gastosActuales = sumarGastosActuales(idProyecto);
+        const gastosConNuevo = gastosActuales + montoGastoNuevo;
+
+        if (gastosConNuevo > presupuestoTotal) {
+            Swal.fire({
+                title: 'Excede el presupuesto',
+                text: 'El gasto ingresado excede el presupuesto disponible para este proyecto.',
+                icon: 'warning',
+                confirmButtonText: 'Entendido',
+            });
+            return;
         }
 
         try {
-            // Enviar datos al servidor
             const response = await fetch('/gastos', {
                 method: 'POST',
                 body: formData
             });
-
-            // Mostrar los datos del formulario en la consola
-            console.info('Los datos tomados de la view son:');
-            for (let pair of formData.entries()) {
-                console.log(`${pair[0]}: ${pair[1]}`);
-            }
 
             const data = await response.json();
             if (data.mensaje === 'Gasto creado exitosamente') {
@@ -488,7 +535,7 @@
             } else {
                 Swal.fire({
                     title: 'Error al guardar el registro',
-                    text: 'No se ha podido completar el registro de gasto. (No se fue posible enviar los datos al servidor)',
+                    text: 'No se ha podido completar el registro de gasto.',
                     icon: 'warning',
                     confirmButtonText: 'Entendido',
                 });
@@ -499,19 +546,42 @@
     }
 
     function verificarPresupuestoHTML(popup, idProyecto) {
-        // Selecciona todas las celdas que contienen los IDs de proyecto en la tabla de presupuestos
         const idsProyectos = document.querySelectorAll('.idProyecto');
         let presupuestoExiste = false;
 
-        // Verifica si el idProyecto proporcionado existe en la lista de IDs de proyectos
         idsProyectos.forEach(celda => {
-            console.log('Comparando:', celda.textContent.trim(), 'con', idProyecto);
             if (celda.textContent.trim() === idProyecto) {
                 presupuestoExiste = true;
             }
         });
 
         return presupuestoExiste;
+    }
+
+    function obtenerPresupuestoTotal(idProyecto) {
+        const presupuestos = document.querySelectorAll('.presupuesto-row');
+        let presupuestoTotal = 0;
+
+        presupuestos.forEach(row => {
+            if (row.querySelector('.idProyecto').textContent.trim() === idProyecto) {
+                presupuestoTotal = parseFloat(row.querySelector('.montoTotal').textContent.trim());
+            }
+        });
+
+        return presupuestoTotal;
+    }
+
+    function sumarGastosActuales(idProyecto) {
+        const gastos = document.querySelectorAll('.gasto-row');
+        let sumaGastos = 0;
+
+        gastos.forEach(row => {
+            if (row.querySelector('.idProyecto').textContent.trim() === idProyecto) {
+                sumaGastos += parseFloat(row.querySelector('.montoTotalGasto').textContent.trim());
+            }
+        });
+
+        return sumaGastos;
     }
 
     async function cargarProyectosGastos(popup) {
@@ -613,7 +683,6 @@
     ////////////////////////////////////////////////////////
     /////////////////// Update /////////////////////////////
 
-    // Ventana emergente para editar un proyecto
     document.querySelectorAll('[name="editarGasto"]').forEach(btn => {
         btn.addEventListener('click', async function () {
             const idGasto = this.getAttribute('data-gasto-id');
@@ -650,40 +719,66 @@
                 });
 
                 const formContent = `
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Actualizar gasto</title>
-                <link rel="stylesheet" href="/css/main.css">
-            </head>
-            <body class="bodyPopup">
-                <form class="popup-form" enctype="multipart/form-data">
-                    <label for="idProyecto">Nombre del proyecto:</label><br>
-                    ${selectProyecto.outerHTML}<br>
-                    <label for="descripcionGasto">Descripción del gasto:</label><br>
-                    <input type="text" id="descripcionGasto" name="descripcionGasto" value="${gasto.descripcionGasto}" required><br>
-                    <label for="lugar">Lugar del gasto:</label><br>
-                    <textarea id="lugar" name="lugar">${gasto.lugar}</textarea><br>
-                    <label for="montoGasto">Monto del gasto:</label><br>
-                    <input type="number" id="montoGasto" name="montoGasto" value="${gasto.montoGasto}"><br>
-                    <label for="fechaGasto">Fecha del Gasto:</label><br>
-                    <input type="date" id="fechaGasto" name="fechaGasto" value="${gasto.fechaGasto}"><br>
-                    <label for="imagenGasto">Imagen del gasto:</label><br>
-                    <input type="file" id="imagenGasto" name="imagenGasto" value="${gasto.imagenGasto}" accept="image/*" required><br>
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Actualizar gasto</title>
+                    <link rel="stylesheet" href="/css/main.css">
+                </head>
+                <body class="bodyPopup">
+                    <form class="popup-form" enctype="multipart/form-data">
+                        <label for="idProyecto">Nombre del proyecto:</label><br>
+                        ${selectProyecto.outerHTML}<br>
+                        <label for="descripcionGasto">Descripción del gasto:</label><br>
+                        <input type="text" id="descripcionGasto" name="descripcionGasto" value="${gasto.descripcionGasto}" required><br>
+                        <label for="lugar">Lugar del gasto:</label><br>
+                        <textarea id="lugar" name="lugar">${gasto.lugar}</textarea><br>
+                        <label for="montoGasto">Monto del gasto:</label><br>
+                        <input type="number" id="montoGasto" name="montoGasto" value="${gasto.montoGasto}"><br>
+                        <label for="fechaGasto">Fecha del Gasto:</label><br>
+                        <input type="date" id="fechaGasto" name="fechaGasto" value="${gasto.fechaGasto}"><br>
+                        <label for="imagenGasto">Imagen del gasto:</label><br>
+                        <input type="file" id="imagenGasto" name="imagenGasto" value="${gasto.imagenGasto}" accept="image/*" required><br>
 
-                    <button class="btnPopup" type="submit">Guardar</button>
-                    <button class="btnPopup" type="button" onclick="window.close()">Cancelar</button>
-                </form>
-            </body>
-            </html>
+                        <button class="btnPopup" type="submit">Guardar</button>
+                        <button class="btnPopup" type="button" onclick="window.close()">Cancelar</button>
+                    </form>
+                </body>
+                </html>
             `;
 
                 const popup = window.open('', 'popup', `width=400,height=600,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
                 popup.document.write(formContent);
+
                 popup.document.querySelector('form').addEventListener('submit', function (event) {
                     event.preventDefault();
+
+                    // Obtener el nuevo valor de montoGasto
+                    const nuevoMontoGasto = parseFloat(popup.document.getElementById('montoGasto').value);
+
+                    // Obtener la suma de todos los gastos actuales y el presupuesto
+                    let sumaMontoGastos = 0;
+                    document.querySelectorAll('.montoTotalGasto').forEach(td => {
+                        sumaMontoGastos += parseFloat(td.textContent);
+                    });
+
+                    const montoTotalPresupuesto = parseFloat(document.querySelector('.montoTotal').textContent);
+
+                    // Validar si la nueva suma de los montos de gastos supera el monto total del presupuesto
+                    const sumaTotalGastos = sumaMontoGastos + nuevoMontoGasto - gasto.montoGasto;
+                    if (sumaTotalGastos > montoTotalPresupuesto) {
+                        Swal.fire({
+                            title: 'Monto excede presupuesto',
+                            text: 'La suma de los montos de gastos supera el monto total del presupuesto asignado.',
+                            icon: 'error',
+                            confirmButtonText: 'Entendido'
+                        });
+                        return;
+                    }
+
+                    // Llamar a la función para actualizar el gasto
                     btnPopupActualizarGasto(idGasto, popup);
                 });
             } else {

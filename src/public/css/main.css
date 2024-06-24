@@ -107,7 +107,8 @@ body {
 .popup-form input[type="email"],
 .popup-form input[type="password"],
 .popup-form select,
-.popup-form option .popup-form textarea {
+.popup-form option,
+.popup-form textarea {
     width: 100%;
     padding: 8px;
     margin-top: 10px;

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,14 +10,17 @@
         <%- include("partials/navigation.ejs") %>
             <!-- Uso de sweetalert2 -->
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+            <!-- Uso de Font awesone -->
+            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css"
+                crossorigin="anonymous">
 </head>
-
 <body>
     <div class="content-wrapper container mt-4">
         <main>
             <div class="row mb-3">
                 <div class="col">
-                    <button id="btnAddPartida" class="btnCommon btn btn-primary w-100">Agregar Partida</button>
+                    <button id="btnAddPartida" class="btnCommon btn btn-primary w-100">
+                        <i class="fas fa-plus"></i> Agregar Partida</button>
                 </div>
             </div>
             <div class="table-responsive">
@@ -37,13 +39,16 @@
                                 <tr class="table-secondary">
                                     <td>
                                         <a name="detallesPartida" class="btn btn-success btn-sm"
-                                            data-partida-id="<%= partida.idPartida %>">Detalles</a>
+                                            data-partida-id="<%= partida.idPartida %>">
+                                            <i class="fas fa-info-circle"></i> Detalles</a>
                                         ||
                                         <a name="editarPartida" class="btn btn-primary btn-sm"
-                                            data-partida-id="<%= partida.idPartida %>">Editar</a>
+                                            data-partida-id="<%= partida.idPartida %>">
+                                            <i class="fas fa-pen"></i> Editar</a>
                                         ||
                                         <a name="eliminarPartida" class="btn btn-danger btn-sm"
-                                            data-partida-id="<%= partida.idPartida %>">Eliminar</a>
+                                            data-partida-id="<%= partida.idPartida %>">
+                                            <i class="fas fa-trash"></i> Eliminar</a>
                                     </td>
                                     <td scope="row">
                                         <%= partida.idPartida %>
@@ -68,7 +73,6 @@
 <footer>
     <%- include('partials/footer.ejs')%>
 </footer>
-
 </html>
 
 <!-- Uso de sweetalert2 para las alertas (presupuesto agotado) -->
@@ -89,7 +93,7 @@
     var popup;
 
     var btnAddPartida = document.getElementById('btnAddPartida').addEventListener('click', function () {
-        popup = window.open('', 'popup', `width=400,height=300,left=${(window.screen.width/2)-(400/2)},top=${(window.screen.height/2)-(500/2)}`);
+        popup = window.open('', 'popup', `width=400,height=300,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
         //'width=400,height=300');
 
         var formContent = `
@@ -215,7 +219,7 @@
             </body>
             </html>
           `;
-                var popup = window.open('', 'popup', `width=300,height=300,left=${(window.screen.width/2)-(400/2)},top=${(window.screen.height/2)-(500/2)}`);
+                var popup = window.open('', 'popup', `width=300,height=300,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
                 //'width=300,height=300');
                 popup.document.write(formContent);
             } else {
@@ -257,7 +261,7 @@
             </body>
             </html>
           `;
-                const popup = window.open('', 'popup', `width=400,height=400,left=${(window.screen.width/2)-(400/2)},top=${(window.screen.height/2)-(500/2)}`);
+                const popup = window.open('', 'popup', `width=400,height=400,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
                 //'width=400,height=400');
                 popup.document.write(formContent);
                 popup.document.querySelector('form').addEventListener('submit', function (event) {

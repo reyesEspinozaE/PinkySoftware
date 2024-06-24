@@ -1,8 +1,35 @@
 import Presupuesto from '../models/presupuesto.js';
 import Gasto from '../models/gasto.js';
+import Proyecto from '../models/proyecto.js';
 import fs from 'fs';
 import path from 'path';
 import { uploadsDir } from '../config/multerConfig.js';
+
+// Obtener el presupuesto restante para un proyecto dado
+export const obtenerPresupuestoRestante = async (req, res) => {
+  try {
+    const { idProyecto } = req.params;
+
+    // Obtener el presupuesto total asignado al proyecto
+    const presupuesto = await Presupuesto.findOne({ where: { idProyecto } });
+
+    if (!presupuesto) {
+      return res.status(404).json({ mensaje: 'Presupuesto no encontrado para el proyecto.' });
+    }
+
+    // Obtener la suma de los gastos del proyecto
+    const gastos = await Gasto.sum('montoGasto', { where: { idProyecto } });
+
+    // Calcular el presupuesto restante
+    const presupuestoRestante = presupuesto.montoTotal - gastos;
+
+    res.json({ presupuestoRestante });
+  } catch (error) {
+    console.error('Error al obtener el presupuesto restante:', error);
+    res.status(500).send('Error al obtener el presupuesto restante');
+  }
+};
+
 
 // Crear un nuevo Gasto
 export const crearGasto = async (req, res) => {
@@ -115,7 +142,21 @@ export const eliminarGasto = async (req, res) => {
 // Obtener todos los registros de presupuestos y gastos
 export const getContaduriaData = async (req, res) => {
   try {
-    const [presupuestos, gastos] = await Promise.all([Presupuesto.findAll(), Gasto.findAll()]);
+    const [presupuestos, gastos] = await Promise.all([
+      Presupuesto.findAll({
+        include: {
+          model: Proyecto,
+          attributes: ['nombreProyecto']
+        }
+      }),
+      Gasto.findAll({
+        include: {
+          model: Proyecto,
+          attributes: ['nombreProyecto']
+        }
+      })
+    ]);
+
     res.render('contadurias.ejs', {
       title: 'Contaduría',
       presupuestos,
@@ -127,12 +168,13 @@ export const getContaduriaData = async (req, res) => {
   }
 };
 
+
 // Crear un nuevo presupuesto
 export const crearPresupuesto = async (req, res) => {
   try {
     const { idProyecto, montoTotal, saldoPendiente, area, fechaMonto, descripcion } = req.body;
     console.log('Datos recibidos en el servidor:', { idProyecto, montoTotal, saldoPendiente, area, fechaMonto, descripcion });
-    
+
     const nuevoPresupuesto = await Presupuesto.create({
       idProyecto,
       montoTotal,

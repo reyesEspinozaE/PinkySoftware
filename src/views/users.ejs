@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,14 +10,16 @@
     <%- include("partials/navigation.ejs") %>
       <!-- Uso de sweetalert2 -->
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+      <!-- Uso de Font awesone -->
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
 </head>
-
 <body>
   <div class="content-wrapper container mt-4">
     <main>
       <div class="row mb-3">
         <div class="col">
-          <button id="btnAddUsuario" class="btnCommon btn btn-primary w-100">Agregar Usuario</button>
+          <button id="btnAddUsuario" class="btnCommon btn btn-primary w-100">
+            <i class="fas fa-plus"></i> Agregar Usuario</button>
         </div>
       </div>
       <div class="table-responsive">
@@ -38,13 +39,14 @@
               <% usuarios.forEach(usuario=> { %>
                 <tr class="table-secondary">
                   <td>
-                    <a name="detalles" class="btn btn-success btn-sm"
-                      data-user-id="<%= usuario.idUsuario %>">Detalles</a>
+                    <a name="detalles" class="btn btn-success btn-sm" data-user-id="<%= usuario.idUsuario %>">
+                      <i class="fas fa-info-circle"></i> Detalles</a>
                     ||
-                    <a name="editar" class="btn btn-primary btn-sm" data-user-id="<%= usuario.idUsuario %>">Editar</a>
+                    <a name="editar" class="btn btn-primary btn-sm" data-user-id="<%= usuario.idUsuario %>">
+                      <i class="fas fa-pen"></i> Editar</a>
                     ||
-                    <a name="eliminar" class="btn btn-danger btn-sm"
-                      data-user-id="<%= usuario.idUsuario %>">Eliminar</a>
+                    <a name="eliminar" class="btn btn-danger btn-sm" data-user-id="<%= usuario.idUsuario %>">
+                      <i class="fas fa-trash"></i> Eliminar</a>
                   </td>
                   <td scope="row">
                     <%= usuario.idUsuario %>
@@ -77,9 +79,7 @@
 <footer>
   <%- include('partials/footer.ejs')%>
 </footer>
-
 </html>
-
 
 <!-- Uso de sweetalert2 para las alertas (presupuesto agotado) -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
@@ -93,131 +93,6 @@
   integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
 
 <script>
-
-  ////////////////////////////////////////////////////////
-  /////////////////// CREATE /////////////////////////////
-
-  // // Definimos una variable para la ventana emergente
-  // var popup;
-
-  // // Seleccionamos el botón por su id
-  // var btnAddUsuario = document.getElementById('btnAddUsuario').addEventListener('click', function () {
-  //   // Abre la ventana emergente para agregar un usuario
-  //   popup = window.open('', 'popup', `width=400,height=370,left=${(window.screen.width / 2) - (400 / 2)},top=${(window.screen.height / 2) - (500 / 2)}`);
-  //   //'width=400,height=370');
-
-  //   // Contenido del formulario dentro de la ventana emergente
-  //   var formContent = `
-  //       <!DOCTYPE html>
-  //       <html lang="en">
-  //       <head>
-  //           <meta charset="UTF-8">
-  //           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  //           <title>Agregar Usuario</title>
-  //           <link rel="stylesheet" href="/css/main.css">
-  //       </head>
-  //       <body class="bodyPopup">
-  //          <form class="popup-form">
-  //               <label for="nombreUsuario">Nombre del usuario:</label><br>
-  //               <input type="text" id="nombreUsuario" name="nombreUsuario"><br>
-
-  //               <label for="correo">Correo electrónico:</label><br>
-  //               <input type="text" id="correo" name="correo"><br>
-
-  //               <label for="contrasenia">Contraseña:</label><br>
-  //               <input type="text" id="contrasenia" name="contrasenia"><br>
-
-  //               <label for="rol">Rol:</label><br>
-  //               <input type="text" id="rol" name="rol"><br>
-
-  //               <button class="btnPopup" type="submit">Guardar</button>
-  //               <button class="btnPopup" type="button" onclick="window.opener.cerrarPopup()">Cancelar</button>
-  //           </form>
-  //       </body>
-  //       </html>
-  //     `;
-
-  //   // Escribimos el contenido del formulario en la ventana emergente
-  //   popup.document.write(formContent);
-
-  //   // Definimos el comportamiento del formulario al ser enviado
-  //   popup.document.querySelector('form').addEventListener('submit', function (event) {
-  //     event.preventDefault();
-  //     // Llamar a la función para guardar el nuevo usuario
-  //     btnPopupGuardar();
-  //   });
-  // });
-
-  // // Definimos la función cerrarPopup para cerrar la ventana emergente
-  // function cerrarPopup() {
-  //   if (popup) {
-  //     popup.close();
-  //   }
-  // }
-
-  // // Definimos la función btnPopupGuardar() para guardar el nuevo usuario
-
-  // function btnPopupGuardar() {
-  //   // Obtener los valores de los campos del formulario
-  //   var nombreUsuario = popup.document.getElementById('nombreUsuario').value;
-  //   var correo = popup.document.getElementById('correo').value;
-  //   var contrasenia = popup.document.getElementById('contrasenia').value;
-  //   var rol = popup.document.getElementById('rol').value;
-
-  //   // Verificar si todos los campos están completos
-  //   if (!nombreUsuario || !correo || !contrasenia || !rol) {
-  //     Swal.fire({
-  //       title: 'Datos incompletos',
-  //       text: 'Por favor complete todos los campos del formulario.',
-  //       icon: 'warning',
-  //       confirmButtonText: 'Entendido',
-  //     });
-  //     return; // Detener la ejecución de la función si los campos están incompletos
-  //   }
-
-  //   // Objeto con los datos del nuevo usuario
-  //   var nuevoUsuario = {
-  //     nombreUsuario: nombreUsuario,
-  //     correo: correo,
-  //     contrasenia: contrasenia,
-  //     rol: rol
-  //   };
-
-  //   // Enviar una solicitud POST al servidor para crear el nuevo usuario
-  //   fetch('/users', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify(nuevoUsuario)
-  //   })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       if (data.mensaje === 'Usuario creado exitosamente') {
-  //         popup.close();
-  //         Swal.fire({
-  //           title: 'Usuario creado exitosamente',
-  //           text: 'El usuario se ha registrado exitosamente',
-  //           icon: 'success',
-  //           confirmButtonText: 'Entendido',
-  //         }).then(() => {
-  //           // Esta línea se ejecutará cuando el usuario presione "Entendido"
-  //           window.location.reload();
-  //         });
-  //       } else {
-  //         Swal.fire({
-  //           title: 'Error al guardar el nuevo usuario',
-  //           text: 'Error al crear el registro del nuevo usuario',
-  //           icon: 'success',
-  //           confirmButtonText: 'Entendido'
-  //         })
-  //       }
-  //     })
-  //     .catch(error => {
-  //       console.error('Error al realizar la solicitud:', error);
-  //     });
-  // }
-
   ////////////////////////////////////////////////////////
   /////////////////// CREATE /////////////////////////////
 

@@ -51,27 +51,6 @@ export const verificarUsuarioExistente = async (req, res) => {
 };
 
 // Crear un nuevo usuario
-// export const crearUsuario = async (req, res) => {
-//   try {
-//     const { nombreUsuario, correo, contrasenia, rol } = req.body;
-//     console.log('Datos recibidos en el servidor:', { nombreUsuario, correo, contrasenia });
-
-//     // Cifrar la contraseña
-//     const hashedPassword = await bcrypt.hash(contrasenia, 10);
-
-//     const nuevoUsuario = await Usuario.create({
-//       nombreUsuario,
-//       correo,
-//       contrasenia: hashedPassword,
-//       rol: rol
-//     });
-//     res.status(201).json({ mensaje: 'Usuario creado exitosamente', usuario: nuevoUsuario });
-//   } catch (error) {
-//     console.error("Error al crear el usuario:", error);
-//     res.status(500).send("Error al crear el usuario");
-//   }
-// };
-// Crear un nuevo usuario
 export const crearUsuario = async (req, res) => {
   try {
     const { nombreUsuario, correo, contrasenia, rol } = req.body;
