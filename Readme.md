@@ -3,8 +3,9 @@ The primary objective of the project is to design and develop a comprehensive bu
 Currently working on this project, approximate date to finish it: "05/07/2024" - "DD/MM/YYYY". Made by C06449.
 
 Para iniciar el proyecto:
-
     - Se debe abrir la terminal
+    - npm init --y
+    - npm install nodemon
     - Escribir " npm run dev ", para iniciar el servidor
     - Escribir localhost:3000/, en tu navegador
 
