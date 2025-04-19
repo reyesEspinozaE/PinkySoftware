@@ -9,7 +9,7 @@ export const getProyectos = async (req, res) => {
     const proyectos = await Proyecto.findAll({ include: Partida }); // Incluir el modelo Partida en la consulta
     const proyectosUsuario = await ProyectoUsuario.findAll();
 
-    if(proyectosUsuario.idUsuario === ){
+    if(proyectosUsuario.idUsuario === 0){
 
     }
     res.render('proyectos.ejs', {
